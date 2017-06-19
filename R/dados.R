@@ -1,4 +1,3 @@
-
 library(readxl)
 #' Carregar Dados
 #'
@@ -8,16 +7,23 @@ library(readxl)
 #' @export
 #' @examples
 #' carregar_inputs ("Planilha_de_Inputs.xlsx")
-carregar_inputs = function (arquivo_de_inputs) {
+carregar_inputs = function (arquivo_de_inputs="Dados.xlsx") {
   ## Ajustando variável de ambiente do Java
 
-  params = read_excel(arquivo_de_inputs,sheet = "Parametros")
+  configs = read_excel(arquivo_de_inputs,sheet = "Configs")
+  configs = as.data.frame(configs)
 
   dados_projetados = read_excel(arquivo_de_inputs, sheet="Dados_Projetados")
+  dados_projetados = as.data.frame(dados_projetados)
 
   dados_projetados = na.omit(dados_projetados)
 
-  return(dados_projetados)
+  parametros = read_excel(arquivo_de_inputs, sheet = "Parametros")
+  parametros = as.data.frame(parametros)
+
+  inputs = list(configs,dados_projetados,parametros)
+  names(inputs) = c("Configs","DadosProjetados","Parametros")
+
+  return(inputs)
 
 }
-
