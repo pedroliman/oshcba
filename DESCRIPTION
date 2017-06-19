@@ -1,0 +1,17 @@
+Package: oshcba
+Type: Package
+Title: Simulacao Monte Carlo de Custos e Beneficios em SST
+Version: 0.1.0
+Author: Pedro Nascimento de Lima
+Maintainer: Pedro N. de Lima <pedrolima.n@gmail.com>
+Description: Analise de Custos e Benefícios em SST usando simulacao Monte Carlo.
+License: What license is it under?
+Encoding: ISO-8859-1
+LazyData: true
+RoxygenNote: 6.0.1
+Imports:
+    mc2d,
+    xlsx,
+    ggplot2,
+    lhs,
+    shiny
