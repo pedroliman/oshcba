@@ -1,5 +1,8 @@
 library(shiny)
-source("./R/risk-analysis.R", local = TRUE)
+library(oshcba)
+carregar_bibliotecas()
+
+# source("risk-analysis.R", local = TRUE)
 
 # O que Roda aqui roda uma vez para sempre na sessao
 CustoVariavelMinimo <- 20
