@@ -1,4 +1,4 @@
-# oshcba
+# Calculadora de Custos e Benefícios em SST
 Aplicativo para Análise de Custos e Benefícios em SST
 
 ## Instalando o App
