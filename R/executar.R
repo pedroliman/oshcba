@@ -1,6 +1,5 @@
 # source(file = "./R/app.R")
 
-
 executarAplicativo = function(){
   carregar_bibliotecas()
   shinyApp(ui = ui, server = server)
