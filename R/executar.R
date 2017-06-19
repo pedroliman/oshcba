@@ -11,5 +11,6 @@ carregar_bibliotecas = function (){
   library(lhs)
   library(mc2d)
   library(ggplot2)
+  library(rjava)
   library(xlsx)
 }
