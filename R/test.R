@@ -67,52 +67,215 @@ simular_lhs = function(CustoFixo, CustoVariavel, Preco, Producao, Demanda, itera
   return(dados_simulados)
 }
 
+rm(list = ls())
 Inputs = carregar_inputs()
 ## Setup Variaveis Aleatorias
 anos = Inputs$Configs$AnosaSeremSimulados
-
-## Obtendo Variáveis Informadas como Parâmetros
-parametros_informados = levels(factor(Inputs$Parametros$NomeVariavel))
-
-# Definindo Iniciativas a Rodar
-iniciativas = c("SemIniciativa","Iniciativa1","Iniciativa2","TodasIniciativas")
-
-inciativas = Inputs$Cenarios
-
-## Definindo quantas vezes vou realizar a amostragem
-n_amostragem = Inputs$Configs$IniciativasTestadas + if (Inputs$Configs$`TestarIniciativasEmConjunto?`){1} + 1
 
 # Definindo o número de replicações:
 Replicacao = 1:Inputs$Configs$Replicacoes
 ndvar(Inputs$Configs$Replicacoes)
 
+## Obtendo Variáveis Informadas como Parâmetros
+# parametros_informados = levels(factor(Inputs$Parametros$NomeVariavel))
 
-#Criando o Dataframe de Parâmetros com o Tamanho Final
-n_parametros = length(parametros_informados)
-n_iniciativas = length(iniciativas)
+# parametros_informados = select(Inputs$Parametros)
 
-parametros = expand.grid(Replicacao,parametros_informados)
-names(parametros) = c("Replicacao","Variavel")
+# Definindo Iniciativas/Cenarios a Simular
+
+Cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
+# Cenarios = as.vector(Cenarios)
+CenarioBase = filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
+
+# Definindo DataFrame de anos
+Anos = Inputs$DadosProjetados$Ano
+# Anos = Inputs$Configs$AnoInicial:(Inputs$Configs$AnoInicial+Inputs$Configs$AnosaSeremSimulados)
+
+# Montando DataFrame de Parametros
+
+ParametrosPorAno = merge(Cenarios,Anos,by=NULL)
+names(ParametrosPorAno) = c("Cenario","CenarioBase","Ano")
+
+# Atribuindo os Nomes de Parâmetros
+
+ParametrosPorAno = inner_join(ParametrosPorAno,Inputs$Parametros,by="Cenario")
+
+Variaveis = ParametrosPorAno %>% select(NomeVariavel) %>% distinct()
+
+# Definindo Variáveis por Ano com Replicações
+# VariaveisPorAno = ParametrosPorAno %>% select(Cenario,Ano) %>% distinct()
+# VariaveisPorAno = merge(VariaveisPorAno,Replicacao) %>% rename(Replicacao=y)
+
+VariaveisPorAno = data.frame(Cenario=character(),
+                             Ano=as.integer(character()),
+                             Replicacao=as.integer(character()),
+                             stringsAsFactors=FALSE)
+names(VariaveisPorAno) = c("Cenario","Ano","Replicacao")
 
 
-parametros[Replicacao,]
+### Parei Aqui (já tenho a lista de parametros por ano, mas ainda não consigo fazer loop nel)a
 
-  v = "NDiasFalta"
-  for (i in iniciativas){
-    distribuicao = subset(Inputs$Parametros$Distribuicao, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
-    Parametro1 = subset(Inputs$Parametros$Parametro1, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
-    Parametro2 = subset(Inputs$Parametros$Parametro2, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
-    Parametro3 = subset(Inputs$Parametros$Parametro3, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
-    Parametro4 = subset(Inputs$Parametros$Parametro4, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
-    amostra = obterAmostra(
-      distribuicao = distribuicao,
-      parametro1=Parametro1,
-      parametro2=Parametro2,
-      parametro3=Parametro3,
-      parametro4=Parametro4)
-    # parametros["Variavel"]=v
-    # parametros[i]=amostra
+
+
+# v = "NDiasFalta"
+# t = 2017
+# c = "Iniciativa1"
+# params = filter(ParametrosPorAno, NomeVariavel==v & Cenario==c & Ano==t)
+# print(params)
+# amostra = obterAmostra(distribuicao = params$Distribuicao,
+#                        parametro1 = params$Parametro1,
+#                        parametro2 = params$Parametro2,
+#                        parametro3 = params$Parametro3,
+#                        parametro4 = params$Parametro4)
+#
+#
+# VAriavelAmostra = data.frame(Cenario=c,
+#                                  Ano=t,
+#                                  Replicacao=Replicacao,
+#                                  v=amostra[,,1],
+#                                  stringsAsFactors=FALSE)
+# names(VAriavelAmostra) = c("Cenario","Ano","Replicacao",v)
+#
+#
+# VariaveisPorAno = full_join(VariaveisPorAno,VAriavelAmostra,by=c("Cenario","Ano","Replicacao"))
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# NovovariaveisPorAno = mutate(NovovariaveisPorAno,
+#                              Cenario = c,
+#                              Ano = t,
+#                              Replicacao = Replicacao)
+# NovovariaveisPorAno[[v]] = amostra[,,1]
+#
+
+
+
+
+## Esse aqui funciona
+i=0
+for (v in Variaveis[,1]) {
+
+  DataFrameVariaveis = data.frame(Cenario=character(),
+                               Ano=as.integer(character()),
+                               Replicacao=as.integer(character()),
+                               Variavel=as.integer(character()),
+                               stringsAsFactors=FALSE)
+  names(DataFrameVariaveis) = c("Cenario","Ano","Replicacao",v)
+
+  for (t in Anos){
+    for (c in Cenarios$Cenario) {
+      params = filter(ParametrosPorAno, NomeVariavel==v & Cenario==c & Ano==t)
+      amostra = obterAmostra(distribuicao = params$Distribuicao,
+                             parametro1 = params$Parametro1,
+                             parametro2 = params$Parametro2,
+                             parametro3 = params$Parametro3,
+                             parametro4 = params$Parametro4)
+
+      VAriavelAmostra = data.frame(Cenario=c,
+                                   Ano=t,
+                                   Replicacao=Replicacao,
+                                   v=amostra[,,1],
+                                   stringsAsFactors=FALSE)
+      names(VAriavelAmostra) = c("Cenario","Ano","Replicacao",v)
+
+      DataFrameVariaveis = bind_rows(DataFrameVariaveis,VAriavelAmostra)
+
+      rm(amostra)
+    }
   }
+
+  head(DataFrameVariaveis)
+
+  if (i==0) {
+    VariaveisPorAno = full_join(VariaveisPorAno,DataFrameVariaveis)
+  } else {
+    VariaveisPorAno = full_join(VariaveisPorAno,DataFrameVariaveis,by=c("Cenario", "Ano", "Replicacao"))
+  }
+  i = i+1
+
+  # VariaveisPorAno[[v]] = NA
+}
+
+
+
+
+#### RODAR ATÉ AQUI E VER A MÁGICA ACONTECER!!
+
+
+
+
+
+
+
+#### DAQUI PRA BAIXO NÂO PRESTA
+
+
+
+
+## Esse aqui funciona
+for (v in Variaveis[,1]) {
+  VariaveisPorAno[[v]] = NA
+}
+
+
+# Alterando Parâmetros Considerando o Delay
+
+ParametrosCenarioBase = filter (ParametrosPorAno,
+                                CenarioBase)
+
+# Substituindo Parâmetros para Variáveis com Delay
+ParametrosPorAno = ParametrosPorAno # TODO - Alterar Variáveis com Delay
+
+
+# Definindo Parâmetro
+## Definindo quantas vezes vou realizar a amostragem
+n_amostragem = Inputs$Configs$IniciativasTestadas + if (Inputs$Configs$`TestarIniciativasEmConjunto?`){1} + 1
+
+
+
+
+# parametros = expand.grid(Replicacao,parametros_informados)
+# names(parametros) = c("Replicacao","Variavel")
+#
+#   for (i in Cenarios){
+#
+#     distribuicao = subset(Inputs$Parametros$Distribuicao, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro1 = subset(Inputs$Parametros$Parametro1, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro2 = subset(Inputs$Parametros$Parametro2, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro3 = subset(Inputs$Parametros$Parametro3, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro4 = subset(Inputs$Parametros$Parametro4, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     amostra = obterAmostra(
+#       distribuicao = distribuicao,
+#       parametro1=Parametro1,
+#       parametro2=Parametro2,
+#       parametro3=Parametro3,
+#       parametro4=Parametro4)
+#     # parametros["Variavel"]=v
+#     # parametros[i]=amostra
+#   }
+#
+#   v = "NDiasFalta"
+#   for (i in iniciativas){
+#     distribuicao = subset(Inputs$Parametros$Distribuicao, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro1 = subset(Inputs$Parametros$Parametro1, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro2 = subset(Inputs$Parametros$Parametro2, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro3 = subset(Inputs$Parametros$Parametro3, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     Parametro4 = subset(Inputs$Parametros$Parametro4, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+#     amostra = obterAmostra(
+#       distribuicao = distribuicao,
+#       parametro1=Parametro1,
+#       parametro2=Parametro2,
+#       parametro3=Parametro3,
+#       parametro4=Parametro4)
+#     # parametros["Variavel"]=v
+#     # parametros[i]=amostra
+#   }
 
   ### Parei aqui em cima. Usar a biblioteca dyplr
 
