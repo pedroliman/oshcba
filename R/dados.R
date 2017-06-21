@@ -21,8 +21,10 @@ carregar_inputs = function (arquivo_de_inputs="Dados.xlsx") {
   parametros = read_excel(arquivo_de_inputs, sheet = "Parametros")
   parametros = as.data.frame(parametros)
 
-  inputs = list(configs,dados_projetados,parametros)
-  names(inputs) = c("Configs","DadosProjetados","Parametros")
+  cenarios = read_excel(arquivo_de_inputs, sheet = "Cenarios")
+
+  inputs = list(configs,dados_projetados,parametros,cenarios)
+  names(inputs) = c("Configs","DadosProjetados","Parametros","Cenarios")
 
   return(inputs)
 

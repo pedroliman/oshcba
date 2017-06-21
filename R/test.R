@@ -8,7 +8,8 @@
 library(mc2d)
 library(ggplot2)
 library(lhs)
-
+library(readxl)
+library(dplyr)
 
 # Setando a seed para o mesmo valor usado pelo @Risk
 # set.seed(2000)
@@ -19,6 +20,11 @@ lucro = function(CustoFixo, CustoVariavel, Preco, Producao, Demanda) {
   return(lucro)
 }
 
+obterAmostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
+  amostra = switch(distribuicao,
+                   "norm" = mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
+                   "unif" = mcstoc(func = rnorm,min=parametro1,max=parametro2))
+}
 
 simular_mc2d = function(CustoFixo, CustoVariavel, Preco, Producao, Demanda){
   CustoVariavel = mcstoc(runif,min=CustoVariavelMinimo,max=CustoVariavelMaximo)
@@ -28,7 +34,6 @@ simular_mc2d = function(CustoFixo, CustoVariavel, Preco, Producao, Demanda){
   resultadomc = mc(CustoVariavel,Preco,Demanda,Lucro)
   return (resultadomc)
 }
-
 
 #Rodando a Análise (Método Antigo com o LHS)
 
@@ -62,26 +67,63 @@ simular_lhs = function(CustoFixo, CustoVariavel, Preco, Producao, Demanda, itera
   return(dados_simulados)
 }
 
-
 Inputs = carregar_inputs()
-
 ## Setup Variaveis Aleatorias
 anos = Inputs$Configs$AnosaSeremSimulados
 
+## Obtendo Variáveis Informadas como Parâmetros
+parametros_informados = levels(factor(Inputs$Parametros$NomeVariavel))
 
-## Simular com Intervenção
+# Definindo Iniciativas a Rodar
+iniciativas = c("SemIniciativa","Iniciativa1","Iniciativa2","TodasIniciativas")
 
-## Simular sem Intervenção
+inciativas = Inputs$Cenarios
 
-## Compara Resultados
+## Definindo quantas vezes vou realizar a amostragem
+n_amostragem = Inputs$Configs$IniciativasTestadas + if (Inputs$Configs$`TestarIniciativasEmConjunto?`){1} + 1
+
+# Definindo o número de replicações:
+Replicacao = 1:Inputs$Configs$Replicacoes
+ndvar(Inputs$Configs$Replicacoes)
 
 
-simular = function(Inputs){
+#Criando o Dataframe de Parâmetros com o Tamanho Final
+n_parametros = length(parametros_informados)
+n_iniciativas = length(iniciativas)
 
-  diasabsenteismo =
+parametros = expand.grid(Replicacao,parametros_informados)
+names(parametros) = c("Replicacao","Variavel")
 
-}
 
-definirParametros = function(Params){
+parametros[Replicacao,]
 
-}
+  v = "NDiasFalta"
+  for (i in iniciativas){
+    distribuicao = subset(Inputs$Parametros$Distribuicao, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+    Parametro1 = subset(Inputs$Parametros$Parametro1, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+    Parametro2 = subset(Inputs$Parametros$Parametro2, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+    Parametro3 = subset(Inputs$Parametros$Parametro3, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+    Parametro4 = subset(Inputs$Parametros$Parametro4, (Inputs$Parametros[i]==TRUE)&(Inputs$Parametros$NomeVariavel==v))
+    amostra = obterAmostra(
+      distribuicao = distribuicao,
+      parametro1=Parametro1,
+      parametro2=Parametro2,
+      parametro3=Parametro3,
+      parametro4=Parametro4)
+    # parametros["Variavel"]=v
+    # parametros[i]=amostra
+  }
+
+  ### Parei aqui em cima. Usar a biblioteca dyplr
+
+
+
+
+amostraTeste = obterAmostra(
+  distribuicao = "norm",
+  parametro1=10,
+  parametro2=2,
+  parametro3=NA,
+  parametro4=NA)
+
+
