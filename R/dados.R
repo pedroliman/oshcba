@@ -1,15 +1,13 @@
 library(readxl)
 #' Carregar Dados
 #'
-#' Esta função carrega dados que ser?o usados como Input.
+#' Esta funcao carrega dados que serao usados como Input.
 #' @param arquivo_de_inputs Planilha do Excel Padronizada contendo Inputs do Modelo
 #' @keywords inputs
 #' @export
 #' @examples
 #' carregar_inputs ("Planilha_de_Inputs.xlsx")
 carregar_inputs = function (arquivo_de_inputs="Dados.xlsx") {
-  ## Ajustando variável de ambiente do Java
-
   configs = read_excel(arquivo_de_inputs,sheet = "Configs")
   configs = as.data.frame(configs)
 

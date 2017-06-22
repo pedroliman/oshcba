@@ -9,7 +9,7 @@ valor_presente(fc, i)
 \arguments{
 \item{fc}{Fluxo de Caixa a ser descontado (vetor)}
 
-\item{i}{Taxa de Retorno a ser utilizada (numérico)}
+\item{i}{Taxa de Retorno a ser utilizada (numerico)}
 }
 \value{
 Vetor do Fluxo de Caixa Descontado

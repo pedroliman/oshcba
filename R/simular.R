@@ -1,16 +1,17 @@
-#' Análise de Risco  (Utilizando o Pacote MC2D)
-#' ========================================================
-#' Esta Análise simula 1000 casos usando distribuições uniformes.
-#' A mesma análise foi realizada com o @Risk para a comparação dos resultados.
-#'
-#'
-# Bibliotecas que vou usar
+
 library(mc2d)
 library(ggplot2)
 library(lhs)
 library(dplyr)
 
 
+#' Obter Cenarios
+#'
+#' @param Inputs Objeto de Inputs (lista)
+#'
+#' @return cenarios
+#' @export
+#'
 obter_cenarios = function(Inputs) {
   cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
   return(cenarios)

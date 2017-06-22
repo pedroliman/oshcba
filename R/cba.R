@@ -1,11 +1,11 @@
 
-#' Razão Benefício Custo
+#' Razao Beneficio Custo
 #'
-#' Esta função Calcula a razão Benefício Custo.
-#' @param benefits O Benefício em Valores Monetários (numérico).
-#' @param costs Os Custos da Iniciativa em Valores Monetários (numérico).
+#' Esta funcao Calcula a razao beneficio custo
+#' @param benefits O Beneficio em Valores Monetarios (numerico).
+#' @param costs Os Custos da Iniciativa em Valores Monetarios (numerico).
 #' @keywords cbr
-#' @return Razão Custo Benefício
+#' @return Razao Beneficio Custo
 #' @export
 #' @examples
 #' cbr(20,30)
@@ -22,7 +22,7 @@ cbr = function(costs, benefits) {
 #' @return ROI (num�rico)
 #' @export
 #'
-#' @examples
+#'
 roi = function(costs, benefits) {
   return((benefits - costs)/costs)
 }
@@ -31,7 +31,7 @@ roi = function(costs, benefits) {
 #' Valor Presente
 #'
 #' @param fc Fluxo de Caixa a ser descontado (vetor)
-#' @param i Taxa de Retorno a ser utilizada (num�rico)
+#' @param i Taxa de Retorno a ser utilizada (numerico)
 #'
 #' @return Vetor do Fluxo de Caixa Descontado
 #' @export
