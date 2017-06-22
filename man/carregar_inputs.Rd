@@ -4,7 +4,7 @@
 \alias{carregar_inputs}
 \title{Carregar Dados}
 \usage{
-carregar_inputs(arquivo_de_inputs)
+carregar_inputs(arquivo_de_inputs = "Dados.xlsx")
 }
 \arguments{
 \item{arquivo_de_inputs}{Planilha do Excel Padronizada contendo Inputs do Modelo}

@@ -8,10 +8,125 @@
 library(mc2d)
 library(ggplot2)
 library(lhs)
+library(dplyr)
 
 
-# Setando a seed para o mesmo valor usado pelo @Risk
-# set.seed(2000)
+obter_cenarios = function(Inputs) {
+  cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
+  return(cenarios)
+}
+
+obter_cenario_base = function(Inputs) {
+  cenario_base = filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
+  return(cenario_base)
+}
+
+obter_anos = function(Inputs) {
+  return(Inputs$DadosProjetados$Ano)
+}
+
+obter_replicacoes = function (Inputs) {
+  replicacoes = 1:Inputs$Configs$Replicacoes
+  ndvar(Inputs$Configs$Replicacoes)
+  return(replicacoes)
+}
+
+
+obter_parametros_por_ano = function (Inputs,cenarios,anos) {
+  # Definindo os Parâmetros
+  parametros_por_ano = merge(cenarios,anos,by=NULL)
+  names(parametros_por_ano) = c("Cenario","CenarioBase","Ano")
+  # Atribuindo os Nomes de Parâmetros
+  parametros_por_ano = inner_join(parametros_por_ano,Inputs$Parametros,by="Cenario")
+  # TODO: Aqui eu deveria substituir os parâmetros com delay!
+}
+
+obter_variaveis = function(parametros_por_ano) {
+  return(parametros_por_ano %>% select(NomeVariavel) %>% distinct())
+}
+
+obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
+  amostra = switch(distribuicao,
+                   "norm" = mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
+                   "unif" = mcstoc(func = rnorm,min=parametro1,max=parametro2))
+}
+
+
+criar_df_params = function (){
+  VariaveisPorAno = data.frame(Cenario=character(),
+                               Ano=as.integer(character()),
+                               Replicacao=as.integer(character()),
+                               stringsAsFactors=FALSE)
+  names(VariaveisPorAno) = c("Cenario","Ano","Replicacao")
+  return(VariaveisPorAno)
+}
+
+criar_df_params_cvar = function() {
+  DataFrameVariaveis = data.frame(criar_df_params(),
+                                  Variavel=as.integer(character()))
+  return(DataFrameVariaveis)
+}
+
+gerar_replicacoes = function(Inputs) {
+  replicacoes
+}
+
+gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,replicacoes) {
+  i=0
+  for (v in variaveis[,1]) {
+
+    DataFrameVariaveis = criar_df_params_cvar()
+    names(DataFrameVariaveis) = c("Cenario","Ano","Replicacao",v)
+
+    for (t in anos){
+      for (c in cenarios$Cenario) {
+        params = filter(parametros_por_ano, NomeVariavel==v & Cenario==c & Ano==t)
+        amostra = obter_amostra(distribuicao = params$Distribuicao,
+                               parametro1 = params$Parametro1,
+                               parametro2 = params$Parametro2,
+                               parametro3 = params$Parametro3,
+                               parametro4 = params$Parametro4)
+
+        VAriavelAmostra = data.frame(Cenario=c,
+                                     Ano=t,
+                                     Replicacao=replicacoes,
+                                     v=amostra[,,1],
+                                     stringsAsFactors=FALSE)
+        names(VAriavelAmostra) = c("Cenario","Ano","Replicacao",v)
+
+        DataFrameVariaveis = bind_rows(DataFrameVariaveis,VAriavelAmostra)
+
+        rm(amostra)
+      }
+    }
+
+    if (i==0) {
+      # VariaveisPorAno = full_join(VariaveisPorAno,DataFrameVariaveis)
+      VariaveisPorAno = DataFrameVariaveis
+    } else {
+      VariaveisPorAno = full_join(VariaveisPorAno,DataFrameVariaveis,by=c("Cenario", "Ano", "Replicacao"))
+    }
+    i = i+1
+
+  }
+  return(VariaveisPorAno)
+
+}
+
+## Função para obtençao de parâmetros
+
+obter_parametros = function(Inputs) {
+  replicacoes = obter_replicacoes(Inputs)
+  anos = obter_anos(Inputs)
+  cenarios = obter_cenarios(Inputs)
+  parametros_por_ano = obter_parametros_por_ano(Inputs,cenarios,anos)
+  variaveis = obter_variaveis(parametros_por_ano)
+  parametros = gerar_amostra_parametros(variaveis,anos,cenarios,parametros_por_ano,replicacoes)
+  return(parametros)
+}
+
+
+### Funções Antigas:
 
 #Definindo Meu Modelo
 lucro = function(CustoFixo, CustoVariavel, Preco, Producao, Demanda) {
