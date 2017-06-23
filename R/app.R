@@ -59,7 +59,7 @@ server <- function(input, output) {
 
   output$histograma_absenteismo <- renderPlot({
 
-    qplot(dados_simulados(),geom = "histogram",
+    qplot(dados_simulados()$DespesaAbsenteismo,geom = "histogram",
           main="Histograma de Despesas em Absenteismo")
   })
 

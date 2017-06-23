@@ -3,7 +3,7 @@ library(mc2d)
 library(ggplot2)
 library(lhs)
 library(dplyr)
-
+library(readxl)
 
 
 obter_cenario_base = function(Inputs) {
@@ -131,6 +131,14 @@ obter_cenarios = function(Inputs) {
   cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
   return(cenarios)
 }
+
+
+#'@export
+exportar_dados_simulados = function(parametros) {
+  arquivo = write.table(parametros,file="dados_simulados.csv",sep=";",dec=",",row.names = FALSE)
+  return(arquivo)
+}
+
 
 
 ### Funções Antigas:

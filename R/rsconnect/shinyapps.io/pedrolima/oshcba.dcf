@@ -3,9 +3,9 @@ title: oshcba
 account: pedrolima
 server: shinyapps.io
 appId: 190520
-bundleId: 880274
+bundleId: 880306
 url: https://pedrolima.shinyapps.io/oshcba/
-when: 1498249213.99676
+when: 1498250132.08886
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: cba.R|dados.R|equacoes.Rmd|executar.R|oshcba.R|outputs.R|risk-analysis.R|simular.R|test.R

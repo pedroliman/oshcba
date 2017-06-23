@@ -98,5 +98,5 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx") {
   inputs = carregar_inputs(ArquivoInputs)
   parametros = obter_parametros(inputs)
   resultado = calcular_despesa_absenteismo(parametros)
-  return(resultado$DespesaAbsenteismo)
+  return(resultado)
 }
