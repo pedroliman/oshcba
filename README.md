@@ -5,8 +5,8 @@ Aplicativo para Análise de Custos e Benefícios em SST
 Para instalar o aplicativo, abra o R e cole estes comandos no prompt: (https://gist.github.com/pedroliman/ffbf5f332abc060ebaa6dea80bc9534f)
 
 ```R
-  # install.packages("devtools")
-  # library(devtools)
+  # install.packages("devt ools")
+  # library(dev tools)
   # install_github("pedroliman/oshcba")
 ```
 ## Executando o Aplicativo
