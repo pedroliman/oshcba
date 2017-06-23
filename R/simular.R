@@ -5,17 +5,6 @@ library(lhs)
 library(dplyr)
 
 
-#' Obter Cenarios
-#'
-#' @param Inputs Objeto de Inputs (lista)
-#'
-#' @return cenarios
-#' @export
-#'
-obter_cenarios = function(Inputs) {
-  cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
-  return(cenarios)
-}
 
 obter_cenario_base = function(Inputs) {
   cenario_base = filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
@@ -31,7 +20,6 @@ obter_replicacoes = function (Inputs) {
   ndvar(Inputs$Configs$Replicacoes)
   return(replicacoes)
 }
-
 
 obter_parametros_por_ano = function (Inputs,cenarios,anos) {
   # Definindo os Parâmetros
@@ -52,7 +40,6 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    "unif" = mcstoc(func = rnorm,min=parametro1,max=parametro2))
 }
 
-
 criar_df_params = function (){
   VariaveisPorAno = data.frame(Cenario=character(),
                                Ano=as.integer(character()),
@@ -66,10 +53,6 @@ criar_df_params_cvar = function() {
   DataFrameVariaveis = data.frame(criar_df_params(),
                                   Variavel=as.integer(character()))
   return(DataFrameVariaveis)
-}
-
-gerar_replicacoes = function(Inputs) {
-  replicacoes
 }
 
 gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,replicacoes) {
@@ -114,8 +97,15 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
 
 }
 
-## Função para obtençao de parâmetros
-
+#' Obter Parametros
+#'
+#' @param Inputs Inputs Carregados com a funcao carregar_inputs()
+#'
+#' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
+#' @export
+#'
+#' @examples
+#' obter_parametros(inputs)
 obter_parametros = function(Inputs) {
   replicacoes = obter_replicacoes(Inputs)
   anos = obter_anos(Inputs)
@@ -123,7 +113,23 @@ obter_parametros = function(Inputs) {
   parametros_por_ano = obter_parametros_por_ano(Inputs,cenarios,anos)
   variaveis = obter_variaveis(parametros_por_ano)
   parametros = gerar_amostra_parametros(variaveis,anos,cenarios,parametros_por_ano,replicacoes)
+  # Unindo Parametros aos Dados Projetados
+  parametros = inner_join(parametros,Inputs$DadosProjetados,by="Ano")
+
+  custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
+  parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
   return(parametros)
+}
+
+#' Obter Cenarios
+#'
+#' @param Inputs Objeto de Inputs (lista)
+#'
+#' @return cenarios
+#' @export
+obter_cenarios = function(Inputs) {
+  cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
+  return(cenarios)
 }
 
 
