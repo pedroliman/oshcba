@@ -8,11 +8,11 @@
 #
 
 library(shiny)
-# library(oshcba)
 library(ggplot2)
-# library(readxl)
-# library(mc2d)
-# library(dplyr)
+# library(oshcba)
+library(readxl)
+library(mc2d)
+library(dplyr)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -25,12 +25,14 @@ ui <- fluidPage(
     sidebarPanel(
       "Faca Upload de seus dados de Input",
       fileInput("Dados de Input",
-                inputId = "DadosInput",buttonLabel = "Arquivo.xlsx")
+                inputId = "DadosInput",buttonLabel = "Arquivo.xlsx"),
+      downloadButton('downloadData', 'Download')
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
       plotOutput("histograma_absenteismo")
+      ,tableOutput('table')
     )
   )
 )
@@ -61,6 +63,10 @@ server <- function(input, output) {
 
     qplot(dados_simulados()$DespesaAbsenteismo,geom = "histogram",
           main="Histograma de Despesas em Absenteismo")
+  })
+
+  output$table <- renderTable({
+    dados_simulados()
   })
 
 }
