@@ -7,13 +7,12 @@
 #    http://shiny.rstudio.com/
 #
 
-library(devtools)
 library(shiny)
-# library(oshcba)
+library(oshcba)
 library(ggplot2)
-library(readxl)
-library(mc2d)
-library(dplyr)
+# library(readxl)
+# library(mc2d)
+# library(dplyr)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
