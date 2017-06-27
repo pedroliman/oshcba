@@ -2,21 +2,23 @@
 % Please edit documentation in R/cba.R
 \name{valor_presente}
 \alias{valor_presente}
-\title{Valor Presente}
+\title{Fluxo de Caixa Descontado}
 \usage{
-valor_presente(fc, i)
+valor_presente(fc, t, i)
 }
 \arguments{
-\item{fc}{Fluxo de Caixa a ser descontado (vetor)}
+\item{fc}{Fluxo de Caixa (numero, em valores monetarios)}
 
-\item{i}{Taxa de Retorno a ser utilizada (numerico)}
+\item{t}{Tempo do fluxo de caixa.}
+
+\item{i}{Taxa de Juros.}
 }
 \value{
-Vetor do Fluxo de Caixa Descontado
+fcd Fluxo de Caixa Descontado
 }
 \description{
-Valor Presente
+Fluxo de Caixa Descontado
 }
 \examples{
-valor_presente (1:10,0.05)
+valor_presente(20,2,0.1)
 }

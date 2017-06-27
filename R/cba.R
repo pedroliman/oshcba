@@ -28,22 +28,51 @@ roi = function(costs, benefits) {
 }
 
 
-#' Valor Presente
+
+#' Fluxo de Caixa Descontado
 #'
-#' @param fc Fluxo de Caixa a ser descontado (vetor)
-#' @param i Taxa de Retorno a ser utilizada (numerico)
+#' @param fc Fluxo de Caixa (numero, em valores monetarios)
+#' @param t Tempo do fluxo de caixa.
+#' @param i Taxa de Juros.
 #'
-#' @return Vetor do Fluxo de Caixa Descontado
+#' @return fcd Fluxo de Caixa Descontado
+#' @examples
+#' valor_presente(20,2,0.1)
+valor_presente = function(fc,t,i) {
+  fcd = fc/(1+i)^(t)
+  return(fcd)
+}
+
+#' Descontar Fluxo de Vaixa
+#'
+#' Calcula o Fluxo de Caixa Descontado Individual de um Conjunto de Variáveis Definido.
+#'
+#'
+#' @param variaveis_a_descontar Vetor com nome de variaveis que terao o fluxo de caixa descontado
+#' @param ano_inicial Número do Ano inicial que será descontado
+#' @param i Taxa de Desconto.
+#' @param parametros Dataframe de parâmetros que contém variáveis a descontar e
+#'
+#' @return
 #' @export
 #'
 #' @examples
-#' valor_presente (1:10,0.05)
-valor_presente = function(fc,i) {
-  for (t in fc) {
-    fc[t] = fc[t]/(1+i)^t
+descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros) {
+  #Definindo Variávels Auxiliadoras
+  sufixo = "Descontado"
+  novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
+
+  # Descontando Variaveis
+  for (v in variaveis_a_descontar) {
+    var_descontada = which(variaveis_a_descontar == v)
+    nova_variavel = novas_variaveis[var_descontada]
+    parametros[nova_variavel] = valor_presente(parametros[v],parametros$Ano-ano_inicial,i)
   }
-  return(fc)
+
+  return(parametros)
 }
+
+
 
 beneficio = function(despesas_com_intervencao,despesas_sem_intervencao) {
 return (despesas_com_intervencao - despesas_sem_intervencao)
@@ -93,10 +122,3 @@ calcular_despesa_absenteismo = function(parametros) {
   return(parametros)
 }
 
-#' @export
-simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx") {
-  inputs = carregar_inputs(ArquivoInputs)
-  parametros = obter_parametros(inputs)
-  resultado = calcular_despesa_absenteismo(parametros)
-  return(resultado)
-}
