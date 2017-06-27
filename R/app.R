@@ -1,5 +1,5 @@
-# Este é um app que possui a interface para a calculadora oshcba.
-## Se está rodando o app pela primeira vez, rode estes comando antes de executar o aplicativo: (Antes de rodar o comando, exclua o "#")
+# Este e um app que possui a interface para a calculadora oshcba.
+## Se esta rodando o app pela primeira vez, rode estes comando antes de executar o aplicativo: (Antes de rodar o comando, exclua o "#")
 # install.packages(c("shiny","ggplot2","readxl","mc2d","dplyr","devtools"))
 #Se precisar atualizaro app, rode este comando:
 # library(devtools)
@@ -7,8 +7,8 @@
 
 library(shiny)
 library(ggplot2)
-# Retire o comentário abaixo para rodar o app
-library(oshcba)
+# Retire o comentario abaixo para rodar o app
+# library(oshcba)
 library(readxl)
 library(mc2d)
 library(dplyr)
