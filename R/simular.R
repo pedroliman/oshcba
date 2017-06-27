@@ -5,7 +5,6 @@ library(lhs)
 library(dplyr)
 library(readxl)
 
-
 obter_cenario_base = function(Inputs) {
   cenario_base = filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
   return(cenario_base)
@@ -36,8 +35,10 @@ obter_variaveis = function(parametros_por_ano) {
 
 obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
   amostra = switch(distribuicao,
-                   "norm" = mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
-                   "unif" = mcstoc(func = rnorm,min=parametro1,max=parametro2))
+                   "normal" = mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
+                   "uniforme" = mcstoc(func = runif,min=parametro1,max=parametro2),
+                   "triangular" = mcstoc(func = rtriang,min=parametro1,mode=parametro2,max=parametro3)
+                   )
 }
 
 criar_df_params = function (){
@@ -138,8 +139,6 @@ exportar_dados_simulados = function(parametros) {
   arquivo = write.table(parametros,file="dados_simulados.csv",sep=";",dec=",",row.names = FALSE)
   return(arquivo)
 }
-
-
 
 ### Funções Antigas:
 
