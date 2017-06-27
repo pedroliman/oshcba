@@ -1,15 +1,14 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# Este é um app que possui a interface para a calculadora oshcba.
+## Se está rodando o app pela primeira vez, rode estes comando antes de executar o aplicativo: (Antes de rodar o comando, exclua o "#")
+# install.packages(c("shiny","ggplot2","readxl","mc2d","dplyr","devtools"))
+#Se precisar atualizaro app, rode este comando:
+# library(devtools)
+# install_github("pedroliman/oshcba")
 
 library(shiny)
 library(ggplot2)
-# library(oshcba)
+# Retire o comentário abaixo para rodar o app
+library(oshcba)
 library(readxl)
 library(mc2d)
 library(dplyr)
