@@ -1,0 +1,273 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Modelo Matematico CBR},
+            pdfauthor={P.N. de Lima, D. B. Goldmeyer, L. F. R. Camargo, A. Dresch, D. P. Lacerda, T. Kunrath},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Modelo Matematico CBR}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{P.N. de Lima, D. B. Goldmeyer, L. F. R. Camargo, A. Dresch, D. P.
+Lacerda, T. Kunrath}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{junho de 2017}
+
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{6}
+\tableofcontents
+}
+\section{Modelo Matemático - Razão
+Benefício-Custo}\label{modelo-matematico---razao-beneficio-custo}
+
+Este documento contém uma definição do modelo matemático que suporta a
+calculadora de custos e benefícios de inciativas em SST.
+
+\subsection{CBR - Razão
+Benefício-Custo}\label{cbr---razao-beneficio-custo}
+
+A razão benefício-custo \(\alpha\) corresponde à razão do somatório dos
+custos \(C_i\) onde \(i\) representa o índice de custos e \(B_j\) os
+benefícios a valor presente.
+
+\[\alpha = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}\]
+
+\subsubsection{Fluxo de Caixa em Valor
+Presente}\label{fluxo-de-caixa-em-valor-presente}
+
+Os fluxos de caixa devem ser ajustados a valor presente utilizando-se
+uma taxa de atratividade \(\theta\) definida pelo usuário do modelo. Tal
+taxa será utilizada para trazer os valores de fluxo de caixa a valor
+presente.
+
+\[B_i(t) = \frac{b_i}{(1+\theta)^t}\]
+
+\subsubsection{Calculo dos Benefícios}\label{calculo-dos-beneficios}
+
+Em todos os casos, o benefício será calculado a partir da diferença em
+valores monetários de uma variável financeira sem a iniciativa em SST e
+com a iniciativa em SST. Exemplificando, o benefício gerado pela redução
+de absenteísmo \(B_{abs}\) será calculado a partir da seguinte equação.
+
+\[B_i = {D}_{i, ci} - {D}_{i, si}\] Exemplificando, se uma empresa, sem
+uma iniciativa em SST terá \(20000\) reais em desepesas com absenteísmo,
+e com esta iniciativa terá \(15000\), o benefício oriúndo desta
+inciativa, apenas relacionado a absenteísmo será:
+
+\[B_{abs} = {D}_{abs, ci} - {D}_{abs, si} = (-15000)-(-20000) = 5000\]
+
+\paragraph{Despesas Evitáveis}\label{despesas-evitaveis}
+
+\subparagraph{Despesas com Reclamatórias
+Trabalhistas}\label{despesas-com-reclamatorias-trabalhistas}
+
+\subparagraph{Acidente / Doença Ocupacional -
+Invalidez}\label{acidente-doenca-ocupacional---invalidez}
+
+\subparagraph{Ações Regressivas (NTEP)}\label{acoes-regressivas-ntep}
+
+\subparagraph{Ausência para Tratamento}\label{ausencia-para-tratamento}
+
+\subparagraph{Despesas Médicas}\label{despesas-medicas}
+
+\subparagraph{Taxa de Sinistralidade}\label{taxa-de-sinistralidade}
+
+\subparagraph{Interrupção Operacional
+(Acidente/Morte)}\label{interrupcao-operacional-acidentemorte}
+
+\subparagraph{Reabilitação do
+trabalhador}\label{reabilitacao-do-trabalhador}
+
+\paragraph{Benefício Não Capturado}\label{beneficio-nao-capturado}
+
+\subparagraph{Exposição à Multas}\label{exposicao-a-multas}
+
+\subparagraph{Reduções Fiscais}\label{reducoes-fiscais}
+
+FAP, RAT e SAT: As despesas com seguro acidentário do trabalho
+\(D_{sat}\) serão calculadas de acordo com as estimativas do \(FAP\)
+(\(0,005 - 0,02\)) e \(RAT\) .
+
+\[D_{sat} = RAT_{ajust}* F\]
+
+Rat Ajustado
+
+\[RAT_{ajust} = (FAP * RAT)\] O \(RAT\) varia entre 1 e 3, de acordo com
+o cnae da empresa em questão. \[RAT \in {1,2,3}\]
+
+FAP
+
+O FAP, por sua vez, é calculado de acordo com os percentis de gravidade
+\(p_g\), frequência \(p_{f}\) e custo\(p_c\):
+
+\[FAP = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02\]
+
+Percentis são calculados de acordo com os índices nos dois anos
+anteriores.* Os percentis dependem do posicionamento da empresa em
+relação às demais. Específicamente a função \(Pos(I_{t-1},I_{t-2})\) é
+calculada pela previdência de acordo com os índices de todas as empresas
+no mesmo subgrupo do CNAE da empresa em questão. Ainda não foi definida
+uma maneira de estimar esta função.
+
+\[p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}\]
+
+Índice de Frequência
+
+\[I_f = \frac{(n_{cats}+n_{b92}+n_{b91}+n_{b93})}{f} * 1000\]
+
+Índice de gravidade
+
+\[I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*n_{b93}+0.1*n_{b94})}{f}* 1000\]
+
+Índice de Custo
+
+\[I_c = \frac{c_{beneficios inss}}{folha media}/ * 1000\]
+
+Custos de Benefícios: Considerar tempo médio de afastamento por tipo de
+afastamento (b91, b92, b93, b94) e o ``ticket médio'' de cada um destes
+benefícios.
+
+\paragraph{Intangível}\label{intangivel}
+
+\subparagraph{Imagem da Empresa}\label{imagem-da-empresa}
+
+\subparagraph{Engajamento / Clima
+Organizacional}\label{engajamento-clima-organizacional}
+
+\paragraph{Melhor Uso dos Recursos}\label{melhor-uso-dos-recursos}
+
+\subparagraph{Turnover}\label{turnover}
+
+As despesas com Turnover \(D_{tur}\) serão calculadas com base no número
+de funcionários afastados por problemas relacionados à SST \(n_{afast}\)
+e no custo médio de substituição dos funcionários\(c_{sub}\).
+
+\[D_{tur} = n_{afast} * c_{sub}\]
+
+Número de Afastamentos é calculado de acordo com a probabilidade de
+morte \(p_{morte}\) e a probabilidade de afastamento por período menor
+que 15 dias \(p_{>15}\)
+
+\[n_{afast} = p_{morte}*f + p_{>15}*f\]
+
+Número de Afastamentos
+
+O número de afastamentos \(n_{afast}\) será estimado de acordo com a
+probabilidade de afastamento \(\rho_{afast}\) e número de funcionários
+\(f\): \[n_{afast} = \rho_{afast} * f \]
+
+\subparagraph{Absenteísmo}\label{absenteismo}
+
+As despesas com Absenteísmo \(D_{abs}\) serão calculadas com base no
+número de dias de absenteísmo por problemas relacionados à SST
+\(d_{abs}\), no número de horas trabalhadas por dia \(h\) e no custo em
+mão de obra médio horário \(c_{mdo}\).
+
+\[D_{abs} = d_{abs} * h * c_{mdo}\]
+
+Dias de Absenteísmo
+
+\[ d_{abs} = p_{<15}*f*n_{daf}+p_{falta}*f*n_{falta}\]
+
+Dias de Absenteísmo (Antigo)
+
+Os dias de absenteísmo \(d_{abs}\) serão estimados de acordo com a
+probabilidade de absenteísmo \(\rho_{abs}\), número de funcionários
+\(f\) e número de dias úteis do ano \(d\):
+
+\[d_{abs} = \rho_{abs} * f * d\]
+
+\subparagraph{Presenteísmo}\label{presenteismo}
+
+\subparagraph{Produtividade}\label{produtividade}
+
+\subparagraph{Qualidade}\label{qualidade}
+
+\subparagraph{Refugo e Retrabalho}\label{refugo-e-retrabalho}
+
+\subparagraph{MP, Insumos, Equipamentos
+Operação}\label{mp-insumos-equipamentos-operacao}
+
+\subsubsection{Variáveis Intermediárias}\label{variaveis-intermediarias}
+
+\subsubsection{Custos}\label{custos}
+
+\paragraph{Custos de Implementação}\label{custos-de-implementacao}
+
+
+\end{document}

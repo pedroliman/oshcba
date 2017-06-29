@@ -40,35 +40,43 @@ Exemplificando, se uma empresa, sem uma iniciativa em SST terá $20000$ reais em
 
 $$B_{abs} = {D}_{abs, ci} - {D}_{abs, si} = (-15000)-(-20000) = 5000$$
 
-#### Despesas com Absenteísmo
-As despesas com Absenteísmo $D_{abs}$ serão calculadas com base no número de dias de absenteísmo por problemas relacionados à SST $d_{abs}$, no número de horas trabalhadas por dia $h$ e no custo em mão de obra médio horário $c_{mdo}$.
 
-$$D_{abs} = d_{abs} * h * c_{mdo}$$
+#### Despesas Evitáveis
 
-Dias de Absenteísmo
-$$ d_{abs} = p_{<15}*f*n_{daf}+p_{falta}*f*n_{falta}$$
+##### Despesas com Reclamatórias Trabalhistas
 
-#### Despesas com Turnover
-As despesas com Turnover $D_{tur}$ serão calculadas com base no número de funcionários afastados por problemas relacionados à SST $n_{afast}$ e no custo médio de substituição dos funcionários$c_{sub}$.
+##### Acidente / Doença Ocupacional - Invalidez
 
-$$D_{tur} = n_{afast} * c_{sub}$$
+##### Ações Regressivas (NTEP)
 
-Número de Afastamentos é calculado de acordo com a probabilidade de morte $p_{morte}$ e a probabilidade de afastamento por período menor que 15 dias $p_{>15}$
+##### Ausência para Tratamento
 
-$$n_{afast} = p_{morte}*f + p_{>15}*f$$
+##### Despesas Médicas
 
-#### FAP, RAT e SAT
-As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ .
+##### Taxa de Sinistralidade
+
+##### Interrupção Operacional (Acidente/Morte)
+
+##### Reabilitação do trabalhador
+
+
+#### Benefício Não Capturado
+
+##### Exposição à Multas
+
+##### Reduções Fiscais
+
+FAP, RAT e SAT: As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ .
 
 $$D_{sat} = RAT_{ajust}* F$$
 
-##### Rat Ajustado
+###### Rat Ajustado
 
 $$RAT_{ajust} = (FAP * RAT)$$
 O $RAT$ varia entre 1 e 3, de acordo com o cnae da empresa em questão.
 $$RAT \in {1,2,3}$$
 
-##### FAP
+###### FAP
 O FAP, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, frequência $p_{f}$ e custo$p_c$:
 
 $$FAP = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
@@ -78,29 +86,71 @@ Percentis são calculados de acordo com os índices nos dois anos anteriores.* O
 $$p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}$$
 
 
-##### Índice de Frequência
+###### Índice de Frequência
 
 $$I_f = \frac{(n_{cats}+n_{b92}+n_{b91}+n_{b93})}{f} * 1000$$
 
-##### Índice de gravidade
+###### Índice de gravidade
 $$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*n_{b93}+0.1*n_{b94})}{f}* 1000$$
 
-##### Índice de Custo
+###### Índice de Custo
 
 $$I_c = \frac{c_{beneficios inss}}{folha media}/ * 1000$$
 
 Custos de Benefícios: Considerar tempo médio de afastamento por tipo de afastamento (b91, b92, b93, b94) e o "ticket médio" de cada um destes benefícios.
 
-### Variáveis Intermediárias
 
-#### Dias de Absenteísmo
+#### Intangível
+
+##### Imagem da Empresa
+
+##### Engajamento / Clima Organizacional
+
+
+
+#### Melhor Uso dos Recursos
+
+##### Turnover
+
+As despesas com Turnover $D_{tur}$ serão calculadas com base no número de funcionários afastados por problemas relacionados à SST $n_{afast}$ e no custo médio de substituição dos funcionários$c_{sub}$.
+
+$$D_{tur} = n_{afast} * c_{sub}$$
+
+Número de Afastamentos é calculado de acordo com a probabilidade de morte $p_{morte}$ e a probabilidade de afastamento por período menor que 15 dias $p_{>15}$
+
+$$n_{afast} = p_{morte}*f + p_{>15}*f$$
+
+
+
+###### Número de Afastamentos
+O número de afastamentos $n_{afast}$ será estimado de acordo com a probabilidade de afastamento $\rho_{afast}$ e número de funcionários $f$:
+$$n_{afast} = \rho_{afast} * f $$
+
+
+##### Absenteísmo
+
+As despesas com Absenteísmo $D_{abs}$ serão calculadas com base no número de dias de absenteísmo por problemas relacionados à SST $d_{abs}$, no número de horas trabalhadas por dia $h$ e no custo em mão de obra médio horário $c_{mdo}$.
+
+$$D_{abs} = d_{abs} * h * c_{mdo}$$
+
+###### Dias de Absenteísmo
+$$ d_{abs} = p_{<15}*f*n_{daf}+p_{falta}*f*n_{falta}$$
+
+###### Dias de Absenteísmo (Antigo)
 Os dias de absenteísmo $d_{abs}$ serão estimados de acordo com a probabilidade de absenteísmo $\rho_{abs}$, número de funcionários $f$ e número de dias úteis do ano $d$:
 
 $$d_{abs} = \rho_{abs} * f * d$$
 
-#### Número de Afastamentos
-O número de afastamentos $n_{afast}$ será estimado de acordo com a probabilidade de afastamento $\rho_{afast}$ e número de funcionários $f$:
-$$n_{afast} = \rho_{afast} * f $$
+##### Presenteísmo
+##### Produtividade
+##### Qualidade
+##### Refugo e Retrabalho
+
+##### MP, Insumos, Equipamentos Operação
+
+
+### Variáveis Intermediárias
+
 
 ### Custos
 
