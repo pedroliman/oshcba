@@ -136,19 +136,106 @@ inciativa, apenas relacionado a absenteísmo será:
 \subparagraph{Despesas com Reclamatórias
 Trabalhistas}\label{despesas-com-reclamatorias-trabalhistas}
 
+Esta subcategoria compreende as despesas evitadas com reclamatórias
+trabalhistas (objeto da ação relacionadas à doenças e acidentes do
+trabalho) após a implementação integral da iniciativa.
+
+Parâmetros: \(c_{med}\): Custo Médio da Reclamatória
+\(n_{reclamatorias}\): Número de Reclamatórias trabalhistas relacionadas
+a SST.
+
+\[{D}_{reclamatorias} = c_{med}*n_{reclamatorias} \]
+
+Número de Reclamatórias Trabalhistas
+
+\[n_{reclamatorias} = f_{desligados} * p_{ajuizarEganharreclamatoria} \]
+
+Parâmetros: \(p_{ajuizarEganharreclamatoria}\): Probabilidade de um
+funcionário demitido entrar com uma reclamatória e ganhar a causa.
+\(f_{desligados}\): Número de Funcionários desligados pela empresa.
+
+Possibilidade 1: Considerar uma única probabilidade de ajuizar e ganhar
+uma ação reclamatória. Esta probabilidade vezes o número de funcionários
+gera o número de reclamatórias trabalhistas a pagar.
+
+Possibilidade 2: Separar o ajuizamento da ação do ganho da ação. Desta
+maneira é possível calcular o custo em ações mesmo quando o funcionário
+não ganhou a ação. A princípio estamos na possibilidade 1.
+
 \subparagraph{Acidente / Doença Ocupacional -
 Invalidez}\label{acidente-doenca-ocupacional---invalidez}
 
+Esta subcategoria compreende as despesas evitadas com incapacitação
+parcial ou total provocada por acidente típico, doença ocupacional ou
+acidente de trajeto após a implementação integral da iniciativa.
+
+Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o
+calculo do FAP e não deveriam ser contados em duplicidade. Possibilidade
+2: Existem despesas que não estão em nenhuma outra categoria e que
+deveriam ser contabilizados aqui. A princípio estamos na possibilidade
+1. A categoria será excluída caso a possibilidade 1 se confirme.
+
 \subparagraph{Ações Regressivas (NTEP)}\label{acoes-regressivas-ntep}
+
+Esta subcategoria compreende as despesas evitadas com ações regressivas
+do INSS após a implementação integral da iniciativa.
+
+A Ação Regressiva representa o o ressarcimento de pagamento de
+benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120
+:A ação regressiva é a penalização adicional relacionada ao B91 - B94.
+
+Ações Regressivas Relacionadas ao INSS
+
+\[D_{ações regressivas INSS} =  \sum_{i=1}^{B} n_iacumulado * p_iacaoregressiva * (f_{crise}*crise) * tregressiva_{i}  \]
+
+Dúvida: O NTEP já estará contabilizado integralmente pelo FAP? Sim:
+Então precisa estar aqui. Não: Então Dúvida 2: Crise econômica deve
+modular esta probabilidade? Que variáveis de contexto devem modular que
+variáveis de input?
+
+Ações Regressivas Relacionadas ao Plano de Saúde
+
+\[D_{ações regressivas SUS} =  TotaldeAfastamentosAcumulado * PrecentualTratamentoNoSUS * (f_{crise}*crise) * PercentualCobrancaSUS/PlanodeSaude * ticketmedio\]
 
 \subparagraph{Ausência para Tratamento}\label{ausencia-para-tratamento}
 
+Esta subcategoria compreende as despesas evitadas com a ausência do
+trabalhador afastado para tratamento após a implementação integral da
+iniciativa.
+
+Esta categoria irá para a categoria de absenteísmo.
+
 \subparagraph{Despesas Médicas}\label{despesas-medicas}
 
-\subparagraph{Taxa de Sinistralidade}\label{taxa-de-sinistralidade}
+Esta subcategoria compreende as despesas evitadas com medicamento e
+atendimento médico para tratamento dos acidentes de trabalho após a
+implementação integral da iniciativa.
 
-\subparagraph{Interrupção Operacional
-(Acidente/Morte)}\label{interrupcao-operacional-acidentemorte}
+\[D_{medicas} = (\sum_{k=1}^{K} n_{acidentesk}) * d_{medio}\]
+
+\subparagraph{Redução de Valores do plano de
+Saúde}\label{reducao-de-valores-do-plano-de-saude}
+
+Esta subcategoria compreende as despesas evitadas com planos de saúde
+via alteração da taxa de sinistralidade após a implementação integral da
+iniciativa. \[D_{planosaude} = D_{planosaudebase} * desc_{plano}\]
+
+Dúvida: Como calcular o desconto no plano de saúde a partir das demais
+variáveis? \[desc_{plano}(TaxaSinistralidade) =  ?? \]
+
+\subparagraph{Reabilitação:}\label{reabilitacao}
+
+Usará (f\_\{crise\}*crise)
+
+\subparagraph{Interrupção Operacional por
+Acidente/Morte}\label{interrupcao-operacional-por-acidentemorte}
+
+\[D_{interdicao} = n_{acidentestipico} * dias * lucrocessante\]
+
+\subparagraph{Interdições Por
+Fiscalização}\label{interdicoes-por-fiscalizacao}
+
+\[D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante \]
 
 \subparagraph{Reabilitação do
 trabalhador}\label{reabilitacao-do-trabalhador}
@@ -186,6 +273,8 @@ uma maneira de estimar esta função.
 
 \[p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}\]
 
+Será definida uma forma para estimar \(p_t\).
+
 Índice de Frequência
 
 \[I_f = \frac{(n_{cats}+n_{b92}+n_{b91}+n_{b93})}{f} * 1000\]
@@ -201,6 +290,12 @@ uma maneira de estimar esta função.
 Custos de Benefícios: Considerar tempo médio de afastamento por tipo de
 afastamento (b91, b92, b93, b94) e o ``ticket médio'' de cada um destes
 benefícios.
+
+\subparagraph{B91, B92, B93, B,94, etc}\label{b91-b92-b93-b94-etc}
+
+\[b_i = n_i * p_i \ \forall b_i \in B\]
+
+Obs: Será necessário possuir
 
 \paragraph{Intangível}\label{intangivel}
 
@@ -243,6 +338,25 @@ mão de obra médio horário \(c_{mdo}\).
 Dias de Absenteísmo
 
 \[ d_{abs} = p_{<15}*f*n_{daf}+p_{falta}*f*n_{falta}\]
+
+\subparagraph{Variável Intermediária
+Acidentes}\label{variavel-intermediaria-acidentes}
+
+Número de Acidentes
+
+\[n_{acidentesk} = f * p_{acidentes} \ \forall k \in K\]
+
+\subparagraph{Afastamentos}\label{afastamentos}
+
+Afastamentos \textless{} 15 dias:
+\[n_{afast<15k} = p_{<15} * n_{acidentes}  \ \forall k \in K\]
+
+Afastamentos \textgreater{} 15 dias:
+\[n_{afast>15k} = p_{>15} * n_{acidentes}  \ \forall k \in K\] Óbitos:
+\[n_{obitosk} = p_{obitos} *n_{acidentes}  \ \forall k \in K \]
+
+Acidentes Sem Afastamento:
+\[n_{safastk} = p_{obitos} *n_{acidentes}  \ \forall k \in K \]
 
 Dias de Absenteísmo (Antigo)
 
