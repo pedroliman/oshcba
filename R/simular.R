@@ -148,7 +148,48 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx") {
 
   # Descontando Variaveis Monetarias
   variaveis_a_descontar = c("CustoTotal","DespesaAbsenteismo")
-  parametros = descontar_fluxo_de_caixa(variaveis_a_descontar,inputs$Configs$AnoInicial,inputs$Configs$TaxaDeDesconto,parametros)
+  resultados = descontar_fluxo_de_caixa(variaveis_a_descontar,inputs$Configs$AnoInicial,inputs$Configs$TaxaDeDesconto,parametros)
 
-  return(parametros)
+  # Obtendo Cenarios
+  cenarios = obter_cenarios(inputs)
+
+  ## Calculando Variáveis do CBR
+  resultados_CBR = calcular_cbr(resultados,cenarios)
+
+  return(resultados_CBR)
+}
+
+
+#'@export
+calcular_cbr = function (resultados,cenarios) {
+
+  ### Sintetizando Resultados por Cenario e Replicacao
+  resultados_sintetizados = resultados %>% group_by(Cenario,Replicacao) %>%
+    summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
+              Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado)
+    )
+
+  resultados_sintetizados = inner_join(resultados_sintetizados,cenarios, by="Cenario")
+
+  replicacoes_sem_iniciativa = filter(resultados_sintetizados,CenarioASIS == TRUE)
+  replicacoes_sem_iniciativa = select(replicacoes_sem_iniciativa,-CenarioASIS)
+
+
+  replicacoes_com_iniciativa = filter(resultados_sintetizados,CenarioASIS == FALSE)
+  replicacoes_com_iniciativa = select(replicacoes_com_iniciativa,-CenarioASIS)
+
+  resultados_CBR = inner_join(replicacoes_sem_iniciativa,replicacoes_com_iniciativa,by="Replicacao")
+
+  ### Calculando Benefícios Totais, Custos e Razão Custo Benefício
+  resultados_CBR = resultados_CBR %>%
+    mutate(CustoTotalCBR = custo(Soma_CustoTotal.y,Soma_CustoTotal.x),
+           BeneficioAbsenteismo = beneficio(Soma_DespesaAbsenteismo.y,Soma_DespesaAbsenteismo.x)) %>%
+    ## Aqui entrariam outros beneficios
+    mutate(BeneficioTotalCBR = BeneficioAbsenteismo + 0) %>%
+    mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,costs=CustoTotalCBR))
+
+  ### Mantendo Apenas Variáveis Úteis
+
+  resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotal.x,-Soma_CustoTotal.y)
+  return(resultados_CBR)
 }

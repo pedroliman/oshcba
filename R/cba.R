@@ -73,14 +73,16 @@ descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametr
 }
 
 
-
 beneficio = function(despesas_com_intervencao,despesas_sem_intervencao) {
 return (despesas_com_intervencao - despesas_sem_intervencao)
 }
 
+custo = function(custos_com_intervencao,custos_sem_intervencao) {
+  return (custos_com_intervencao - custos_sem_intervencao)
+}
 
 despesas_absenteismo = function(dias_abs,HorasPorDia,CustoMDO) {
-  return(dias_abs*HorasPorDia*CustoMDO)
+  return(dias_abs*HorasPorDia*-CustoMDO)
 }
 
 #' @export
