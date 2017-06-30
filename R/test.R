@@ -63,3 +63,9 @@ library(dplyr)
 #
 # resultados_CBR = resultados_CBR %>% select(-Cenario.x,-Soma_CustoTotal.x,-Soma_CustoTotal.y)
 # write.table(resultados_CBR,file="resultados_CBR.csv",sep=";",dec=",",row.names = FALSE)
+#
+#
+#
+# iniciativas = obter_cenarios(inputs) %>% filter(!CenarioASIS) %>% select(Cenario)
+#
+# iniciativas = as.vector(t(iniciativas))
