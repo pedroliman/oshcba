@@ -5,37 +5,42 @@
 # library(devtools)
 # install_github("pedroliman/oshcba")
 library(shiny)
-# library(oshcba)
+library(oshcba)
 library(ggplot2)
 library(readxl)
 library(mc2d)
 library(dplyr)
+library(reshape2)
+library(purrr)
 
-#source("setup.R")
-#setup_oshcba()
-
+### Definindo uma seed fixa fora do app para ter replicações mehor comparáveis.
+set.seed(1000)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
   # Application title
-  titlePanel("Calculadora de Custos e Beneficios SST"),
+  titlePanel("Calculadora de Custos e Beneficios SST - V. 0.0.2"),
 
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
       "Faca Upload de seus dados de Input",
       fileInput("Dados de Input",
-                inputId = "DadosInput",buttonLabel = "Arquivo.xlsx"),
-      downloadButton('downloadData', 'Download')
+                inputId = "DadosInput",buttonLabel = "Arquivo.xlsx")
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
-      selectInput("Iniciativa", "Selecione a Iniciativa",
-                  c("TodasIniciativas", "Iniciativa1", "Iniciativa2")),
-      plotOutput("histograma_absenteismo")
-      ,tableOutput('table')
+
+      tabsetPanel(
+        tabPanel("Graficos",
+                 selectInput("Iniciativa", "Selecione a Iniciativa para exibir os Graficos",
+                             c("Iniciativa1", "Iniciativa2", "Iniciativa3", "Iniciativa4", "Iniciatva5", "Iniciativa6", "Iniciativa7", "Iniciativa8", "Iniciativa9", "Iniciativa10", "TodasIniciativas")),
+                 plotOutput("histograma_absenteismo")
+        ),
+        tabPanel("Tabela de Resultados", tableOutput("table"), downloadButton('downloadData', 'Baixar Tabela de Resultados'))
+      )
     )
   )
 )
@@ -88,9 +93,13 @@ server <- function(input, output, session) {
   output$histograma_absenteismo <- renderPlot({
     dados_simulados = dados_simulados()
     if (!is.null(dados_simulados))
-      dados_simulados = dados_simulados %>% filter(Cenario.y == input$Iniciativa)
-    qplot(dados_simulados$RazaoBeneficioCusto,geom = "histogram",
-          main="Histograma de Despesas em Absenteismo")
+      dados_simulados = dados_simulados %>% filter(Cenario.y == input$Iniciativa) %>% select(Cenario.y, BeneficioAbsenteismo, BeneficioTotalCBR, RazaoBeneficioCusto)
+
+    ggplot(data = melt(dados_simulados), mapping = aes(x = value)) +
+      geom_histogram(bins = 15) + facet_wrap(~variable, scales = 'free_x')
+
+    # qplot(dados_simulados$RazaoBeneficioCusto,geom = "histogram",
+    #       main="Histograma de Despesas em Absenteismo")
   })
 
   output$table <- renderTable({
