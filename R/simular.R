@@ -40,6 +40,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    )
 }
 
+
 criar_df_params = function (){
   VariaveisPorAno = data.frame(Cenario=character(),
                                Ano=as.integer(character()),
