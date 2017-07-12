@@ -1,8 +1,8 @@
-library(mc2d)
-library(ggplot2)
-library(lhs)
-library(dplyr)
-library(readxl)
+# library(mc2d)
+# library(ggplot2)
+# library(lhs)
+# library(dplyr)
+# library(readxl)
 
 obter_cenario_base = function(Inputs) {
   cenario_base = filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
@@ -148,8 +148,7 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx") {
   parametros = calcular_despesa_absenteismo(parametros)
 
   # Descontando Variaveis Monetarias
-  variaveis_a_descontar = c("CustoTotal","DespesaAbsenteismo")
-  resultados = descontar_fluxo_de_caixa(variaveis_a_descontar,inputs$Configs$AnoInicial,inputs$Configs$TaxaDeDesconto,parametros)
+  resultados = descontar_fluxo_de_caixa(oshcba_options$variaveis_a_descontar,inputs$Configs$AnoInicial,inputs$Configs$TaxaDeDesconto,parametros,oshcba_options$sufixo_vars_fc)
 
   # Obtendo Cenarios
   cenarios = obter_cenarios(inputs)

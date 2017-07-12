@@ -29,3 +29,7 @@ NULL
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
+
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage("Bem vindo a calculadora de custos e beneficios. V. 0.0.2-alpha")
+}

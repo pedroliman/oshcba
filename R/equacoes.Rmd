@@ -4,6 +4,7 @@ author: P.N. de Lima, D. B. Goldmeyer, L. F. R. Camargo, A. Dresch, D. P. Lacerd
   T. Kunrath
 date: "junho de 2017"
 output:
+  word_document: default
   pdf_document:
     keep_tex: yes
     latex_engine: xelatex
@@ -11,7 +12,6 @@ output:
     toc: yes
     toc_depth: 6
   html_document: default
-  word_document: default
 ---
 
 
@@ -120,6 +120,8 @@ $$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
 
 ##### Reabilitação do trabalhador
 
+Os custos para reabilitação do trabalhador deve compreender custos relacionados a RH, SST, recapacitação, adequação do posto de trabalho, e adequação do salário.
+
 
 #### Benefício Não Capturado
 
@@ -163,6 +165,8 @@ Custos de Benefícios: Considerar tempo médio de afastamento por tipo de afasta
 
 ##### B91, B92, B93, B,94, etc
 
+
+
 $$b_i = n_i * p_i \ \forall b_i \in B$$
 
 Obs: Será necessário possuir
@@ -204,22 +208,29 @@ $$D_{abs} = d_{abs} * h * c_{mdo}$$
 $$ d_{abs} = p_{<15}*f*n_{daf}+p_{falta}*f*n_{falta}$$
 
 ##### Variável Intermediária Acidentes
-Número de Acidentes
+Número de Acidentes $Nac_{k}$ dp tipo $k$ é igual ao número de funcionários na empresas vezes o percentual de funcionários que se acidentou $Pac_{k}$. O tipo de acidente pode ser Típico, de Trajeto, Doença Ocupacional ou "Não Acidente".
 
-$$n_{acidentesk} = f * p_{acidentes} \ \forall k \in K$$
+$$Nac_{k} = f * Pac_{k} \ \forall k \in K$$
 
 ##### Afastamentos
 
 Afastamentos < 15 dias:
-$$n_{afast<15k} = p_{<15} * n_{acidentes}  \ \forall k \in K$$
+$$naf_{<15k} = p_{<15} * Nac_{k}  \ \forall k \in K$$
 
 Afastamentos > 15 dias:
-$$n_{afast>15k} = p_{>15} * n_{acidentes}  \ \forall k \in K$$
+$$naf_{>15k} = p_{>15} * Nac_{k}  \ \forall k \in K$$
 Óbitos:
-$$n_{obitosk} = p_{obitos} *n_{acidentes}  \ \forall k \in K $$
+$$nob_{k} = p_{obitos} * Nac_{k}  \ \forall k \in K $$
 
 Acidentes Sem Afastamento:
-$$n_{safastk} = p_{obitos} *n_{acidentes}  \ \forall k \in K $$
+$$nsaf_{k} = p_{nsaf} *Nac_{k}  \ \forall k \in K $$
+
+
+###### Número de Benefícios Concedidos
+O número de Benefícios concedidos do tipo $i$ serão calculados...
+b92  = ...
+b93 = ...
+
 
 
 ###### Dias de Absenteísmo (Antigo)
@@ -230,7 +241,11 @@ $$d_{abs} = \rho_{abs} * f * d$$
 ##### Presenteísmo
 ##### Produtividade
 ##### Qualidade
+Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
 ##### Refugo e Retrabalho
+Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
+
+É necessário também considerar acidentes de trajeto?
 
 ##### MP, Insumos, Equipamentos Operação
 

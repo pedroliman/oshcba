@@ -1,6 +1,6 @@
-library(mc2d)
-library(ggplot2)
-library(lhs)
+# library(mc2d)
+# library(ggplot2)
+# library(lhs)
 
 #' Funcao Lucro
 #'

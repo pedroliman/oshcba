@@ -1,9 +1,9 @@
 
-library(mc2d)
-library(ggplot2)
-library(lhs)
-library(readxl)
-library(dplyr)
+# library(mc2d)
+# library(ggplot2)
+# library(lhs)
+# library(readxl)
+# library(dplyr)
 
 #
 # # Codigo para gerar a documentacao

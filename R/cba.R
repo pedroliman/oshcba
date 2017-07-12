@@ -1,4 +1,4 @@
-library(dplyr)
+# library(dplyr)
 #' Razao Beneficio Custo
 #'
 #' Esta funcao Calcula a razao beneficio custo
@@ -57,9 +57,8 @@ valor_presente = function(fc,t,i) {
 #' @export
 #'
 #' @examples
-descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros) {
+descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros, sufixo) {
   #Definindo Variávels Auxiliadoras
-  sufixo = "Descontado"
   novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
 
   # Descontando Variaveis

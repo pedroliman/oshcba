@@ -1,10 +1,11 @@
-library(readxl)
+# library(readxl)
 #' Carregar Dados
 #'
 #' Esta funcao carrega dados que serao usados como Input.
 #' @param arquivo_de_inputs Planilha do Excel Padronizada contendo Inputs do Modelo
 #' @keywords inputs
 #' @export
+#' @importFrom readxl read_excel
 #' @examples
 #' carregar_inputs ("Planilha_de_Inputs.xlsx")
 carregar_inputs = function (arquivo_de_inputs="Dados.xlsx") {
