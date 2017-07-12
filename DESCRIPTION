@@ -20,5 +20,6 @@ Imports:
     readxl,
     ggplot2,
     lhs,
-    shiny,
+    shiny
+Depends:
     dplyr

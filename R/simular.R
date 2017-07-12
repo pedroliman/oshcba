@@ -41,17 +41,17 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
   amostra = switch(distribuicao,
                    "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
                    "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2),
-                   "triangular" = mc2d::mcstoc(func = rtriang,min=parametro1,mode=parametro2,max=parametro3)
+                   "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3)
                    )
 }
 
 
-criar_df_params = function (){
+criar_df_params = function (vars_df_variaveis_por_ano = oshcba_options$vars_df_variaveis_por_ano){
   VariaveisPorAno = data.frame(Cenario=character(),
                                Ano=as.integer(character()),
                                Replicacao=as.integer(character()),
                                stringsAsFactors=FALSE)
-  names(VariaveisPorAno) = c("Cenario","Ano","Replicacao")
+  names(VariaveisPorAno) = vars_df_variaveis_por_ano
   return(VariaveisPorAno)
 }
 

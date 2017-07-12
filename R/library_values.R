@@ -9,6 +9,9 @@ oshcba_options = list(
 
   # Variaveis relacionadas ao desconto do fluxo de caixa
   sufixo_vars_fc = "Descontado",
-  variaveis_a_descontar = c("CustoTotal","DespesaAbsenteismo")
+  variaveis_a_descontar = c("CustoTotal","DespesaAbsenteismo"),
+
+  # Nomes de Variaveis
+  vars_df_variaveis_por_ano =  c("Cenario","Ano","Replicacao")
 
 )
