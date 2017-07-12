@@ -4,8 +4,13 @@
 # library(dplyr)
 # library(readxl)
 
+#' Title
+#'
+#' @param Inputs
+#'
+#' @return
 obter_cenario_base = function(Inputs) {
-  cenario_base = filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
+  cenario_base = dplyr::filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
   return(cenario_base)
 }
 
@@ -15,7 +20,7 @@ obter_anos = function(Inputs) {
 
 obter_replicacoes = function (Inputs) {
   replicacoes = 1:Inputs$Configs$Replicacoes
-  ndvar(Inputs$Configs$Replicacoes)
+  mc2d::ndvar(Inputs$Configs$Replicacoes)
   return(replicacoes)
 }
 
@@ -34,9 +39,9 @@ obter_variaveis = function(parametros_por_ano) {
 
 obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
   amostra = switch(distribuicao,
-                   "normal" = mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
-                   "uniforme" = mcstoc(func = runif,min=parametro1,max=parametro2),
-                   "triangular" = mcstoc(func = rtriang,min=parametro1,mode=parametro2,max=parametro3)
+                   "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
+                   "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2),
+                   "triangular" = mc2d::mcstoc(func = rtriang,min=parametro1,mode=parametro2,max=parametro3)
                    )
 }
 
@@ -65,7 +70,7 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
 
     for (t in anos){
       for (c in cenarios$Cenario) {
-        params = filter(parametros_por_ano, NomeVariavel==v & Cenario==c & Ano==t)
+        params = dplyr::filter(parametros_por_ano, NomeVariavel==v & Cenario==c & Ano==t)
         amostra = obter_amostra(distribuicao = params$Distribuicao,
                                parametro1 = params$Parametro1,
                                parametro2 = params$Parametro2,
@@ -129,7 +134,7 @@ obter_parametros = function(Inputs) {
 #' @return cenarios
 #' @export
 obter_cenarios = function(Inputs) {
-  cenarios = filter(Inputs$Cenarios,Simular) %>% select(-Simular)
+  cenarios = dplyr::filter(Inputs$Cenarios,Simular) %>% select(-Simular)
   return(cenarios)
 }
 
@@ -141,7 +146,7 @@ exportar_dados_simulados = function(parametros) {
 
 #' @export
 simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx") {
-  inputs = carregar_inputs(ArquivoInputs)
+  inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs)
   parametros = obter_parametros(inputs)
 
   # Calculando Modulos de Beneficio
@@ -171,11 +176,11 @@ calcular_cbr = function (resultados,cenarios) {
 
   resultados_sintetizados = inner_join(resultados_sintetizados,cenarios, by="Cenario")
 
-  replicacoes_sem_iniciativa = filter(resultados_sintetizados,CenarioASIS == TRUE)
+  replicacoes_sem_iniciativa = dplyr::filter(resultados_sintetizados,CenarioASIS == TRUE)
   replicacoes_sem_iniciativa = select(replicacoes_sem_iniciativa,-CenarioASIS)
 
 
-  replicacoes_com_iniciativa = filter(resultados_sintetizados,CenarioASIS == FALSE)
+  replicacoes_com_iniciativa = dplyr::filter(resultados_sintetizados,CenarioASIS == FALSE)
   replicacoes_com_iniciativa = select(replicacoes_com_iniciativa,-CenarioASIS)
 
   resultados_CBR = inner_join(replicacoes_sem_iniciativa,replicacoes_com_iniciativa,by="Replicacao")
