@@ -15,3 +15,11 @@ oshcba_options = list(
   vars_df_variaveis_por_ano =  c("Cenario","Ano","Replicacao")
 
 )
+
+#' Export OshCBA Options
+#'
+#' @return oshcba_options
+#' @export
+obter_oshcba_options = function () {
+  oshcba_options
+}

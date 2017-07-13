@@ -145,23 +145,33 @@ exportar_dados_simulados = function(parametros) {
 }
 
 #' @export
-simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx") {
+simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples") {
   inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs)
   parametros = obter_parametros(inputs)
 
   # Calculando Modulos de Beneficio
-  parametros = calcular_despesa_absenteismo(parametros)
+  resultados = calcular_despesa_absenteismo(parametros)
 
   # Descontando Variaveis Monetarias
-  resultados = descontar_fluxo_de_caixa(oshcba_options$variaveis_a_descontar,inputs$Configs$AnoInicial,inputs$Configs$TaxaDeDesconto,parametros,oshcba_options$sufixo_vars_fc)
+  resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
+                                                    ano_inicial = inputs$Configs$AnoInicial,
+                                                    i = inputs$Configs$TaxaDeDesconto,
+                                                    parametros = resultados,
+                                                    sufixo = oshcba_options$sufixo_vars_fc)
 
   # Obtendo Cenarios
   cenarios = obter_cenarios(inputs)
 
   ## Calculando Variáveis do CBR
-  resultados_CBR = calcular_cbr(resultados,cenarios)
+  resultados_CBR = calcular_cbr(resultados_descontados,cenarios)
 
-  return(resultados_CBR)
+  ## Definindo Lista Completa de Inputs, Options, ensemble e resultados_CBR
+
+  output = switch(EXPR = modo,
+                  "simples" = resultados_CBR,
+                  "completo" = list(Inputs = inputs, Osh_Options = oshcba_options, Parametros = parametros, Resultados = resultados, Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
+
+  return(output)
 }
 
 
