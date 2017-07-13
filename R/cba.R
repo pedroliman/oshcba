@@ -28,7 +28,6 @@ roi = function(costs, benefits) {
 }
 
 
-
 #' Fluxo de Caixa Descontado
 #'
 #' @param fc Fluxo de Caixa (numero, em valores monetarios)

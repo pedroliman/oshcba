@@ -149,8 +149,10 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples"
   inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs)
   parametros = obter_parametros(inputs)
 
-  # Calculando Modulos de Beneficio
-  resultados = calcular_despesa_absenteismo(parametros)
+  # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes Importa
+  resultados = obter_parametros(inputs) %>%
+    calcular_nev_k() %>%
+    calcular_despesa_absenteismo()
 
   # Descontando Variaveis Monetarias
   resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
