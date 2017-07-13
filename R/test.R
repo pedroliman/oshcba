@@ -1,5 +1,5 @@
 
-
+#' @export
 simular_e_gravar_resultados = function () {
   base_folder = paste(getwd(),"resultados",as.character(Sys.time()), sep = "/")
   resultados = simular_temp_absenteismo(modo = "completo")
@@ -15,5 +15,3 @@ simular_e_gravar_resultados = function () {
   write.table(resultados$Resultados_Descontados, "Resultados_CBR.csv",sep=";",dec=",",row.names = FALSE)
   resultados
 }
-
-a = 123213
