@@ -176,6 +176,7 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples"
                   "simples" = resultados_CBR,
                   "completo" = list(Inputs = inputs, Osh_Options = oshcba_options, Parametros = parametros, Resultados = resultados, Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
 
+  # Mudar para output depois
   return(output)
 }
 
@@ -239,11 +240,13 @@ calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes
 
         #TODO: E se nem Todos os Outputs estao presentes
         if (!all(v_outputs %in% colnames(resultados))) {
-          resultados = funcoes_list[[f]](parametros)
+          resultados = funcoes_list[[f]](resultados)
           print(paste("Funcao Calculada: ", f))
-        } else {print(paste("Todos os Outputs Ja Foram calculados: ", f))}
+        } else {
+          print(paste("Todos os Outputs Ja Foram calculados: ", f))}
 
-      } else {print(paste("Faltam Inputs para calcular: ", f))}
+      } else {
+        print(paste("Faltam Inputs para calcular: ", f))}
     }
     i + 1
   }

@@ -22,13 +22,13 @@ oshcba_options = list(
   pref_prob_cs = "Pcs",
   separador_dimensoes = "_",
   vetor_eventos_k = c("Tipico", "Trajeto", "DoenOcup", "NRelac"),
-  vetor_consequencias_l = c("Afmenor15", "Afmaior15", "Safast", "Obito", "Falta"),
+  vetor_consequencias_c = c("Afmenor15", "Afmaior15", "Safast", "Obito"),
 
   # Lista de Funcoes:
-  funcoes_list = list(calcular_eventos = calcular_eventos, formula_nev_k = formula_nev_k, formula_ncs_j_k = formula_ncs_j_k),
+  funcoes_list = list(calcular_eventos_e_consequencias = calcular_eventos_e_consequencias, calcular_faltas = calcular_faltas),
 
   # Vetor de Funcoes a Calcular
-  v_funcoes = c("calcular_eventos"),
+  v_funcoes = c("calcular_eventos_e_consequencias", "calcular_faltas"),
 
   # Iteracoes a realizar
   iteracoes = 2
