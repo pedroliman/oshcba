@@ -151,7 +151,10 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples"
 
   # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes Importa
   resultados = obter_parametros(inputs) %>%
-    calcular_nev_k() %>%
+    calcular_funcoes(inputs_funcoes = inputs$Funcoes_Inputs,
+                     output_funcoes = inputs$Funcoes_Outputs,
+                     funcoes = oshcba_options$v_funcoes,
+                     funcoes_list = oshcba_options$funcoes_list) %>%
     calcular_despesa_absenteismo()
 
   # Descontando Variaveis Monetarias
@@ -175,7 +178,6 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples"
 
   return(output)
 }
-
 
 #'@export
 calcular_cbr = function (resultados,cenarios) {
@@ -209,4 +211,41 @@ calcular_cbr = function (resultados,cenarios) {
 
   resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotal.x,-Soma_CustoTotal.y)
   return(resultados_CBR)
+}
+
+#' Calcular Funcoes
+#'
+#' @param parametros Dataframe de parametros a serem usados para o calculo
+#' @param inputs_funcoes Dataframe de inputs por Funcao
+#' @param output_funcoes Dataframe de Outputs por Funcao
+#' @param funcoes Vetor com o nome das Funcoes a serem calculadas
+#' @param funcoes_list List com todas as funcoes que podem ser usadas pelo Calcular Funcoes
+#'
+#' @return Dataframe de resultados com as variaveis calculadas
+#' @export
+#'
+calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes, funcoes_list) {
+  iteracoes = oshcba_options$iteracoes
+  resultados = parametros
+  # Esta funcao calcula as demais funcoes
+  for (i in 1:iteracoes) {
+    for (f in funcoes){
+      v_inputs = inputs_funcoes %>% dplyr::filter(Funcao == f) %>% .$Inputs
+      v_outputs = output_funcoes %>% dplyr::filter(Funcao == f) %>% .$Outputs
+
+      # Só executar a funcao se..
+      # Todos os Inputs estão presentes:
+      if (all(v_inputs %in% colnames(resultados))) {
+
+        #TODO: E se nem Todos os Outputs estao presentes
+        if (!all(v_outputs %in% colnames(resultados))) {
+          resultados = funcoes_list[[f]](parametros)
+          print(paste("Funcao Calculada: ", f))
+        } else {print(paste("Todos os Outputs Ja Foram calculados: ", f))}
+
+      } else {print(paste("Faltam Inputs para calcular: ", f))}
+    }
+    i + 1
+  }
+  return(resultados)
 }
