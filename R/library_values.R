@@ -25,7 +25,10 @@ oshcba_options = list(
   vetor_consequencias_c = c("Afmenor15", "Afmaior15", "Safast", "Obito"),
 
   # Vetor de Funcoes a Calcular
-  v_funcoes = c("calcular_even_e_cons", "calcular_faltas"),
+  v_funcoes = c("calcular_eventos", "calcular_faltas"),
+
+  # lista de funcoes
+  # funcoes_list = list(calcular_eventos = calcular_eventos, calcular_faltas = calcular_faltas),
 
   # Iteracoes a realizar
   iteracoes = 2
@@ -41,6 +44,3 @@ obter_oshcba_options = function () {
 }
 
 
-funcoes_list = function() {
-  list(calcular_even_e_cons = calcular_even_e_cons, calcular_faltas = calcular_faltas)
-}
