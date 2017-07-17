@@ -74,13 +74,15 @@ descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametr
   #Definindo Variavels Auxiliadoras
   novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
 
+  message(paste("06. cba.R/descontar_fluxo_de_caixa: Iniciando Calculo do Valor Presente Liquido das variaveis: ",
+                variaveis_a_descontar))
+
   # Descontando Variaveis
   for (v in variaveis_a_descontar) {
     var_descontada = which(variaveis_a_descontar == v)
     nova_variavel = novas_variaveis[var_descontada]
     parametros[nova_variavel] = valor_presente(parametros[v],parametros$Ano-ano_inicial,i)
   }
-
   return(parametros)
 }
 

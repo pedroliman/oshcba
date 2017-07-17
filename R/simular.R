@@ -6,17 +6,21 @@ exportar_dados_simulados = function(parametros) {
 }
 
 #' @export
-simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples") {
+simular_temp_absenteismo = function(ArquivoInputs="./data/Dados.xlsx", modo = "simples") {
   inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs)
   parametros = obter_parametros(inputs)
 
   # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes Importa
-  resultados = obter_parametros(inputs) %>%
+
+  message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
+  resultados = parametros %>%
     calcular_funcoes(inputs_funcoes = inputs$Funcoes_Inputs,
                      output_funcoes = inputs$Funcoes_Outputs,
                      funcoes = oshcba_options$v_funcoes,
                      funcoes_list = funcoes_list) %>%
     calcular_despesa_absenteismo()
+
+  message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
 
   # Descontando Variaveis Monetarias
   resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
@@ -37,6 +41,7 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples"
                   "simples" = resultados_CBR,
                   "completo" = list(Inputs = inputs, Osh_Options = oshcba_options, Parametros = parametros, Resultados = resultados, Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
 
+  message("08. simular.R/simular: Finalizando Simulacao.")
   # Mudar para output depois
   return(output)
 }
@@ -44,6 +49,7 @@ simular_temp_absenteismo = function(ArquivoInputs="Dados.xlsx", modo = "simples"
 #'@export
 calcular_cbr = function (resultados,cenarios) {
 
+  message("07. simular.R/calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
   ### Sintetizando Resultados por Cenario e Replicacao
   resultados_sintetizados = resultados %>% group_by(Cenario,Replicacao) %>%
     summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
@@ -72,6 +78,7 @@ calcular_cbr = function (resultados,cenarios) {
   ### Mantendo Apenas Variaveis uteis
 
   resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotal.x,-Soma_CustoTotal.y)
+  message("07. simular.R/calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
   return(resultados_CBR)
 }
 
@@ -101,13 +108,19 @@ calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes
 
         #TODO: E se nem Todos os Outputs estao presentes
         if (!all(v_outputs %in% colnames(resultados))) {
-          resultados = funcoes_list[[f]](resultados)
-          print(paste("Funcao Calculada: ", f))
+          chamada_da_funcao = paste(f,"(resultados)",sep = "")
+
+
+          # Problema da "chamada" dinamica A funcao:
+          # Resolvido usando este link: https://stackoverflow.com/questions/36161760/r-programmatically-create-a-function-call
+          resultados = eval(parse(text = chamada_da_funcao))
+          # resultados = funcoes_list[[f]](resultados)
+          message(paste("04. simular.R/calcular_funcoes: Funcao Calculada: ", f))
         } else {
-          print(paste("Todos os Outputs Ja Foram calculados: ", f))}
+          message(paste("04. simular.R/calcular_funcoes: Todos os Outputs Ja Foram calculados: ", f))}
 
       } else {
-        print(paste("Faltam Inputs para calcular: ", f))}
+        message(paste("04. simular.R/calcular_funcoes: Faltam Inputs para calcular: ", f))}
     }
     i + 1
   }

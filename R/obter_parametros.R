@@ -119,6 +119,7 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
 #' @examples
 #' obter_parametros(inputs)
 obter_parametros = function(Inputs) {
+  message("02. obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
   replicacoes = obter_replicacoes(Inputs)
   anos = obter_anos(Inputs)
   cenarios = obter_cenarios(Inputs)
@@ -130,6 +131,7 @@ obter_parametros = function(Inputs) {
 
   custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
   parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
+  message("02. obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
   return(parametros)
 }
 

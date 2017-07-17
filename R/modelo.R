@@ -1,6 +1,6 @@
 ############# EVENTOS E CONSEQUENCIAS #################
 
-calcular_even_e_cons = function(parametros) {
+calcular_eventos = function(parametros) {
 
   separador = oshcba_options$separador_dimensoes
   prefixo_inputs = oshcba_options$pref_prob_ev
