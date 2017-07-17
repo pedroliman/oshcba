@@ -31,6 +31,27 @@ $$\alpha = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
 Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente.
 
 $$B_i(t) = \frac{b_i}{(1+\theta)^t}$$
+### Calculo da Falta
+Em todos os casos, o número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_falta$, conforme equação abaixo: 
+
+$$Nfalta = f * T_falta$$ 
+### Calculo dos Eventos
+Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, probabilidade do evento "k" ocorrer $Pev_{k}$, e a probabilidade da consequência $"c"$ ocorrer $Pev_c$. Onde $k$ pertence ao conjunto K= [típico, trajeto, doença não ocupacional]. E $c$ pertece ao conjunto C =[ afastamento<15, afastamento>15, óbito, sem afastamento].  
+
+$$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
+#### B92
+$$N_{b92} = Nev_{af_{<15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
+#### B91
+$$N_{b91} = Nev_{af>15}, ocupacional} * P_{inval}$$
+#### B94
+
+$$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico}  ) * P_{inval}$$
+#### B93
+
+$$N_{b93} = Nev_{obito, k}$$
+#### Numero de benefícios acumulados 
+
+$$N_B = \sum_{i=1}^{B} n_iacumulado \ \forall \ i \  \in \ B$$
 
 ### Calculo dos Benefícios
 Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
@@ -82,6 +103,7 @@ $$D_{ações regressivas INSS} =  \sum_{i=1}^{B} n_iacumulado * p_iacaoregressiv
 
 Dúvida: O NTEP já estará contabilizado integralmente pelo FAP? Sim: Então precisa estar aqui. Não: Então
 Dúvida 2: Crise econômica deve modular esta probabilidade? Que variáveis de contexto devem modular que variáveis de input?
+
 
 ###### Ações Regressivas Relacionadas ao Plano de Saúde
 
