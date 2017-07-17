@@ -1,11 +1,18 @@
 Package: oshcba
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Simulacao Monte Carlo de Custos e Beneficios em SST
+Version: 0.0.3
+Author: Pedro Nascimento de Lima
+Maintainer: Pedro N. de Lima <pedrolima.n@gmail.com>
+Description: Analise de Custos e Beneficios em SST usando simulacao Monte Carlo.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+    mc2d,
+    readxl,
+    ggplot2,
+    lhs,
+    shiny
+Depends:
+    dplyr
