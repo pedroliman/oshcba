@@ -1,21 +1,4 @@
-
-calcular_eventos = function(parametros) {
-
-  prefixo_inputs = oshcba_options$pref_prob_ev
-  prefixo_outputs = oshcba_options$pref_n_ev
-  eventos_k = oshcba_options$vetor_eventos_k
-  consequencias_c = oshcba_options$vetor_consequencias_c
-  vetor_inputs = paste(prefixo_inputs, eventos_k, sep = "_")
-  vetor_outputs = paste(prefixo_outputs, eventos_k, sep = "_")
-
-  parametros[vetor_outputs] = formula_nev_k(f = parametros$Funcionarios, Pev_k = parametros[vetor_inputs])
-  parametros
-
-}
-
-
-
-############# EVENTOS E CONSEQUÊNCIAS #################
+############# EVENTOS E CONSEQUENCIAS #################
 
 calcular_eventos_e_consequencias = function(parametros) {
 
@@ -59,17 +42,6 @@ formula_nev_k = function(f, Pev_k) {
 formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
   round(x = Nev_k*Pcs_k_l, digits = 0)
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 ############# FALTAS #################
@@ -161,14 +133,7 @@ calcular_despesa_absenteismo = function(parametros) {
 
 
 
-
-
-
-
-
-
-
-# Funcoes nao utilizadas
+### FUNCOES NAO UTILIZADAS ####
 conferir_params = function(parametros, inputs) {
 
   mensagem = "Confira seu arquivo de dados. Voce não informou todos os parametros."
