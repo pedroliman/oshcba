@@ -1,0 +1,787 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+---
+title: "Código Fonte"
+output: html_notebook
+--
+
+Versao do Codigo: 18/07/2017
+
+```{r}
+
+# cba.R
+
+
+### RAZAO BENEFICIO CUSTO ####
+
+# library(dplyr)
+#' Razao Beneficio Custo
+#'
+#' Esta funcao Calcula a razao beneficio custo
+#' @param benefits O Beneficio em Valores Monetarios (numerico).
+#' @param costs Os Custos da Iniciativa em Valores Monetarios (numerico).
+#' @keywords cbr
+#' @return Razao Beneficio Custo
+#' @export
+#' @examples
+#' cbr(20,30)
+cbr = function(costs, benefits) {
+  return(benefits/costs)
+}
+
+
+#' Retorno Sobre Investimento
+#'
+#' @param costs Custos Envolvidos
+#' @param benefits Benefícios Envolvidos
+#'
+#' @return ROI (numérico)
+#' @export
+#'
+#'
+roi = function(costs, benefits) {
+  return((benefits - costs)/costs)
+}
+
+
+beneficio = function(despesas_com_intervencao,despesas_sem_intervencao) {
+  return (despesas_com_intervencao - despesas_sem_intervencao)
+}
+
+custo = function(custos_com_intervencao,custos_sem_intervencao) {
+  return (custos_com_intervencao - custos_sem_intervencao)
+}
+
+### FLUXO DE CAIXA DESCONTADO ####
+
+#' Fluxo de Caixa Descontado
+#'
+#' @param fc Fluxo de Caixa (numero, em valores monetarios)
+#' @param t Tempo do fluxo de caixa.
+#' @param i Taxa de Juros.
+#'
+#' @return fcd Fluxo de Caixa Descontado
+#' @examples
+#' valor_presente(20,2,0.1)
+valor_presente = function(fc,t,i) {
+  fcd = fc/(1+i)^(t)
+  return(fcd)
+}
+
+#' Descontar Fluxo de Vaixa
+#'
+#' Calcula o Fluxo de Caixa Descontado Individual de um Conjunto de Variáveis Definido.
+#'
+#'
+#' @param variaveis_a_descontar Vetor com nome de variaveis que terao o fluxo de caixa descontado
+#' @param ano_inicial Número do Ano inicial que sera descontado
+#' @param i Taxa de Desconto.
+#' @param parametros Dataframe de parametros que contem variaveis a descontar e
+#'
+#' @return
+#' @export
+#'
+#' @examples
+descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros, sufixo) {
+  #Definindo Variavels Auxiliadoras
+  novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
+
+  message(paste("06. cba.R/descontar_fluxo_de_caixa: Iniciando Calculo do Valor Presente Liquido das variaveis: ",
+                variaveis_a_descontar))
+
+  # Descontando Variaveis
+  for (v in variaveis_a_descontar) {
+    var_descontada = which(variaveis_a_descontar == v)
+    nova_variavel = novas_variaveis[var_descontada]
+    parametros[nova_variavel] = valor_presente(parametros[v],parametros$Ano-ano_inicial,i)
+  }
+  return(parametros)
+}
+
+
+
+despesas_absenteismo = function(dias_abs,HorasPorDia,CustoMDO) {
+  return(dias_abs*HorasPorDia*-CustoMDO)
+}
+
+#' @export
+dias_absenteismo = function(Funcionarios,PercMen15,PercFalta,Nafast,Nfalta) {
+  return(Funcionarios*(PercMen15*Nafast+PercFalta*Nfalta))
+}
+
+
+## Calculos de Absenteismo:
+
+#' @export
+calcular_dias_absenteismo = function(parametros) {
+
+  # Verificando se Parametro ja foi calculado
+  if(!("DiasAbsenteismo" %in% colnames(parametros)))
+  {
+    parametros = mutate(parametros,DiasAbsenteismo =
+                          dias_absenteismo(Funcionarios,
+                                           PercAfastMen15,
+                                           PercFalta,
+                                           NAfastMen15,
+                                           NDiasFalta)
+    )
+  }
+  return(parametros)
+}
+
+#' @export
+calcular_despesa_absenteismo = function(parametros) {
+
+  # Calculando parametros dependentes
+  parametros = calcular_dias_absenteismo(parametros)
+
+
+  # Calculando Despesa Final
+  parametros = mutate(parametros,DespesaAbsenteismo =
+                        despesas_absenteismo(DiasAbsenteismo,HorasPorDia,CustoMDO)
+  )
+  return(parametros)
+}
+
+
+# dados.R
+# library(readxl)
+#' Carregar Dados
+#'
+#' Esta funcao carrega dados que serao usados como Input.
+#' @param arquivo_de_inputs Planilha do Excel Padronizada contendo Inputs do Modelo
+#' @keywords inputs
+#' @export
+#' @importFrom readxl read_excel
+#' @examples
+#' carregar_inputs ("Planilha_de_Inputs.xlsx")
+carregar_inputs = function (arquivo_de_inputs="./data/Dados.xlsx", abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
+
+  # Criando uma list para os inputs
+  message(
+    paste("01. dados.R/carregar_inputs: Iniciando Carregamento de Inputs (funcao carregar_inputs()",
+          "arquivo_de_inputs = ", arquivo_de_inputs)
+    )
+  inputs = vector(mode = "list", length = length(nomes_inputs))
+  names(inputs) = nomes_inputs
+
+  # Preenchendo os Dados dos Inputs
+  for (aba in abas_a_ler) {
+    n_aba = which(aba == abas_a_ler)
+    inputs[[n_aba]] = readxl::read_excel(arquivo_de_inputs,sheet = aba)
+  }
+
+  message("01. dados.R/carregar_inputs: Finalizando Carregamento de Inputs.")
+  return(inputs)
+
+}
+
+#' @export
+simular_e_gravar_resultados = function () {
+  base_folder = paste(getwd(),"resultados",as.character(Sys.time()), sep = "/")
+  resultados = simular_temp_absenteismo(modo = "completo")
+
+  ## Pode existir uma maneira mais prática de fazer isto, mas eu não encontrei:
+  write.table(resultados$Inputs$Configs, "Inputs$Configs.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Inputs$DadosProjetados, "Inputs$DadosProjetados.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Inputs$Parametros, "Inputs$Parametros.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Inputs$Cenarios, "Inputs$Cenarios.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Inputs$Custos, "Inputs$Custos.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Parametros, "Parametros.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Resultados, "Resultados.csv",sep=";",dec=",",row.names = FALSE)
+  write.table(resultados$Resultados_Descontados, "Resultados_CBR.csv",sep=";",dec=",",row.names = FALSE)
+  resultados
+}
+
+
+# simular.R
+
+#'@export
+exportar_dados_simulados = function(parametros) {
+  arquivo = write.table(parametros,file="dados_simulados.csv",sep=";",dec=",",row.names = FALSE)
+  return(arquivo)
+}
+
+#' @export
+simular_temp_absenteismo = function(ArquivoInputs="./data/Dados.xlsx", modo = "simples") {
+  inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs)
+  parametros = obter_parametros(inputs)
+
+  # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes Importa
+
+  message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
+  resultados = parametros %>%
+    calcular_funcoes(inputs_funcoes = inputs$Funcoes_Inputs,
+                     output_funcoes = inputs$Funcoes_Outputs,
+                     funcoes = oshcba_options$v_funcoes,
+                     funcoes_list = funcoes_list) %>%
+    calcular_despesa_absenteismo()
+
+  message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
+
+  # Descontando Variaveis Monetarias
+  resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
+                                                    ano_inicial = inputs$Configs$AnoInicial,
+                                                    i = inputs$Configs$TaxaDeDesconto,
+                                                    parametros = resultados,
+                                                    sufixo = oshcba_options$sufixo_vars_fc)
+
+  # Obtendo Cenarios
+  cenarios = obter_cenarios(inputs)
+
+  ## Calculando Variaveis do CBR
+  resultados_CBR = calcular_cbr(resultados_descontados,cenarios)
+
+  ## Definindo Lista Completa de Inputs, Options, ensemble e resultados_CBR
+
+  output = switch(EXPR = modo,
+                  "simples" = resultados_CBR,
+                  "completo" = list(Inputs = inputs, Osh_Options = oshcba_options, Parametros = parametros, Resultados = resultados, Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
+
+  message("08. simular.R/simular: Finalizando Simulacao.")
+  # Mudar para output depois
+  return(output)
+}
+
+#'@export
+calcular_cbr = function (resultados,cenarios) {
+
+  message("07. simular.R/calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
+  ### Sintetizando Resultados por Cenario e Replicacao
+  resultados_sintetizados = resultados %>% group_by(Cenario,Replicacao) %>%
+    summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
+              Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado)
+    )
+
+  resultados_sintetizados = inner_join(resultados_sintetizados,cenarios, by="Cenario")
+
+  replicacoes_sem_iniciativa = dplyr::filter(resultados_sintetizados,CenarioASIS == TRUE)
+  replicacoes_sem_iniciativa = select(replicacoes_sem_iniciativa,-CenarioASIS)
+
+
+  replicacoes_com_iniciativa = dplyr::filter(resultados_sintetizados,CenarioASIS == FALSE)
+  replicacoes_com_iniciativa = select(replicacoes_com_iniciativa,-CenarioASIS)
+
+  resultados_CBR = inner_join(replicacoes_sem_iniciativa,replicacoes_com_iniciativa,by="Replicacao")
+
+  ### Calculando Beneficios Totais, Custos e Razao Custo Beneficio
+  resultados_CBR = resultados_CBR %>%
+    mutate(CustoTotalCBR = custo(Soma_CustoTotal.y,Soma_CustoTotal.x),
+           BeneficioAbsenteismo = beneficio(Soma_DespesaAbsenteismo.y,Soma_DespesaAbsenteismo.x)) %>%
+    ## Aqui entrariam outros beneficios
+    mutate(BeneficioTotalCBR = BeneficioAbsenteismo + 0) %>%
+    mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,costs=CustoTotalCBR))
+
+  ### Mantendo Apenas Variaveis uteis
+
+  resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotal.x,-Soma_CustoTotal.y)
+  message("07. simular.R/calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
+  return(resultados_CBR)
+}
+
+#' Calcular Funcoes
+#'
+#' @param parametros Dataframe de parametros a serem usados para o calculo
+#' @param inputs_funcoes Dataframe de inputs por Funcao
+#' @param output_funcoes Dataframe de Outputs por Funcao
+#' @param funcoes Vetor com o nome das Funcoes a serem calculadas
+#' @param funcoes_list List com todas as funcoes que podem ser usadas pelo Calcular Funcoes
+#'
+#' @return Dataframe de resultados com as variaveis calculadas
+#' @export
+#'
+calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes, funcoes_list) {
+  iteracoes = oshcba_options$iteracoes
+  resultados = parametros
+  # Esta funcao calcula as demais funcoes
+  for (i in 1:iteracoes) {
+    for (f in funcoes){
+      v_inputs = inputs_funcoes %>% dplyr::filter(Funcao == f) %>% .$Inputs
+      v_outputs = output_funcoes %>% dplyr::filter(Funcao == f) %>% .$Outputs
+
+      # So executar a funcao se..
+      # Todos os Inputs estao presentes:
+      if (all(v_inputs %in% colnames(resultados))) {
+
+        #TODO: E se nem Todos os Outputs estao presentes
+        if (!all(v_outputs %in% colnames(resultados))) {
+          chamada_da_funcao = paste(f,"(resultados)",sep = "")
+
+
+          # Problema da "chamada" dinamica A funcao:
+          # Resolvido usando este link: https://stackoverflow.com/questions/36161760/r-programmatically-create-a-function-call
+          resultados = eval(parse(text = chamada_da_funcao))
+          # resultados = funcoes_list[[f]](resultados)
+          message(paste("04. simular.R/calcular_funcoes: Funcao Calculada: ", f))
+        } else {
+          message(paste("04. simular.R/calcular_funcoes: Todos os Outputs Ja Foram calculados: ", f))}
+
+      } else {
+        message(paste("04. simular.R/calcular_funcoes: Faltam Inputs para calcular: ", f))}
+    }
+    i + 1
+  }
+  return(resultados)
+}
+
+
+# obter_parametros.R
+#' Title
+#'
+#' @param Inputs
+#'
+#' @return
+obter_cenario_base = function(Inputs) {
+  cenario_base = dplyr::filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
+  return(cenario_base)
+}
+
+obter_anos = function(Inputs) {
+  return(Inputs$DadosProjetados$Ano)
+}
+
+obter_replicacoes = function (Inputs) {
+  replicacoes = 1:Inputs$Configs$Replicacoes
+  mc2d::ndvar(Inputs$Configs$Replicacoes)
+  return(replicacoes)
+}
+
+obter_parametros_por_ano = function (Inputs,cenarios,anos) {
+  # Definindo os Parâmetros
+  parametros_por_ano = merge(cenarios,anos,by=NULL)
+  names(parametros_por_ano) = c("Cenario","CenarioBase","Ano")
+  # Atribuindo os Nomes de Parâmetros
+  parametros_por_ano = inner_join(parametros_por_ano,Inputs$Parametros,by="Cenario")
+  # TODO: Aqui eu deveria substituir os parâmetros com delay!
+}
+
+obter_variaveis = function(parametros_por_ano) {
+  return(parametros_por_ano %>% select(NomeVariavel) %>% distinct())
+}
+
+obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
+  amostra = switch(distribuicao,
+                   "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
+                   "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2),
+                   "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3)
+                   )
+}
+
+#' Obter Cenarios
+#'
+#' @param Inputs Objeto de Inputs (lista)
+#'
+#' @return cenarios
+#' @export
+obter_cenarios = function(Inputs) {
+  cenarios = dplyr::filter(Inputs$Cenarios,Simular) %>% select(-Simular)
+  return(cenarios)
+}
+
+
+
+criar_df_params = function (vars_df_variaveis_por_ano = oshcba_options$vars_df_variaveis_por_ano){
+  VariaveisPorAno = data.frame(Cenario=character(),
+                               Ano=as.integer(character()),
+                               Replicacao=as.integer(character()),
+                               stringsAsFactors=FALSE)
+  names(VariaveisPorAno) = vars_df_variaveis_por_ano
+  return(VariaveisPorAno)
+}
+
+criar_df_params_cvar = function() {
+  DataFrameVariaveis = data.frame(criar_df_params(),
+                                  Variavel=as.integer(character()))
+  return(DataFrameVariaveis)
+}
+
+gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,replicacoes) {
+  i=0
+  for (v in variaveis[,1]) {
+
+    DataFrameVariaveis = criar_df_params_cvar()
+    names(DataFrameVariaveis) = c("Cenario","Ano","Replicacao",v)
+
+    for (t in anos){
+      for (c in cenarios$Cenario) {
+        params = dplyr::filter(parametros_por_ano, NomeVariavel==v & Cenario==c & Ano==t)
+        amostra = obter_amostra(distribuicao = params$Distribuicao,
+                               parametro1 = params$Parametro1,
+                               parametro2 = params$Parametro2,
+                               parametro3 = params$Parametro3,
+                               parametro4 = params$Parametro4)
+
+        VAriavelAmostra = data.frame(Cenario=c,
+                                     Ano=t,
+                                     Replicacao=replicacoes,
+                                     v=amostra[,,1],
+                                     stringsAsFactors=FALSE)
+        names(VAriavelAmostra) = c("Cenario","Ano","Replicacao",v)
+
+        DataFrameVariaveis = bind_rows(DataFrameVariaveis,VAriavelAmostra)
+
+        rm(amostra)
+      }
+    }
+
+    if (i==0) {
+      # VariaveisPorAno = full_join(VariaveisPorAno,DataFrameVariaveis)
+      VariaveisPorAno = DataFrameVariaveis
+    } else {
+      VariaveisPorAno = full_join(VariaveisPorAno,DataFrameVariaveis,by=c("Cenario", "Ano", "Replicacao"))
+    }
+    i = i+1
+
+  }
+  return(VariaveisPorAno)
+
+}
+
+#' Obter Parametros
+#'
+#' @param Inputs Inputs Carregados com a funcao carregar_inputs()
+#'
+#' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
+#' @export
+#'
+#' @examples
+#' obter_parametros(inputs)
+obter_parametros = function(Inputs) {
+  message("02. obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
+  replicacoes = obter_replicacoes(Inputs)
+  anos = obter_anos(Inputs)
+  cenarios = obter_cenarios(Inputs)
+  parametros_por_ano = obter_parametros_por_ano(Inputs,cenarios,anos)
+  variaveis = obter_variaveis(parametros_por_ano)
+  parametros = gerar_amostra_parametros(variaveis,anos,cenarios,parametros_por_ano,replicacoes)
+  # Unindo Parametros aos Dados Projetados
+  parametros = inner_join(parametros,Inputs$DadosProjetados,by="Ano")
+
+  custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
+  parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
+  message("02. obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
+  return(parametros)
+}
+
+
+# modelo.R
+############# EVENTOS E CONSEQUENCIAS #################
+
+calcular_eventos = function(parametros) {
+
+  separador = oshcba_options$separador_dimensoes
+  prefixo_inputs = oshcba_options$pref_prob_ev
+  prefixo_outputs = oshcba_options$pref_n_ev
+  eventos_k = oshcba_options$vetor_eventos_k
+  consequencias_c = oshcba_options$vetor_consequencias_c
+
+  vetor_inputs_eventos = paste(prefixo_inputs, eventos_k, sep = separador)
+  vetor_inputs_consequencias = paste(prefixo_inputs, consequencias_c, sep = separador)
+
+  matriz_outputs = outer(consequencias_c, eventos_k, FUN = paste, sep = separador)
+  vetor_outputs = paste(prefixo_outputs, as.vector(matriz_outputs), sep = separador)
+
+  df_valores_input_eventos = parametros[vetor_inputs_eventos]
+  df_valores_input_conseq = parametros[vetor_inputs_consequencias]
+
+  num_colunas = length(vetor_inputs_eventos)*length(vetor_inputs_consequencias)
+
+  multiplicar_por_conseq = function(x) {
+    x * df_valores_input_conseq
+  }
+
+  df_inputs = as.data.frame(purrr::map(df_valores_input_eventos, multiplicar_por_conseq))
+
+  parametros[vetor_outputs] = formula_eventos_e_consequencias(f = parametros$Funcionarios, P_result = df_inputs)
+  parametros
+
+}
+
+formula_eventos_e_consequencias = function(f, P_result) {
+  round(x = f*P_result, digits = 0)
+}
+
+
+formula_nev_k = function(f, Pev_k) {
+  round(x = f*Pev_k, digits = 0)
+}
+
+formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
+  round(x = Nev_k*Pcs_k_l, digits = 0)
+}
+
+
+############# FALTAS #################
+
+
+calcular_faltas = function(parametros) {
+
+  vetor_inputs = c("TaxaFaltas")
+  vetor_outputs = c("NFaltas")
+
+  parametros[vetor_outputs] = formula_faltas(f = parametros$Funcionarios, T_faltas = parametros[vetor_inputs])
+  parametros
+
+}
+
+
+formula_faltas = function(f, T_faltas) {
+  round(x = f*T_faltas, digits = 0)
+}
+
+
+
+
+############ TURNOVER ##################
+
+calcular_turnover = function(parametros) {
+
+  input_custo_subst = "CustoSubstituicao"
+  vetor_inputs_substituidos = c("CustoSubstituicao")
+  vetor_outputs = c("Despesa_Turnover")
+
+  parametros[vetor_outputs] = formula_turnover(substitu, c_sub = parametros[vetor_inputs])
+  parametros
+
+}
+
+
+formula_turnover = function(substitu, c_sub) {
+  substitu * (-c_sub)
+}
+
+
+
+############ ABSENTEiSMO ##################
+
+despesas_absenteismo = function(dias_abs,HorasPorDia,CustoMDO) {
+  return(dias_abs*HorasPorDia*-CustoMDO)
+}
+
+#' @export
+dias_absenteismo = function(Funcionarios,PercMen15,PercFalta,Nafast,Nfalta) {
+  return(Funcionarios*(PercMen15*Nafast+PercFalta*Nfalta))
+}
+
+
+## Calculos de Absenteismo:
+
+#' @export
+calcular_dias_absenteismo = function(parametros) {
+
+  # Verificando se Parametro ja foi calculado
+  if(!("DiasAbsenteismo" %in% colnames(parametros)))
+  {
+    parametros = mutate(parametros,DiasAbsenteismo =
+                          dias_absenteismo(Funcionarios,
+                                           PercAfastMen15,
+                                           PercFalta,
+                                           NAfastMen15,
+                                           NDiasFalta)
+    )
+  }
+  return(parametros)
+}
+
+#' @export
+calcular_despesa_absenteismo = function(parametros) {
+
+  # Calculando parametros dependentes
+  parametros = calcular_dias_absenteismo(parametros)
+
+
+  # Calculando Despesa Final
+  parametros = mutate(parametros,DespesaAbsenteismo =
+                        despesas_absenteismo(DiasAbsenteismo,HorasPorDia,CustoMDO)
+  )
+  return(parametros)
+}
+
+
+
+### FUNCOES NAO UTILIZADAS ####
+conferir_params = function(parametros, inputs) {
+
+  mensagem = "Confira seu arquivo de dados. Voce nao informou todos os parametros."
+
+  # Conferir se os parmetros contem as variaveis necessarias
+  if (!all(inputs %in% colnames(parametros))) {
+    stop(mensagem, call. = TRUE)
+  }
+
+}
+
+# library-values.R
+# These are hard-coded values used by the library.
+# Those values will be loaded to the workspace after loading the library. The names used here should be unique and should not be changed.
+
+oshcba_options = list(
+
+  # Variaveis relacionadas aos Inputs
+  abas_a_ler = c("Configs", "Dados_Projetados", "Parametros", "Cenarios", "Custos", "Funcoes_Inputs", "Funcoes_Outputs"),
+  nomes_inputs = c("Configs","DadosProjetados","Parametros","Cenarios","Custos", "Funcoes_Inputs", "Funcoes_Outputs"),
+
+  # Variaveis relacionadas ao desconto do fluxo de caixa
+  sufixo_vars_fc = "Descontado",
+  variaveis_a_descontar = c("CustoTotal","DespesaAbsenteismo"),
+
+  # Nomes de Variaveis
+  vars_df_variaveis_por_ano =  c("Cenario","Ano","Replicacao"),
+
+  # Vetores relacionados aos eventos existentes
+
+  ## Variaveis Relacionadas a Eventos
+  pref_prob_ev = "Pev",
+  pref_n_ev = "Nev",
+  pref_prob_cs = "Pcs",
+  separador_dimensoes = "_",
+  vetor_eventos_k = c("Tipico", "Trajeto", "DoenOcup", "NRelac"),
+  vetor_consequencias_c = c("Afmenor15", "Afmaior15", "Safast", "Obito"),
+
+  # Vetor de Funcoes a Calcular
+  v_funcoes = c("calcular_eventos", "calcular_faltas"),
+
+  # lista de funcoes
+  # funcoes_list = list(calcular_eventos = calcular_eventos, calcular_faltas = calcular_faltas),
+
+  # Iteracoes a realizar
+  iteracoes = 2
+
+  )
+
+#' Export OshCBA Options
+#'
+#' @return oshcba_options
+#' @export
+obter_oshcba_options = function () {
+  oshcba_options
+}
+
+
+# app.R
+library(shiny)
+# library(oshcba)
+library(ggplot2)
+library(readxl)
+library(mc2d)
+library(dplyr)
+library(reshape2)
+library(purrr)
+
+
+set.seed(1000)
+
+# Define UI for application that draws a histogram
+ui <- fluidPage(
+
+  # Application title
+  titlePanel("Calculadora de Custos e Beneficios SST - V. 0.0.2"),
+
+  # Sidebar with a slider input for number of bins
+  sidebarLayout(
+    sidebarPanel(
+      "Faca Upload de seus dados de Input",
+      fileInput("Dados de Input",
+                inputId = "DadosInput",buttonLabel = "Arquivo.xlsx")
+    ),
+
+    # Show a plot of the generated distribution
+    mainPanel(
+
+      tabsetPanel(
+        tabPanel("Graficos",
+                 selectInput("Iniciativa", "Selecione a Iniciativa para exibir os Graficos",
+                             c("Iniciativa1", "Iniciativa2", "Iniciativa3", "Iniciativa4", "Iniciatva5", "Iniciativa6", "Iniciativa7", "Iniciativa8", "Iniciativa9", "Iniciativa10", "TodasIniciativas")),
+                 plotOutput("histograma_absenteismo")
+        ),
+        tabPanel("Tabela de Resultados", tableOutput("table"), downloadButton('downloadData', 'Baixar Tabela de Resultados'))
+      )
+    )
+  )
+)
+
+# Define server logic required to draw a histogram
+server <- function(input, output, session) {
+
+  # Esta funcao apenas retorna o arquivo de Dados
+  CarregaDados <- reactive({
+    arquivodados <- input$DadosInput
+    if (is.null(arquivodados))
+      return(NULL)
+    file.copy(arquivodados$datapath,
+              paste(arquivodados$datapath, ".xlsx", sep=""))
+    return(arquivodados)
+  })
+
+  # Esta funcao retorna a lista inputs
+  inputs = reactive({
+    arquivoinputs = CarregaDados()
+    if (is.null(arquivoinputs))
+      return(NULL)
+    inputs = carregar_inputs(arquivoinputs)
+    return(carregar_inputs(inputs))
+  })
+
+  # Dados de Absenteismo simulados
+  dados_simulados = reactive(
+    {
+      inputs = CarregaDados()
+      if (is.null(inputs))
+        return(NULL)
+      dados = simular_temp_absenteismo(paste(inputs$datapath, ".xlsx", sep=""))
+      return(dados)
+    })
+
+
+  # Iniciativas Simuladas: Este codigo provavelmente deveria ser implementado fora do layout
+  iniciativas = reactive({
+    inputs = inputs()
+    if (is.null(inputs))
+      return(NULL)
+    iniciativas = obter_cenarios(inputs) %>%
+      filter(!CenarioASIS) %>%
+      select(Cenario)
+    iniciativas = as.vector(t(iniciativas))
+    return(iniciativas)
+  })
+
+  output$histograma_absenteismo <- renderPlot({
+    dados_simulados = dados_simulados()
+    if (!is.null(dados_simulados))
+      dados_simulados = dados_simulados %>% filter(Cenario.y == input$Iniciativa) %>% select(Cenario.y, BeneficioAbsenteismo, BeneficioTotalCBR, RazaoBeneficioCusto)
+
+    ggplot(data = melt(dados_simulados), mapping = aes(x = value)) +
+      geom_histogram(bins = 15) + facet_wrap(~variable, scales = 'free_x')
+
+    # qplot(dados_simulados$RazaoBeneficioCusto,geom = "histogram",
+    #       main="Histograma de Despesas em Absenteismo")
+  })
+
+  output$table <- renderTable({
+    head(dados_simulados(),n = 100)
+  })
+
+  output$completetable <- renderTable({
+    dados_simulados()
+  })
+
+  output$downloadData <- downloadHandler(
+    filename = function() { paste("output_simulacao", '.csv', sep='') },
+    content = function(file) {
+      #write.csv(datasetInput(), file)
+      write.table(dados_simulados(),file,sep=";",dec=",",row.names = FALSE)
+    }
+  )
+
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+
+```
+
+
