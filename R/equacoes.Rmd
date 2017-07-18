@@ -42,6 +42,7 @@ $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 #### B92
 $$N_{b92} = Nev_{af_{<15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
 #### B91
+
 $$N_{b91} = Nev_{af>15}, ocupacional} * P_{inval}$$
 #### B94
 
@@ -149,6 +150,17 @@ Os custos para reabilitação do trabalhador deve compreender custos relacionado
 
 ##### Exposição à Multas
 
+$$D_{multas}= (f_{crise}*crise) * N_l * C_{med_l}$$
+###### Número de multas (N_l)
+
+$$N_l = Atendlegisl_l * p_{multa_l}$$
+###### Probabilidade multa (p_{multa_l})
+
+$$ p_{multa_l} = if Nref => Nev then p_{multapriori_l}$$
+
+
+
+
 ##### Reduções Fiscais
 
 FAP, RAT e SAT: As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ .
@@ -207,7 +219,7 @@ Obs: Será necessário possuir
 
 As despesas com Turnover $D_{tur}$ serão calculadas com base no número de funcionários afastados por problemas relacionados à SST $n_{afast}$ e no custo médio de substituição dos funcionários$c_{sub}$.
 
-$$D_{tur} = n_{afast} * c_{sub}$$
+$$D_{tur} = (Nev_{af_{<15},k} + Nev_{obito,k}) * c_{sub}$$ 
 
 Número de Afastamentos é calculado de acordo com a probabilidade de morte $p_{morte}$ e a probabilidade de afastamento por período menor que 15 dias $p_{>15}$
 
@@ -227,7 +239,8 @@ As despesas com Absenteísmo $D_{abs}$ serão calculadas com base no número de 
 $$D_{abs} = d_{abs} * h * c_{mdo}$$
 
 ###### Dias de Absenteísmo
-$$ d_{abs} = p_{<15}*f*n_{daf}+p_{falta}*f*n_{falta}$$
+
+$$ d_{abs} = (Nev_{af_{<15},k}} + Nfalta)*D_{medioafast_{<15}}$$
 
 ##### Variável Intermediária Acidentes
 Número de Acidentes $Nac_{k}$ dp tipo $k$ é igual ao número de funcionários na empresas vezes o percentual de funcionários que se acidentou $Pac_{k}$. O tipo de acidente pode ser Típico, de Trajeto, Doença Ocupacional ou "Não Acidente".
