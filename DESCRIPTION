@@ -15,7 +15,8 @@ Imports:
     lhs,
     shiny
 Depends:
-    dplyr
+    dplyr,
+    purrr
 Suggests:
     testthat,
     covr
