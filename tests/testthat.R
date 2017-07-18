@@ -1,4 +1,4 @@
 library(testthat)
 library(oshcba)
 
-test_check("oshcba")
+# test_check("oshcba")

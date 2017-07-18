@@ -115,9 +115,6 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
 #'
 #' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
 #' @export
-#'
-#' @examples
-#' obter_parametros(inputs)
 obter_parametros = function(Inputs) {
   message("02. obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
   replicacoes = obter_replicacoes(Inputs)

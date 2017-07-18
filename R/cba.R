@@ -68,8 +68,6 @@ valor_presente = function(fc,t,i) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
 descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros, sufixo) {
   #Definindo Variavels Auxiliadoras
   novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")

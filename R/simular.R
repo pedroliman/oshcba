@@ -1,5 +1,5 @@
 #' @export
-simular_cba = function(ArquivoInputs = "./data/Dados.xlsx", modo = "simples") {
+simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "simples") {
   inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler,
                            nomes_inputs = oshcba_options$nomes_inputs)
   parametros = obter_parametros(inputs)

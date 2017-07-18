@@ -2,7 +2,7 @@ library(testthat)
 library(oshcba)
 context("Test calcular_funcoes()")
 
-inputs = carregar_inputs("../../data/Dados.xlsx")
+inputs = carregar_inputs("Dados.xlsx")
 parametros = obter_parametros(inputs)
 n_cenarios = nrow(obter_cenarios(inputs))
 n_linhas_parametros = inputs$Configs$AnosaSeremSimulados * inputs$Configs$Replicacoes * n_cenarios
