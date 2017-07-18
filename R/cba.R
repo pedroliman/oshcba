@@ -66,7 +66,7 @@ valor_presente = function(fc,t,i) {
 #' @param i Taxa de Desconto.
 #' @param parametros Dataframe de parametros que contem variaveis a descontar e
 #'
-#' @return
+#' @return fluco de caixa descontado
 #' @export
 descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros, sufixo) {
   #Definindo Variavels Auxiliadoras

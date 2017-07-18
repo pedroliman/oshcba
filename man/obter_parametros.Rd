@@ -15,6 +15,3 @@ Dataframe com parametros para simulacao (incluindo parametros com distribuicao e
 \description{
 Obter Parametros
 }
-\examples{
-obter_parametros(inputs)
-}

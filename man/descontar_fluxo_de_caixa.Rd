@@ -16,6 +16,9 @@ descontar_fluxo_de_caixa(variaveis_a_descontar, ano_inicial, i, parametros,
 
 \item{parametros}{Dataframe de parametros que contem variaveis a descontar e}
 }
+\value{
+fluco de caixa descontado
+}
 \description{
 Calcula o Fluxo de Caixa Descontado Individual de um Conjunto de Variáveis Definido.
 }

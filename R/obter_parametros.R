@@ -1,8 +1,3 @@
-#' Title
-#'
-#' @param Inputs
-#'
-#' @return
 obter_cenario_base = function(Inputs) {
   cenario_base = dplyr::filter(Inputs$Cenarios,CenarioASIS) %>% select(Cenario)
   return(cenario_base)
