@@ -9,7 +9,7 @@ oshcba_options = list(
 
   # Variaveis relacionadas ao desconto do fluxo de caixa
   sufixo_vars_fc = "Descontado",
-  variaveis_a_descontar = c("CustoTotal","DespesaAbsenteismo"),
+  variaveis_a_descontar = c("CustoTotal", "DespesaTurnover", "DespesaAbsenteismo"),
 
   # Nomes de Variaveis
   vars_df_variaveis_por_ano =  c("Cenario","Ano","Replicacao"),
@@ -25,7 +25,7 @@ oshcba_options = list(
   vetor_consequencias_c = c("Afmenor15", "Afmaior15", "Safast", "Obito"),
 
   # Vetor de Funcoes a Calcular
-  v_funcoes = c("calcular_eventos", "calcular_faltas"),
+  v_funcoes = c("calcular_absenteismo", "calcular_eventos", "calcular_faltas", "calcular_turnover"),
 
   # lista de funcoes
   # funcoes_list = list(calcular_eventos = calcular_eventos, calcular_faltas = calcular_faltas),
@@ -42,5 +42,4 @@ oshcba_options = list(
 obter_oshcba_options = function () {
   oshcba_options
 }
-
 

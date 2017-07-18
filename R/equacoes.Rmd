@@ -43,7 +43,7 @@ $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 $$N_{b92} = Nev_{af_{<15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
 #### B91
 
-$$N_{b91} = Nev_{af>15}, ocupacional} * P_{inval}$$
+$$N_{b91} = Nev_{ocupacional, af>15} * P_{inval}$$
 #### B94
 
 $$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico}  ) * P_{inval}$$

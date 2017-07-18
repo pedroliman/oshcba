@@ -45,8 +45,6 @@ formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
 
 
 ############# FALTAS #################
-
-
 calcular_faltas = function(parametros) {
 
   vetor_inputs = c("TaxaFaltas")
@@ -69,32 +67,71 @@ formula_faltas = function(f, T_faltas) {
 
 calcular_turnover = function(parametros) {
 
-  input_custo_subst = "CustoSubstituicao"
-  vetor_inputs_substituidos = c("CustoSubstituicao")
-  vetor_outputs = c("Despesa_Turnover")
+  formula_turnover = function(substituidos, c_sub) {
+    substituidos * (-c_sub)
+  }
 
-  parametros[vetor_outputs] = formula_turnover(substitu, c_sub = parametros[vetor_inputs])
+  input_custo_subst = "CustoMedSubstitu"
+  vetor_inputs_substituidos = c("Nev_Afmaior15_Tipico", "Nev_Obito_Tipico", "Nev_Afmaior15_Trajeto", "Nev_Obito_Trajeto", "Nev_Afmaior15_DoenOcup", "Nev_Obito_DoenOcup", "Nev_Afmaior15_NRelac", "Nev_Obito_NRelac")
+  output_despesa = "DespesaTurnover"
+  output_substitituidos = "NSubstituidos"
+
+  # Calculando Desligados
+  parametros[output_substitituidos] = rowSums(parametros[vetor_inputs_substituidos])
+
+
+  # Calculando Despesa com Turnover
+  parametros[output_despesa] = formula_turnover(substituidos = parametros[output_substitituidos], c_sub = parametros[input_custo_subst])
   parametros
 
 }
 
 
-formula_turnover = function(substitu, c_sub) {
-  substitu * (-c_sub)
+
+############ ABSENTEISMO ##################
+calcular_absenteismo = function(parametros){
+
+  despesa_absenteismo = function(dias_abs,HorasPorDia,CustoMDO) {
+    dias_abs * HorasPorDia * -CustoMDO
+  }
+
+  dias_absenteismo = function(Nev_afmen15,DiasMedAfast_Men15,NFaltas) {
+    rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
+  }
+
+  input_vetor_afast_men15 = c("Nev_Afmenor15_Tipico", "Nev_Afmenor15_Trajeto", "Nev_Afmenor15_DoenOcup", "Nev_Afmenor15_NRelac")
+  input_faltas = "NFaltas"
+  input_horas = "HorasPorDia"
+  input_custo_mdo = "CustoMDO"
+  input_dias_med_afastmen15 = "DiasMedAfast_Men15"
+
+  output_dias_absenteismo = "DiasAbsenteismo"
+  output_despesa_absenteismo = "DespesaAbsenteismo"
+
+  # Calculando Dias de Absenteismo
+  # parametros[output_dias_absenteismo] = dias_absenteismo(Nev_afmen15 = parametros[input_vetor_afast_men15],
+  #                                                        DiasMedAfast_Men15 = input_dias_med_afastmen15,
+  #                                                        NFaltas = input_faltas)
+  parametros[output_dias_absenteismo] = rowSums(parametros[input_vetor_afast_men15])*parametros[input_dias_med_afastmen15]
+  parametros[output_dias_absenteismo] = parametros[output_dias_absenteismo] + parametros[input_faltas]
+
+
+  # Calculando Despesa com Absenteismo
+  parametros[output_despesa_absenteismo] = despesa_absenteismo(dias_abs = parametros[output_dias_absenteismo],
+                                                               HorasPorDia = parametros[input_horas],
+                                                               CustoMDO = parametros[input_custo_mdo])
+
+  parametros
+
 }
+
+
 
 
 
 ############ ABSENTEiSMO ##################
 
-despesas_absenteismo = function(dias_abs,HorasPorDia,CustoMDO) {
-  return(dias_abs*HorasPorDia*-CustoMDO)
-}
 
-#' @export
-dias_absenteismo = function(Funcionarios,PercMen15,PercFalta,Nafast,Nfalta) {
-  return(Funcionarios*(PercMen15*Nafast+PercFalta*Nfalta))
-}
 
 
 ## Calculos de Absenteismo:
