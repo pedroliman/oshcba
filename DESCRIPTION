@@ -16,3 +16,5 @@ Imports:
     shiny
 Depends:
     dplyr
+Suggests:
+    testthat

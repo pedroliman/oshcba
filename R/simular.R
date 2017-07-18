@@ -1,24 +1,17 @@
-
-#'@export
-exportar_dados_simulados = function(parametros) {
-  arquivo = write.table(parametros,file="dados_simulados.csv",sep=";",dec=",",row.names = FALSE)
-  return(arquivo)
-}
-
 #' @export
-simular_temp_absenteismo = function(ArquivoInputs="./data/Dados.xlsx", modo = "simples") {
+simular_cba = function(ArquivoInputs="./data/Dados.xlsx", modo = "simples") {
   inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs)
   parametros = obter_parametros(inputs)
 
   # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes Importa
 
   message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
-  resultados = parametros %>%
-    calcular_funcoes(inputs_funcoes = inputs$Funcoes_Inputs,
-                     output_funcoes = inputs$Funcoes_Outputs,
-                     funcoes = oshcba_options$v_funcoes,
-                     funcoes_list = funcoes_list) %>%
-    calcular_despesa_absenteismo()
+  resultados = calcular_funcoes(parametros = parametros,
+                                inputs_funcoes = inputs$Funcoes_Inputs,
+                                output_funcoes = inputs$Funcoes_Outputs,
+                                funcoes = oshcba_options$v_funcoes)
+
+  resultados = calcular_despesa_absenteismo(parametros = resultados)
 
   message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
 
@@ -88,12 +81,11 @@ calcular_cbr = function (resultados,cenarios) {
 #' @param inputs_funcoes Dataframe de inputs por Funcao
 #' @param output_funcoes Dataframe de Outputs por Funcao
 #' @param funcoes Vetor com o nome das Funcoes a serem calculadas
-#' @param funcoes_list List com todas as funcoes que podem ser usadas pelo Calcular Funcoes
 #'
 #' @return Dataframe de resultados com as variaveis calculadas
 #' @export
 #'
-calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes, funcoes_list) {
+calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes) {
   iteracoes = oshcba_options$iteracoes
   resultados = parametros
   # Esta funcao calcula as demais funcoes
@@ -102,28 +94,35 @@ calcular_funcoes = function (parametros, inputs_funcoes, output_funcoes, funcoes
       v_inputs = inputs_funcoes %>% dplyr::filter(Funcao == f) %>% .$Inputs
       v_outputs = output_funcoes %>% dplyr::filter(Funcao == f) %>% .$Outputs
 
-      # So executar a funcao se..
-      # Todos os Inputs estao presentes:
-      if (all(v_inputs %in% colnames(resultados))) {
-
-        #TODO: E se nem Todos os Outputs estao presentes
-        if (!all(v_outputs %in% colnames(resultados))) {
-          chamada_da_funcao = paste(f,"(resultados)",sep = "")
-
-
-          # Problema da "chamada" dinamica A funcao:
-          # Resolvido usando este link: https://stackoverflow.com/questions/36161760/r-programmatically-create-a-function-call
-          resultados = eval(parse(text = chamada_da_funcao))
-          # resultados = funcoes_list[[f]](resultados)
-          message(paste("04. simular.R/calcular_funcoes: Funcao Calculada: ", f))
-        } else {
-          message(paste("04. simular.R/calcular_funcoes: Todos os Outputs Ja Foram calculados: ", f))}
-
+      # Verificando se vetores de inputs e outputs estao corretos
+      if (any(c(length(v_inputs) == 0, length(v_outputs) == 0))) {
+        message(message(paste("04. simular.R/calcular_funcoes: Lista de Inputs ou Outputs esta vazia: ", f)))
       } else {
-        message(paste("04. simular.R/calcular_funcoes: Faltam Inputs para calcular: ", f))}
-    }
+        # So executar a funcao se..
+        # Todos os Inputs estao presentes:
+        if (all(v_inputs %in% colnames(resultados))) {
+
+          #TODO: E se nem Todos os Outputs estao presentes
+          if (!all(v_outputs %in% colnames(resultados))) {
+            chamada_da_funcao = paste(f,"(resultados)",sep = "")
+            resultados = eval(parse(text = chamada_da_funcao))
+            message(paste("04. simular.R/calcular_funcoes: Funcao Calculada: ", f))
+          } else {
+            message(paste("04. simular.R/calcular_funcoes: Todos os Outputs Ja Foram calculados: ", f))}
+
+        } else {
+          message(paste("04. simular.R/calcular_funcoes: Faltam Inputs para calcular: ", f))}
+      }
+
+        }
+
     i + 1
   }
   return(resultados)
 }
 
+#'@export
+exportar_dados_simulados = function(parametros) {
+  arquivo = write.table(parametros,file="dados_simulados.csv",sep=";",dec=",",row.names = FALSE)
+  return(arquivo)
+}
