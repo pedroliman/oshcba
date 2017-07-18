@@ -17,7 +17,4 @@ Razao Beneficio Custo
 \description{
 Esta funcao Calcula a razao beneficio custo
 }
-\examples{
-cbr(20,30)
-}
 \keyword{cbr}

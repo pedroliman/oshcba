@@ -19,6 +19,3 @@ fcd Fluxo de Caixa Descontado
 \description{
 Fluxo de Caixa Descontado
 }
-\examples{
-valor_presente(20,2,0.1)
-}

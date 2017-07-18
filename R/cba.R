@@ -11,8 +11,6 @@
 #' @keywords cbr
 #' @return Razao Beneficio Custo
 #' @export
-#' @examples
-#' cbr(20,30)
 cbr = function(costs, benefits) {
   return(benefits/costs)
 }
@@ -49,8 +47,6 @@ custo = function(custos_com_intervencao,custos_sem_intervencao) {
 #' @param i Taxa de Juros.
 #'
 #' @return fcd Fluxo de Caixa Descontado
-#' @examples
-#' valor_presente(20,2,0.1)
 valor_presente = function(fc,t,i) {
   fcd = fc/(1+i)^(t)
   return(fcd)
