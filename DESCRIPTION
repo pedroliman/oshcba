@@ -17,4 +17,5 @@ Imports:
 Depends:
     dplyr
 Suggests:
-    testthat
+    testthat,
+    covr

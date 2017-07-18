@@ -1,8 +1,9 @@
 # oshcba
 
 [![Travis-CI Build Status](https://travis-ci.org/pedroliman/oshcba.svg?branch=master)](https://travis-ci.org/pedroliman/oshcba)
+[![Coverage Status](https://img.shields.io/codecov/c/github/pedroliman/oshcba/master.svg)](https://codecov.io/github/pedroliman/oshcba?branch=master)
 
-The goal of oshcba is to ...
+This library is meant to evidence the value of investin in people's health at work. In other words, we do a Monte Carlo Simulation of a Cost-Benefit Analysis for a group of Organizational Health Initiatives.
 
 ## Installation
 
@@ -16,8 +17,9 @@ devtools::install_github("pedroliman/oshcba")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+One would want to use this library directly only if
 
 ``` r
-## basic example code
+## simulating
+resultados = simular_cba("Dados.xlsx")
 ```
