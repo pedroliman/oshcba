@@ -31,7 +31,9 @@ calcular_eventos = function(parametros) {
 }
 
 formula_eventos_e_consequencias = function(f, P_result) {
-  round(x = f*P_result, digits = 0)
+  # O Arredondamento nao fechou
+  #round(x = f*P_result, digits = 0)
+  ceiling(f*P_result)
 }
 
 
