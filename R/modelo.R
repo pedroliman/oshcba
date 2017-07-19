@@ -154,32 +154,7 @@ calcular_multas = function(parametros){
 }
 
 
-############ ACOES REGRESSIVAS ##################
-calcular_multas = function(parametros){
 
-  # Vai ter que mudar quando tivermos mais do que uma lei
-  despesa_multas = function(n_multas_l, cmed) {
-    n_multas_l * -cmed
-  }
-
-  numero_multas_l = function(atend_legislacao, crise, fator_crise, numero_multas_a_priori) {
-    numero_multas = (1 - atend_legislacao) * numero_multas_a_priori * (1 + (crise * fator_crise))
-    numero_multas = if((numero_multas[1,]) < 0) {0} else {round(numero_multas,0)}
-    numero_multas
-  }
-
-  # Calculando Numero de Multas para uma Lei
-  parametros["NumeroMultas_Lei1"] = numero_multas_l(atend_legislacao = parametros["Atendimento_Lei1"],
-                                                    crise = parametros["Crise"],
-                                                    fator_crise = parametros["FatorCrise"],
-                                                    numero_multas_a_priori = parametros["NumeroMultasAPriori_Lei1"])
-
-  # Calculando Despesa com Multas para uma Lei
-  parametros["DespesaMultas"] = despesa_multas(n_multas_l = parametros["NumeroMultas_Lei1"],
-                                               cmed = parametros["CustoMedioMulta_Lei1"])
-  parametros
-
-}
 
 
 ### FUNCOES NAO UTILIZADAS ####
