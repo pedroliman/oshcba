@@ -126,43 +126,60 @@ calcular_absenteismo = function(parametros){
 }
 
 
-############ ABSENTEISMO ##################
-calcular_absenteismo = function(parametros){
+############ MULTAS ##################
+calcular_multas = function(parametros){
 
-  despesa_absenteismo = function(dias_abs,HorasPorDia,CustoMDO) {
-    dias_abs * HorasPorDia * -CustoMDO
+  # Vai ter que mudar quando tivermos mais do que uma lei
+  despesa_multas = function(n_multas_l, cmed) {
+   n_multas_l * -cmed
   }
 
-  dias_absenteismo = function(Nev_afmen15,DiasMedAfast_Men15,NFaltas) {
-    rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
+  numero_multas_l = function(atend_legislacao, crise, fator_crise, numero_multas_a_priori) {
+    numero_multas = (1 - atend_legislacao) * numero_multas_a_priori * (1 + (crise * fator_crise))
+    numero_multas = if((numero_multas[1,]) < 0) {0} else {round(numero_multas,0)}
+    numero_multas
   }
 
-  input_vetor_afast_men15 = c("Nev_Afmenor15_Tipico", "Nev_Afmenor15_Trajeto", "Nev_Afmenor15_DoenOcup", "Nev_Afmenor15_NRelac")
-  input_faltas = "NFaltas"
-  input_horas = "HorasPorDia"
-  input_custo_mdo = "CustoMDO"
-  input_dias_med_afastmen15 = "DiasMedAfast_Men15"
+  # Calculando Numero de Multas para uma Lei
+  parametros["NumeroMultas_Lei1"] = numero_multas_l(atend_legislacao = parametros["Atendimento_Lei1"],
+                                                    crise = parametros["Crise"],
+                                                    fator_crise = parametros["FatorCrise"],
+                                                    numero_multas_a_priori = parametros["NumeroMultasAPriori_Lei1"])
 
-  output_dias_absenteismo = "DiasAbsenteismo"
-  output_despesa_absenteismo = "DespesaAbsenteismo"
-
-  # Calculando Dias de Absenteismo
-  # parametros[output_dias_absenteismo] = dias_absenteismo(Nev_afmen15 = parametros[input_vetor_afast_men15],
-  #                                                        DiasMedAfast_Men15 = input_dias_med_afastmen15,
-  #                                                        NFaltas = input_faltas)
-  parametros[output_dias_absenteismo] = rowSums(parametros[input_vetor_afast_men15])*parametros[input_dias_med_afastmen15]
-  parametros[output_dias_absenteismo] = parametros[output_dias_absenteismo] + parametros[input_faltas]
-
-
-  # Calculando Despesa com Absenteismo
-  parametros[output_despesa_absenteismo] = despesa_absenteismo(dias_abs = parametros[output_dias_absenteismo],
-                                                               HorasPorDia = parametros[input_horas],
-                                                               CustoMDO = parametros[input_custo_mdo])
-
+  # Calculando Despesa com Multas para uma Lei
+  parametros["DespesaMultas"] = despesa_multas(n_multas_l = parametros["NumeroMultas_Lei1"],
+                                               cmed = parametros["CustoMedioMulta_Lei1"])
   parametros
 
 }
 
+
+############ ACOES REGRESSIVAS ##################
+calcular_multas = function(parametros){
+
+  # Vai ter que mudar quando tivermos mais do que uma lei
+  despesa_multas = function(n_multas_l, cmed) {
+    n_multas_l * -cmed
+  }
+
+  numero_multas_l = function(atend_legislacao, crise, fator_crise, numero_multas_a_priori) {
+    numero_multas = (1 - atend_legislacao) * numero_multas_a_priori * (1 + (crise * fator_crise))
+    numero_multas = if((numero_multas[1,]) < 0) {0} else {round(numero_multas,0)}
+    numero_multas
+  }
+
+  # Calculando Numero de Multas para uma Lei
+  parametros["NumeroMultas_Lei1"] = numero_multas_l(atend_legislacao = parametros["Atendimento_Lei1"],
+                                                    crise = parametros["Crise"],
+                                                    fator_crise = parametros["FatorCrise"],
+                                                    numero_multas_a_priori = parametros["NumeroMultasAPriori_Lei1"])
+
+  # Calculando Despesa com Multas para uma Lei
+  parametros["DespesaMultas"] = despesa_multas(n_multas_l = parametros["NumeroMultas_Lei1"],
+                                               cmed = parametros["CustoMedioMulta_Lei1"])
+  parametros
+
+}
 
 
 ### FUNCOES NAO UTILIZADAS ####

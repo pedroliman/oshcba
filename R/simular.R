@@ -45,7 +45,8 @@ calcular_cbr = function(resultados, cenarios) {
   resultados_sintetizados = resultados %>% group_by(Cenario, Replicacao) %>%
     summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
               Soma_DespesaTurnover = sum(DespesaTurnoverDescontado),
-              Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado))
+              Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado),
+              Soma_DespesaMultas = sum(DespesaMultasDescontado))
 
   resultados_sintetizados = inner_join(resultados_sintetizados, cenarios,
                                        by = "Cenario")
@@ -68,8 +69,10 @@ calcular_cbr = function(resultados, cenarios) {
                                              BeneficioTurnover = beneficio(Soma_DespesaTurnover.y,
                                                                            Soma_DespesaTurnover.x),
                                              BeneficioAbsenteismo = beneficio(Soma_DespesaAbsenteismo.y,
-                                                                           Soma_DespesaAbsenteismo.x)) %>% ## Aqui entrariam outros beneficios
-    mutate(BeneficioTotalCBR = BeneficioTurnover + BeneficioAbsenteismo + 0) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
+                                                                           Soma_DespesaAbsenteismo.x),
+                                             BeneficioMultas = beneficio(Soma_DespesaMultas.y,
+                                                                              Soma_DespesaMultas.x)) %>% ## Aqui entrariam outros beneficios
+    mutate(BeneficioTotalCBR = BeneficioTurnover + BeneficioAbsenteismo + BeneficioMultas + 0) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
                                                                                               costs = CustoTotalCBR))
 
   ### Mantendo Apenas Variaveis uteis
