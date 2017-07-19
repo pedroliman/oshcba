@@ -14,7 +14,7 @@ n_cenarios = nrow(obter_cenarios(inputs))
 n_linhas_parametros = inputs$Configs$AnosaSeremSimulados * inputs$Configs$Replicacoes * n_cenarios
 
 ### Definir aqui Variaveis a Verificar
-despesas_a_calcular = c("DespesaAbsenteismo", "DespesaTurnover", "DespesaMultas")
+despesas_a_calcular = c("DespesaAbsenteismo", "DespesaTurnover", "DespesaMultas", "DespesaAcoesRegressivasINSS")
 
 test_that("calcular_funcoes retorna dataframe com numero de linhas correto", {
   expect_equal(nrow(resultados), n_linhas_parametros)

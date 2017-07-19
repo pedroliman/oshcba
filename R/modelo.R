@@ -154,7 +154,60 @@ calcular_multas = function(parametros){
 }
 
 
+############ ACOES REGRESSIVAS ##################
+calcular_acoes_regressivas_inss = function(parametros){
 
+  vetor_eventos_acao_regressiva_inss_afmaior15 = c("Nev_Afmaior15_Tipico", "Nev_Afmaior15_Trajeto", "Nev_Afmaior15_DoenOcup")
+
+  vetor_eventos_acao_regressiva_inss_obitos = c("Nev_Obito_Tipico", "Nev_Obito_Trajeto", "Nev_Obito_DoenOcup")
+
+
+  # Vai ter que mudar quando tivermos mais do que uma lei
+  despesa_acoes_regressivas_inss = function(acoes_regressivas, cmed) {
+    acoes_regressivas * -cmed
+  }
+
+  acoes_regressivas_inss = function(crise, fator_crise, n_acumulado, p_acao_regressiva) {
+    acoes_regressivas = n_acumulado * p_acao_regressiva * (1 + (crise * fator_crise))
+    acoes_regressivas = round(acoes_regressivas, 0)
+    acoes_regressivas
+  }
+
+
+  # Calculando Numero de eventos para acao regressiva
+  parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_afmaior15])*parametros["PInvalidez"]
+  parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_obitos]) + parametros["Nev_AcaoRegressivaINSS"]
+
+  # Calculando Acoes Regressivas Acumuladas
+  AnoInicial = min(parametros$Ano)
+  AnoMaximo = max(parametros$Ano)
+
+  # Ordenando o Df para o Calculo Iterativo
+  parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
+
+  # Calculando o N Acumulado de modo Recursivo
+  for (l in 1:nrow(parametros)) {
+    parametros[l,"Nev_AcaoRegressivaINSSAcumulado"] = if (parametros[l,"Ano"] == AnoInicial ) {
+      parametros[l,"Nev_AcaoRegressivaInicial"] + parametros[l,"Nev_AcaoRegressivaINSS"]
+    } else {
+      parametros[l,"Nev_AcaoRegressivaINSS"] + parametros[l-1,"Nev_AcaoRegressivaINSSAcumulado"]
+    }
+  }
+
+
+  # Calculando Numero de Multas para uma Lei
+  parametros["AcoesRegressivasINSS"] = acoes_regressivas_inss(crise = parametros$Crise,
+                                                              fator_crise = parametros$FatorCrise,
+                                                              n_acumulado = parametros$Nev_AcaoRegressivaINSSAcumulado,
+                                                              p_acao_regressiva = parametros$PAcaoRegressiva)
+
+
+
+  parametros["DespesaAcoesRegressivasINSS"] = despesa_acoes_regressivas_inss(acoes_regressivas = parametros["AcoesRegressivasINSS"],
+                                               cmed = parametros["CustoMedioAcaoRegressivaINSS"])
+  parametros
+
+}
 
 
 ### FUNCOES NAO UTILIZADAS ####
