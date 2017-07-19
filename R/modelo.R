@@ -126,49 +126,6 @@ calcular_absenteismo = function(parametros){
 }
 
 
-
-
-
-############ ABSENTEiSMO ##################
-
-
-
-
-## Calculos de Absenteismo:
-
-#' @export
-calcular_dias_absenteismo = function(parametros) {
-
-  # Verificando se Parametro ja foi calculado
-  if(!("DiasAbsenteismo" %in% colnames(parametros)))
-  {
-    parametros = mutate(parametros,DiasAbsenteismo =
-                          dias_absenteismo(Funcionarios,
-                                           PercAfastMen15,
-                                           PercFalta,
-                                           NAfastMen15,
-                                           NDiasFalta)
-    )
-  }
-  return(parametros)
-}
-
-#' @export
-calcular_despesa_absenteismo = function(parametros) {
-
-  # Calculando parametros dependentes
-  parametros = calcular_dias_absenteismo(parametros)
-
-
-  # Calculando Despesa Final
-  parametros = mutate(parametros,DespesaAbsenteismo =
-                        despesas_absenteismo(DiasAbsenteismo,HorasPorDia,CustoMDO)
-  )
-  return(parametros)
-}
-
-
-
 ### FUNCOES NAO UTILIZADAS ####
 conferir_params = function(parametros, inputs) {
 

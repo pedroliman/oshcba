@@ -49,3 +49,8 @@ cenarios = obter_cenarios(inputs)
 ## Calculando Variaveis do CBR
 resultados_CBR = calcular_cbr(resultados_descontados, cenarios)
 
+
+
+# Para exportar algum dataframe para csv, é possível usar a funcao:
+exportar_dados_simulados(resultados_CBR)
+# Esta operacao irá exportar o dataframe que receber para csv na pasta atual, com o nome "dados_simulados.csv".
