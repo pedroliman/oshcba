@@ -14,7 +14,7 @@ ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx"
 #' Simular todo o processo, retornando apenas a tabela de CBR / CBA
 resultados_simples = simular_cba(ArquivoInputs = ArquivoInputs, modo = "simples")
 
-#' Simular todo o processo, retornando apenas a tabela de CBR / CBA
+#' Simular todo o processo, retornando todas as variáveis intermediárias
 resultados_completo = simular_cba(ArquivoInputs = ArquivoInputs, modo = "completo")
 
 
@@ -28,22 +28,22 @@ oshcba_options = obter_oshcba_options()
 inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler,
                          nomes_inputs = oshcba_options$nomes_inputs)
 
-#' Carregar Parametros
+#' Obter Parâmetros (considerando as distribuições informadas)
 parametros = obter_parametros(inputs)
 
-# Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes
+# Calculando Modulos de Beneficio
 message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
 resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = inputs$Funcoes_Inputs,
                               output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes)
 
 message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
 
-# Descontando Variaveis Monetarias
+# Descontar Variaveis Monetarias
 resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
                                                   ano_inicial = inputs$Configs$AnoInicial, i = inputs$Configs$TaxaDeDesconto,
                                                   parametros = resultados, sufixo = oshcba_options$sufixo_vars_fc)
 
-# Obtendo Cenarios
+# Obter Cenarios
 cenarios = obter_cenarios(inputs)
 
 ## Calculando Variaveis do CBR
