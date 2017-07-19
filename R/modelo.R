@@ -31,7 +31,9 @@ calcular_eventos = function(parametros) {
 }
 
 formula_eventos_e_consequencias = function(f, P_result) {
-  round(x = f*P_result, digits = 0)
+  # O Arredondamento nao fechou
+  #round(x = f*P_result, digits = 0)
+  ceiling(f*P_result)
 }
 
 
@@ -126,47 +128,88 @@ calcular_absenteismo = function(parametros){
 }
 
 
+############ MULTAS ##################
+calcular_multas = function(parametros){
 
-
-
-############ ABSENTEiSMO ##################
-
-
-
-
-## Calculos de Absenteismo:
-
-#' @export
-calcular_dias_absenteismo = function(parametros) {
-
-  # Verificando se Parametro ja foi calculado
-  if(!("DiasAbsenteismo" %in% colnames(parametros)))
-  {
-    parametros = mutate(parametros,DiasAbsenteismo =
-                          dias_absenteismo(Funcionarios,
-                                           PercAfastMen15,
-                                           PercFalta,
-                                           NAfastMen15,
-                                           NDiasFalta)
-    )
+  # Vai ter que mudar quando tivermos mais do que uma lei
+  despesa_multas = function(n_multas_l, cmed) {
+   n_multas_l * -cmed
   }
-  return(parametros)
+
+  numero_multas_l = function(atend_legislacao, crise, fator_crise, numero_multas_a_priori) {
+    numero_multas = (1 - atend_legislacao) * numero_multas_a_priori * (1 + (crise * fator_crise))
+    numero_multas = if((numero_multas[1,]) < 0) {0} else {round(numero_multas,0)}
+    numero_multas
+  }
+
+  # Calculando Numero de Multas para uma Lei
+  parametros["NumeroMultas_Lei1"] = numero_multas_l(atend_legislacao = parametros["Atendimento_Lei1"],
+                                                    crise = parametros["Crise"],
+                                                    fator_crise = parametros["FatorCrise"],
+                                                    numero_multas_a_priori = parametros["NumeroMultasAPriori_Lei1"])
+
+  # Calculando Despesa com Multas para uma Lei
+  parametros["DespesaMultas"] = despesa_multas(n_multas_l = parametros["NumeroMultas_Lei1"],
+                                               cmed = parametros["CustoMedioMulta_Lei1"])
+  parametros
+
 }
 
-#' @export
-calcular_despesa_absenteismo = function(parametros) {
 
-  # Calculando parametros dependentes
-  parametros = calcular_dias_absenteismo(parametros)
+############ ACOES REGRESSIVAS ##################
+calcular_acoes_regressivas_inss = function(parametros){
+
+  vetor_eventos_acao_regressiva_inss_afmaior15 = c("Nev_Afmaior15_Tipico", "Nev_Afmaior15_Trajeto", "Nev_Afmaior15_DoenOcup")
+
+  vetor_eventos_acao_regressiva_inss_obitos = c("Nev_Obito_Tipico", "Nev_Obito_Trajeto", "Nev_Obito_DoenOcup")
 
 
-  # Calculando Despesa Final
-  parametros = mutate(parametros,DespesaAbsenteismo =
-                        despesas_absenteismo(DiasAbsenteismo,HorasPorDia,CustoMDO)
-  )
-  return(parametros)
+  # Vai ter que mudar quando tivermos mais do que uma lei
+  despesa_acoes_regressivas_inss = function(acoes_regressivas, cmed) {
+    acoes_regressivas * -cmed
+  }
+
+  acoes_regressivas_inss = function(crise, fator_crise, n_acumulado, p_acao_regressiva) {
+    acoes_regressivas = n_acumulado * p_acao_regressiva * (1 + (crise * fator_crise))
+    acoes_regressivas = round(acoes_regressivas, 0)
+    acoes_regressivas
+  }
+
+
+  # Calculando Numero de eventos para acao regressiva
+  parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_afmaior15])*parametros["PInvalidez"]
+  parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_obitos]) + parametros["Nev_AcaoRegressivaINSS"]
+
+  # Calculando Acoes Regressivas Acumuladas
+  AnoInicial = min(parametros$Ano)
+  AnoMaximo = max(parametros$Ano)
+
+  # Ordenando o Df para o Calculo Iterativo
+  parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
+
+  # Calculando o N Acumulado de modo Recursivo
+  for (l in 1:nrow(parametros)) {
+    parametros[l,"Nev_AcaoRegressivaINSSAcumulado"] = if (parametros[l,"Ano"] == AnoInicial ) {
+      parametros[l,"Nev_AcaoRegressivaInicial"] + parametros[l,"Nev_AcaoRegressivaINSS"]
+    } else {
+      parametros[l,"Nev_AcaoRegressivaINSS"] + parametros[l-1,"Nev_AcaoRegressivaINSSAcumulado"]
+    }
+  }
+
+
+  # Calculando Numero de Multas para uma Lei
+  parametros["AcoesRegressivasINSS"] = acoes_regressivas_inss(crise = parametros$Crise,
+                                                              fator_crise = parametros$FatorCrise,
+                                                              n_acumulado = parametros$Nev_AcaoRegressivaINSSAcumulado,
+                                                              p_acao_regressiva = parametros$PAcaoRegressiva)
+
+
+
+  parametros["DespesaAcoesRegressivasINSS"] = despesa_acoes_regressivas_inss(acoes_regressivas = parametros["AcoesRegressivasINSS"],
+                                               cmed = parametros["CustoMedioAcaoRegressivaINSS"])
+  parametros
+
 }
-
 
 
 ### FUNCOES NAO UTILIZADAS ####

@@ -43,7 +43,11 @@ calcular_cbr = function(resultados, cenarios) {
   ### Sintetizando Resultados por Cenario e Replicacao
   ## Lembrar:
   resultados_sintetizados = resultados %>% group_by(Cenario, Replicacao) %>%
-    summarise(Soma_CustoTotal = sum(CustoTotalDescontado), Soma_DespesaTurnover = sum(DespesaTurnoverDescontado))
+    summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
+              Soma_DespesaTurnover = sum(DespesaTurnoverDescontado),
+              Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado),
+              Soma_DespesaMultas = sum(DespesaMultasDescontado),
+              Soma_DespesaAcoesRegressivasINSS = sum(DespesaAcoesRegressivasINSSDescontado))
 
   resultados_sintetizados = inner_join(resultados_sintetizados, cenarios,
                                        by = "Cenario")
@@ -62,9 +66,16 @@ calcular_cbr = function(resultados, cenarios) {
 
   ### Calculando Beneficios Totais, Custos e Razao Custo Beneficio
   resultados_CBR = resultados_CBR %>% mutate(CustoTotalCBR = custo(Soma_CustoTotal.y,
-                                                                   Soma_CustoTotal.x), BeneficioTurnover = beneficio(Soma_DespesaTurnover.y,
-                                                                                                                        Soma_DespesaTurnover.x)) %>% ## Aqui entrariam outros beneficios
-    mutate(BeneficioTotalCBR = BeneficioTurnover + 0) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
+                                                                   Soma_CustoTotal.x),
+                                             BeneficioTurnover = beneficio(Soma_DespesaTurnover.y,
+                                                                           Soma_DespesaTurnover.x),
+                                             BeneficioAbsenteismo = beneficio(Soma_DespesaAbsenteismo.y,
+                                                                           Soma_DespesaAbsenteismo.x),
+                                             BeneficioMultas = beneficio(Soma_DespesaMultas.y,
+                                                                              Soma_DespesaMultas.x),
+                                             BeneficioAcoesRegressivasINSS = beneficio(Soma_DespesaAcoesRegressivasINSS.y,
+                                                                                       Soma_DespesaAcoesRegressivasINSS.x)) %>% ## Aqui entrariam outros beneficios
+    mutate(BeneficioTotalCBR = BeneficioTurnover + BeneficioAbsenteismo + BeneficioMultas + BeneficioAcoesRegressivasINSS + 0) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
                                                                                               costs = CustoTotalCBR))
 
   ### Mantendo Apenas Variaveis uteis
