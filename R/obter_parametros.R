@@ -41,7 +41,8 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
 #' @return cenarios
 #' @export
 obter_cenarios = function(Inputs) {
-  cenarios = dplyr::filter(Inputs$Cenarios,Simular) %>% select(-Simular)
+  cenarios = dplyr::filter(Inputs$Cenarios,Simular)
+  cenarios = select(cenarios, -Simular)
   return(cenarios)
 }
 
