@@ -4,14 +4,14 @@ author: P.N. de Lima, D. B. Goldmeyer, L. F. R. Camargo, A. Dresch, D. P. Lacerd
   T. Kunrath
 date: "junho de 2017"
 output:
-  word_document: default
+  html_document: default
   pdf_document:
     keep_tex: yes
     latex_engine: xelatex
     number_sections: yes
     toc: yes
     toc_depth: 6
-  html_document: default
+  word_document: default
 ---
 
 
@@ -21,6 +21,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Modelo Matemático - Razão Benefício-Custo
 Este documento contém uma definição do modelo matemático que suporta a calculadora de custos e benefícios de inciativas em SST.
+
+# Lista de Símbolos e Definições
+
+| Símbolo | Definição |
+|-------|-------------------------------------------------------------------------------------------------|
+| $\alpha$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
+| $B_{i}$ | Benefício atribuído ao conjunto de iniciativas em questão em valor presente, onde $i$ indexa a categoria de Iniciativa.|
+| $C_i$ | Custo atribuído ao conjunto de inciativas em questão, onde $j$ indexa a categoria de custos.|
+| $\theta$ | Taxa de desconto a utilizar para trazer o valor dos custos e benefícios a valor presente.
+| $Nev_{c,k}$ | Número de Eventos do tipo $k$ com a consequência $c$|
+| $k$ | Índice que indexa os tipos de eventos, $k \in K = \{Típico, Trajeto, Doença Não Ocupacional, Não RelacionadoAoTrabalho\}$ |
+| $c$ | Índice que indexa as consequências dos eventos, $c \in C = \{Afastamento<15, Afastamento>15, Óbito, Sem Afastamento\}$ |
+| $Pev_{k}$ | Percentual de Funcionários que irá sofrer o evento $k$ em um período. |
+| $Pev_c$ |
+
 
 ## CBR - Razão Benefício-Custo
 A razão benefício-custo $\alpha$ corresponde à razão do somatório dos custos $C_i$ onde $i$ representa o índice de custos e $B_j$ os benefícios a valor presente.
@@ -35,21 +50,48 @@ $$B_i(t) = \frac{b_i}{(1+\theta)^t}$$
 Em todos os casos, o número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_falta$, conforme equação abaixo: 
 
 $$Nfalta = f * T_falta$$ 
+
 ### Calculo dos Eventos
-Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, probabilidade do evento "k" ocorrer $Pev_{k}$, e a probabilidade da consequência $"c"$ ocorrer $Pev_c$. Onde $k$ pertence ao conjunto K= [típico, trajeto, doença não ocupacional]. E $c$ pertece ao conjunto C =[ afastamento<15, afastamento>15, óbito, sem afastamento].  
+Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, probabilidade do evento $k$ ocorrer $Pev_{k}$, e a probabilidade da consequência $c$ ocorrer $Pev_c$. Onde $k$ pertence ao conjunto $K= {típico, trajeto, doença não ocupacional}$. E $c$ pertece ao conjunto C =[ afastamento<15, afastamento>15, óbito, sem afastamento].  
 
 $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
-#### B92
-$$N_{b92} = Nev_{af_{<15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
-#### B91
 
-$$N_{b91} = Nev_{ocupacional, af>15} * P_{inval}$$
-#### B94
+#### B91 - Auxílio Doença Acidentário.
 
-$$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico}  ) * P_{inval}$$
-#### B93
+$$N_{b91} = Nev_{ocupacional, af>15}$$
 
-$$N_{b93} = Nev_{obito, k}$$
+
+#### B92 - Aposentadoria por Invalidez Acidentária
+
+
+O número de benefícios concedidos $N_{b92}$ será igual ao número de afastamentos menor do que quinze dias $Nev_{af_{<15},k}$.
+
+***Dúvida: Este número será correspondente ao número de funcionários que recebeu benefício. Sendo assim, não pode ser usado como um índice de gravidade, e sim de frequência. Esta dúvida se aplica a todos Nb**
+
+
+$$N_{b92} = Nev_{af_{>15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
+A probabilidade de invalidez P_{inval} será igual para cada tipo de acidente $k$.
+
+#### B93 - Pensão por Morte Acidentária
+
+* Exceto para Tipos de Acidentes não relacionados ao trabalhos.
+
+$$N_{b93} = Nev_{obito, k}, onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional)$$
+
+#### B94 - Auxílio Acidente
+
+$$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico})$$
+
+#### B31 - Auxílio Doença Previdenciário
+
+$$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15}$$
+
+#### B32 - Aposentadoria Invalidez Previdenciário
+
+$$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
+
+
+
 #### Numero de benefícios acumulados 
 
 $$N_B = \sum_{i=1}^{B} n_iacumulado \ \forall \ i \  \in \ B$$
@@ -165,7 +207,10 @@ $$ p_{multa_l} = if Nref => Nev then p_{multapriori_l}$$
 
 FAP, RAT e SAT: As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ .
 
-$$D_{sat} = RAT_{ajust}* F$$
+$$D_{sat} = RAT_{ajust,t-1}* F$$
+Período Base: 2014 e 2015
+Calculo: 2016
+Vigência: 2017
 
 ###### Rat Ajustado
 
@@ -174,9 +219,28 @@ O $RAT$ varia entre 1 e 3, de acordo com o cnae da empresa em questão.
 $$RAT \in {1,2,3}$$
 
 ###### FAP
+
+
+Fonte utilizada: http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm
+Outro Link: https://www2.dataprev.gov.br/FapWeb/pages/documentosApoio/documentosDeApoio.xhtml
+
+
 O FAP, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, frequência $p_{f}$ e custo$p_c$:
 
-$$FAP = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
+$$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
+
+Ajuste 1:
+$$FAP = 0,5 + 0,5 * IC \if \ (IC < 1, turnover < 0,75) $$
+
+Ajuste 2:
+
+$$FAP = 1 \if \ IC < 1, (turnover > 0,75)$$
+
+Ajuste 3:
+$$FAP = IC - (IC-1)*0,15 \ \if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} = 0)$$
+
+Ajuste 4:
+$$FAP = IC  \if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} > 0) $$
 
 Percentis são calculados de acordo com os índices nos dois anos anteriores.* Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t-1},I_{t-2})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. Ainda não foi definida uma maneira de estimar esta função.
 
@@ -186,14 +250,17 @@ Será definida uma forma para estimar $p_t$.
 
 ###### Índice de Frequência
 
-$$I_f = \frac{(n_{cats}+n_{b92}+n_{b91}+n_{b93})}{f} * 1000$$
+$$I_f = \frac{(n_{obitossembeneficio}+n_{b92}+n_{b91}+n_{b93}+n_{b94})}{f} * 1000$$
+
+Para fins de calculo do FAP, o índice de frequência deve considerar os dois últimos anos:
+$$I_f,t = \frac{I_{f,t-1} + I_{f,t-2}}}{2}$$
 
 ###### Índice de gravidade
-$$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*n_{b93}+0.1*n_{b94})}{f}* 1000$$
+$$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*(n_{b93}+n_{obitossembeneficio})+0.1*n_{b94})}{f}* 1000$$
 
 ###### Índice de Custo
 
-$$I_c = \frac{c_{beneficios inss}}{folha media}/ * 1000$$
+$$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédio}/ * 1000$$
 
 Custos de Benefícios: Considerar tempo médio de afastamento por tipo de afastamento (b91, b92, b93, b94) e o "ticket médio" de cada um destes benefícios.
 
@@ -274,7 +341,11 @@ Os dias de absenteísmo $d_{abs}$ serão estimados de acordo com a probabilidade
 $$d_{abs} = \rho_{abs} * f * d$$
 
 ##### Presenteísmo
+
+
 ##### Produtividade
+
+
 ##### Qualidade
 Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
 ##### Refugo e Retrabalho
