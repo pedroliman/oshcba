@@ -1,0 +1,65 @@
+---
+title: "Tabela_Símbolos"
+author: "Pedro Lima"
+date: "26 de julho de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## tabela de Símbolos
+| Símbolo | Definição |
+|-------|-------------------------------------------------------------------------------------------------|
+| $RBC$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
+| $B_{i}$ | Benefício atribuído ao conjunto de iniciativas em questão em valor presente, onde $i$ indexa a categoria de Iniciativa.|
+| $C_i$ | Custo atribuído ao conjunto de inciativas em questão, onde $j$ indexa a categoria de custos.|
+| $\theta$ | Taxa de desconto a utilizar para trazer o valor dos custos e benefícios a valor presente.
+| $f$ | Número de Funcionários da Empresa.|
+| $Nfalta$ | Número de Faltas.|
+| $T_falta$ | Taxa de Faltas. (Faltas por Funcionário por Período).|
+| $Nev_{c,k}$ | Número de Eventos $c$ gerados a partir do acidente do tipo $k$.|
+| $k$ | Índice que indexa os tipos de acidentes. |
+| $c$ | Índice que indexa os tipos de eventos.|
+| $Pev_{k}$ | Percentual de Funcionários que irá sofrer o evento $k$ em um período. Equivalente ao percentual de funcionários da empresa a sofrer o evento. |
+| $Pev_{c}$ | Probabilidade do evento $c$ ocorrer. |
+| $Pev_{k}$ | Probabilidade do tipo de acidente $k$ ocorrer. Equivalente ao percentual de funcionários da empresa a sofrer o evento.|
+| $N_{b91}$ | Número de Auxílios Doença Acidentário.|
+| $N_{b92}$ | Número de Aposentadorias por Invalidez Acidentária.|
+| $N_{b93}$ | Número de Pensões por Morte Acidentária.|
+| $N_{b94}$ | Número de Auxílio Acidente. |
+| $N_{b31}$ | Número de Auxílios Doença Previdenciário. |
+| $N_{b32}$ | Número de Aposentadorias Invalidez Previdenciário. |
+| $P_{Invalidez}$ | Percentual dos Acidentes com afastamento maior do que quinze dias que gera invalidez. |
+| $NB_{i,t} $ | Número de benefícios acumulados, considerando o período atual e os períodos anteriores. $i$ indexa os tipos de benefícios, $i \in \ I =\{N_{b91}, N_{b92}, N_{b93}, N_{b94}\}$. |
+| $B_i$ | Benefício gerado pela iniciativa (ou iniciativas) avaliadas, na categoria $i$, em unidades monetárias. |
+| ${D}_{i, inic}$ | Despesa ocorrida na categoria $i$, considerando a realização da iniciativa. |
+| ${D}_{i, asis}$ | Despesa ocorrida na categoria $i$, considerando o cenário as is.|
+| ${D}_{reclamatorias}$ | Despesas evitadas com reclamatórias trabalhistas. |
+| $c_{medrec}$ | Custo Médio da Reclamatória.|
+| $n_{reclamatorias}$ | Número de Reclamatórias trabalhistas relacionadas a SST.|
+| $f_{desligados}$ | Número de Funcionários desligados pela empresa.|
+| $p_{ajuizarEganharreclamatoria}$ | Probabilidade de um funcionário demitido entrar com uma reclamatória e ganhar a causa.|
+| $D_{ações regressivas INSS}$ | Despesas relacionadas a Ações Regressivas.|
+| $p_iacaoregressiva$ | a.|
+| $tregressiva_{i}$ | a.|
+| $f_{crise}$ | a.|
+| $crise$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|
+| $a$ | a.|

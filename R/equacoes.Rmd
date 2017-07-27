@@ -1,16 +1,15 @@
 ---
 title: "Modelo Matematico CBR"
-author: P.N. de Lima, D. B. Goldmeyer, L. F. R. Camargo, A. Dresch, D. P. Lacerda,
-  T. Kunrath
-date: "junho de 2017"
+author: 
+date: "julho de 2017"
 output:
-  html_document: default
   pdf_document:
     keep_tex: yes
     latex_engine: xelatex
     number_sections: yes
     toc: yes
     toc_depth: 6
+  html_document: default
   word_document: default
 ---
 
@@ -24,9 +23,10 @@ Este documento contém uma definição do modelo matemático que suporta a calcu
 
 # Lista de Símbolos e Definições
 
+
 | Símbolo | Definição |
 |-------|-------------------------------------------------------------------------------------------------|
-| $\alpha$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
+| $RBC$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
 | $B_{i}$ | Benefício atribuído ao conjunto de iniciativas em questão em valor presente, onde $i$ indexa a categoria de Iniciativa.|
 | $C_i$ | Custo atribuído ao conjunto de inciativas em questão, onde $j$ indexa a categoria de custos.|
 | $\theta$ | Taxa de desconto a utilizar para trazer o valor dos custos e benefícios a valor presente.
@@ -34,13 +34,13 @@ Este documento contém uma definição do modelo matemático que suporta a calcu
 | $k$ | Índice que indexa os tipos de eventos, $k \in K = \{Típico, Trajeto, Doença Não Ocupacional, Não RelacionadoAoTrabalho\}$ |
 | $c$ | Índice que indexa as consequências dos eventos, $c \in C = \{Afastamento<15, Afastamento>15, Óbito, Sem Afastamento\}$ |
 | $Pev_{k}$ | Percentual de Funcionários que irá sofrer o evento $k$ em um período. |
-| $Pev_c$ |
+| $Pev_c$ | 
 
 
 ## CBR - Razão Benefício-Custo
-A razão benefício-custo $\alpha$ corresponde à razão do somatório dos custos $C_i$ onde $i$ representa o índice de custos e $B_j$ os benefícios a valor presente.
+A razão benefício-custo ${RBC}$ corresponde à razão do somatório dos custos $C_i$ onde $i$ representa o índice de custos e $B_j$ os benefícios a valor presente.
 
-$$\alpha = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
+$${RBC} = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
 
 ### Fluxo de Caixa em Valor Presente
 Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente.
@@ -52,11 +52,12 @@ Em todos os casos, o número de faltas será calculado a partir da multiplicaç�
 $$Nfalta = f * T_falta$$ 
 
 ### Calculo dos Eventos
-Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, probabilidade do evento $k$ ocorrer $Pev_{k}$, e a probabilidade da consequência $c$ ocorrer $Pev_c$. Onde $k$ pertence ao conjunto $K= {típico, trajeto, doença não ocupacional}$. E $c$ pertece ao conjunto C =[ afastamento<15, afastamento>15, óbito, sem afastamento].  
+Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, a probabilidade do evento $c$ ocorrer $Pev_c$, e a probabilidade do tipo de acidente $k$ ocorrer $Pev_{k}$. Os eventos $c$ pertece ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
 
 $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 
 #### B91 - Auxílio Doença Acidentário.
+Após o calculo dos eventos serão calculados os benefícios gerados a partir deste benefícios.
 
 $$N_{b91} = Nev_{ocupacional, af>15}$$
 
@@ -88,21 +89,19 @@ $$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15}$$
 
 #### B32 - Aposentadoria Invalidez Previdenciário
 
-$$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
-
-
+$$N_{b32} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
 
 #### Numero de benefícios acumulados 
 
-$$N_B = \sum_{i=1}^{B} n_iacumulado \ \forall \ i \  \in \ B$$
+$$NB_{i,t} = \sum_{t=1}^{t} N_i,t + N_i,inicial \ \forall \ i \  \in \ B$$
 
-### Calculo dos Benefícios
+### Calculo dos Benefícios da Iniciativa
 Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
 
-$$B_i = {D}_{i, ci} - {D}_{i, si}$$
+$$B_i = {D}_{i, inic} - {D}_{i, asis}$$
 Exemplificando, se uma empresa, sem uma iniciativa em SST terá $20000$ reais em desepesas com absenteísmo, e com esta iniciativa terá $15000$, o benefício oriúndo desta inciativa, apenas relacionado a absenteísmo será:
 
-$$B_{abs} = {D}_{abs, ci} - {D}_{abs, si} = (-15000)-(-20000) = 5000$$
+$$B_{abs} = {D}_{abs, inic} - {D}_{abs, asis} = (-15000)-(-20000) = 5000$$
 
 
 #### Despesas Evitáveis
@@ -110,11 +109,7 @@ $$B_{abs} = {D}_{abs, ci} - {D}_{abs, si} = (-15000)-(-20000) = 5000$$
 ##### Despesas com Reclamatórias Trabalhistas
 Esta subcategoria compreende as despesas evitadas com reclamatórias trabalhistas (objeto da ação relacionadas à doenças e acidentes do trabalho) após a implementação integral da iniciativa.
 
-Parâmetros:
-$c_{med}$: Custo Médio da Reclamatória
-$n_{reclamatorias}$: Número de Reclamatórias trabalhistas relacionadas a SST.
-
-$${D}_{reclamatorias} = c_{med}*n_{reclamatorias} $$
+$${D}_{reclamatorias} = c_{medrec}*n_{reclamatorias} $$
 
 ###### Número de Reclamatórias Trabalhistas
 
@@ -150,7 +145,7 @@ Dúvida 2: Crise econômica deve modular esta probabilidade? Que variáveis de c
 
 ###### Ações Regressivas Relacionadas ao Plano de Saúde
 
-$$D_{ações regressivas SUS} =  TotaldeAfastamentosAcumulado * PrecentualTratamentoNoSUS * (f_{crise}*crise) * PercentualCobrancaSUS/PlanodeSaude * ticketmedio$$
+$$D_{açõesregrSUS} =  AfastamenAcumulad * PercTratSus * (f_{crise}*crise) * PercCobrSUSEPlano * cmed$$
 
 ##### Ausência para Tratamento
 
@@ -188,7 +183,7 @@ $$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
 Os custos para reabilitação do trabalhador deve compreender custos relacionados a RH, SST, recapacitação, adequação do posto de trabalho, e adequação do salário.
 
 
-#### Benefício Não Capturado
+#### Retorno Direto
 
 ##### Exposição à Multas
 
@@ -199,8 +194,6 @@ $$N_l = Atendlegisl_l * p_{multa_l}$$
 ###### Probabilidade multa (p_{multa_l})
 
 $$ p_{multa_l} = if Nref => Nev then p_{multapriori_l}$$
-
-
 
 
 ##### Reduções Fiscais
@@ -230,17 +223,19 @@ O FAP, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, 
 $$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
 
 Ajuste 1:
-$$FAP = 0,5 + 0,5 * IC \if \ (IC < 1, turnover < 0,75) $$
+$$FAP = 0,5 + 0,5 * IC \ if \ (IC < 1, turnover < 0,75) $$
 
 Ajuste 2:
 
-$$FAP = 1 \if \ IC < 1, (turnover > 0,75)$$
+$$FAP = 1 \ if \ IC < 1, (turnover > 0,75)$$
 
 Ajuste 3:
-$$FAP = IC - (IC-1)*0,15 \ \if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} = 0)$$
+
+$$FAP = IC - (IC-1)*0,15 \ \ if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} = 0)$$
 
 Ajuste 4:
-$$FAP = IC  \if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} > 0) $$
+
+$$FAP = IC  \ if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} > 0) $$
 
 Percentis são calculados de acordo com os índices nos dois anos anteriores.* Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t-1},I_{t-2})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. Ainda não foi definida uma maneira de estimar esta função.
 
@@ -253,24 +248,19 @@ Será definida uma forma para estimar $p_t$.
 $$I_f = \frac{(n_{obitossembeneficio}+n_{b92}+n_{b91}+n_{b93}+n_{b94})}{f} * 1000$$
 
 Para fins de calculo do FAP, o índice de frequência deve considerar os dois últimos anos:
-$$I_f,t = \frac{I_{f,t-1} + I_{f,t-2}}}{2}$$
+
+$$I_f,t = \frac{I_{f,t-1} + I_{f,t-2}}{2}$$
 
 ###### Índice de gravidade
+
 $$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*(n_{b93}+n_{obitossembeneficio})+0.1*n_{b94})}{f}* 1000$$
 
 ###### Índice de Custo
 
-$$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédio}/ * 1000$$
+$$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia}/ * 1000$$
 
 Custos de Benefícios: Considerar tempo médio de afastamento por tipo de afastamento (b91, b92, b93, b94) e o "ticket médio" de cada um destes benefícios.
 
-##### B91, B92, B93, B,94, etc
-
-
-
-$$b_i = n_i * p_i \ \forall b_i \in B$$
-
-Obs: Será necessário possuir
 
 #### Intangível
 
@@ -308,37 +298,6 @@ $$D_{abs} = d_{abs} * h * c_{mdo}$$
 ###### Dias de Absenteísmo
 
 $$ d_{abs} = (Nev_{af_{<15},k}} + Nfalta)*D_{medioafast_{<15}}$$
-
-##### Variável Intermediária Acidentes
-Número de Acidentes $Nac_{k}$ dp tipo $k$ é igual ao número de funcionários na empresas vezes o percentual de funcionários que se acidentou $Pac_{k}$. O tipo de acidente pode ser Típico, de Trajeto, Doença Ocupacional ou "Não Acidente".
-
-$$Nac_{k} = f * Pac_{k} \ \forall k \in K$$
-
-##### Afastamentos
-
-Afastamentos < 15 dias:
-$$naf_{<15k} = p_{<15} * Nac_{k}  \ \forall k \in K$$
-
-Afastamentos > 15 dias:
-$$naf_{>15k} = p_{>15} * Nac_{k}  \ \forall k \in K$$
-Óbitos:
-$$nob_{k} = p_{obitos} * Nac_{k}  \ \forall k \in K $$
-
-Acidentes Sem Afastamento:
-$$nsaf_{k} = p_{nsaf} *Nac_{k}  \ \forall k \in K $$
-
-
-###### Número de Benefícios Concedidos
-O número de Benefícios concedidos do tipo $i$ serão calculados...
-b92  = ...
-b93 = ...
-
-
-
-###### Dias de Absenteísmo (Antigo)
-Os dias de absenteísmo $d_{abs}$ serão estimados de acordo com a probabilidade de absenteísmo $\rho_{abs}$, número de funcionários $f$ e número de dias úteis do ano $d$:
-
-$$d_{abs} = \rho_{abs} * f * d$$
 
 ##### Presenteísmo
 
