@@ -31,15 +31,24 @@ $${RBC} = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
 Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente.
 
 $$B_i(t) = \frac{b_i}{(1+\theta)^t}$$
-### Calculo da Falta
-Em todos os casos, o número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_falta$, conforme equação abaixo: 
 
-$$Nfalta = f * T_falta$$ 
+### Cálculo dos Benefícios da Iniciativa
+Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
 
-### Calculo dos Eventos
-Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, a probabilidade do evento $c$ ocorrer $Pev_c$, e a probabilidade do tipo de acidente $k$ ocorrer $Pev_{k}$. Os eventos $c$ pertece ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
+$$B_i = {D}_{i, inic} - {D}_{i, asis}$$
+Exemplificando, se uma empresa, sem uma iniciativa em SST terá $20000$ reais em desepesas com absenteísmo, e com esta iniciativa terá $15000$, o benefício oriúndo desta inciativa, apenas relacionado a absenteísmo será:
+
+$$B_{abs} = {D}_{abs, inic} - {D}_{abs, asis} = (-15000)-(-20000) = 5000$$
+
+### Cálculo dos Eventos
+Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, e o percentual de funcionários $Pev_c$ que sofrerá o evento $c$, e o percentual do tipo de acidente $k$ ocorrer $Pev_{k}$. Os eventos $c$ pertecem ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
 
 $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
+
+#### Calculo de Faltas
+O número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_{falta}$, conforme equação abaixo: 
+
+$$Nfalta = f * T_falta$$ 
 
 #### B91 - Auxílio Doença Acidentário.
 Após o calculo dos eventos serão calculados os benefícios gerados a partir deste benefícios.
@@ -52,21 +61,18 @@ $$N_{b91} = Nev_{ocupacional, af>15}$$
 
 O número de benefícios concedidos $N_{b92}$ será igual ao número de afastamentos menor do que quinze dias $Nev_{af_{<15},k}$.
 
-***Dúvida: Este número será correspondente ao número de funcionários que recebeu benefício. Sendo assim, não pode ser usado como um índice de gravidade, e sim de frequência. Esta dúvida se aplica a todos Nb**
-
 
 $$N_{b92} = Nev_{af_{>15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
 A probabilidade de invalidez P_{inval} será igual para cada tipo de acidente $k$.
 
 #### B93 - Pensão por Morte Acidentária
 
-* Exceto para Tipos de Acidentes não relacionados ao trabalhos.
-
 $$N_{b93} = Nev_{obito, k}, onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional)$$
 
 #### B94 - Auxílio Acidente
 
 $$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico})$$
+Deve-se notar que, para fins de FAP, os eventos não devem considerar os acidentes de trajetos. Caso o número de benefícios separado por espécie seja apenas relevante para o FAP, os acidentes de trajetos devem ser removidos das fórmulas acima. Caso contrário, devem ser criadas variáveis em separado para fins de FAP e para outros fins.
 
 #### B31 - Auxílio Doença Previdenciário
 
@@ -80,15 +86,6 @@ $$N_{b32} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
 
 $$NB_{i,t} = \sum_{t=1}^{t} N_i,t + N_i,inicial \ \forall \ i \  \in \ B$$
 
-### Calculo dos Benefícios da Iniciativa
-Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
-
-$$B_i = {D}_{i, inic} - {D}_{i, asis}$$
-Exemplificando, se uma empresa, sem uma iniciativa em SST terá $20000$ reais em desepesas com absenteísmo, e com esta iniciativa terá $15000$, o benefício oriúndo desta inciativa, apenas relacionado a absenteísmo será:
-
-$$B_{abs} = {D}_{abs, inic} - {D}_{abs, asis} = (-15000)-(-20000) = 5000$$
-
-
 #### Despesas Evitáveis
 
 ##### Despesas com Reclamatórias Trabalhistas
@@ -100,13 +97,6 @@ $${D}_{reclamatorias} = c_{medrec}*n_{reclamatorias} $$
 
 $$n_{reclamatorias} = f_{desligados} * p_{ajuizarEganharreclamatoria} $$
 
-Parâmetros:
-$p_{ajuizarEganharreclamatoria}$: Probabilidade de um funcionário demitido entrar com uma reclamatória e ganhar a causa.
-$f_{desligados}$: Número de Funcionários desligados pela empresa.
-
-Possibilidade 1: Considerar uma única probabilidade de ajuizar e ganhar uma ação reclamatória. Esta probabilidade vezes o número de funcionários gera o número de reclamatórias trabalhistas a pagar.
-
-Possibilidade 2: Separar o ajuizamento da ação do ganho da ação. Desta maneira é possível calcular o custo em ações mesmo quando o funcionário não ganhou a ação. A princípio estamos na possibilidade 1.
 
 ##### Acidente / Doença Ocupacional - Invalidez
 
@@ -116,17 +106,11 @@ Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o calculo
 Possibilidade 2: Existem despesas que não estão em nenhuma outra categoria e que deveriam ser contabilizados aqui. A princípio estamos na possibilidade 1. A categoria será excluída caso a possibilidade 1 se confirme.
 
 ##### Ações Regressivas
-Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral da iniciativa.
-
-A Ação Regressiva representa o o ressarcimento de pagamento de benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120 :A ação regressiva é a penalização adicional relacionada ao B91 - B94.
+Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral da iniciativa. A Ação Regressiva representa o o ressarcimento de pagamento de benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120 :A ação regressiva é a penalização adicional relacionada ao B91 - B94.
 
 ###### Ações Regressivas Relacionadas ao INSS
 
-$$D_{ações regressivas INSS} =  \sum_{i=1}^{B} n_iacumulado * p_iacaoregressiva * (f_{crise}*crise) * tregressiva_{i}  $$
-
-Dúvida: O NTEP já estará contabilizado integralmente pelo FAP? Sim: Então precisa estar aqui. Não: Então
-Dúvida 2: Crise econômica deve modular esta probabilidade? Que variáveis de contexto devem modular que variáveis de input?
-
+$$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress} * (f_{crise}*crise) * tregress_{i}  $$
 
 ###### Ações Regressivas Relacionadas ao Plano de Saúde
 
@@ -134,9 +118,7 @@ $$D_{açõesregrSUS} =  AfastamenAcumulad * PercTratSus * (f_{crise}*crise) * Pe
 
 ##### Ausência para Tratamento
 
-Esta subcategoria compreende as despesas evitadas com a ausência do trabalhador afastado para tratamento após a implementação integral da iniciativa.
-
-Esta categoria irá para a categoria de absenteísmo.
+Esta subcategoria compreende as despesas evitadas com a ausência do trabalhador afastado para tratamento após a implementação integral da iniciativa. Os custos desta categoria já estão incluidos na categoria de absenteísmo.
 
 ##### Despesas Médicas
 
@@ -146,47 +128,37 @@ $$D_{medicas} = (\sum_{k=1}^{K} n_{acidentesk}) * d_{medio}$$
 
 ##### Redução de Valores do plano de Saúde 
 Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral da iniciativa.
+
 $$D_{planosaude} = D_{planosaudebase} * desc_{plano}$$
 
-Dúvida: Como calcular o desconto no plano de saúde a partir das demais variáveis?
-$$desc_{plano}(TaxaSinistralidade) =  ?? $$
-
-##### Reabilitação:
-Usará (f_{crise}*crise)
-
+$$desc_{plano}(TaxaSinistralidade) =   {...}  $$
 
 ##### Interrupção Operacional por Acidente/Morte
 
 $$D_{interdicao} = n_{acidentestipico} * dias * lucrocessante$$
 
+##### Reabilitaçãodo Trabalhador
+
+$$D_{reab} = custo_{reab} * nacumulado_i * preab_i $$
+
 ##### Interdições Por Fiscalização
 $$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
 
-
-##### Reabilitação do trabalhador
-
-Os custos para reabilitação do trabalhador deve compreender custos relacionados a RH, SST, recapacitação, adequação do posto de trabalho, e adequação do salário.
-
-
-#### Retorno Direto
+#### Reduções Fiscais
 
 ##### Exposição à Multas
 
 $$D_{multas}= (f_{crise}*crise) * N_l * C_{med_l}$$
-###### Número de multas (N_l)
+
+###### Número de multas
 
 $$N_l = Atendlegisl_l * p_{multa_l}$$
-###### Probabilidade multa (p_{multa_l})
 
-$$ p_{multa_l} = if Nref => Nev then p_{multapriori_l}$$
+###### Probabilidade de multa
 
+$$ p_{multa_l} =  p_{multapriori_l} * fator_{l} * (Nev_{tipico} + Nev_{doenocup})$$
 
-##### Reduções Fiscais
-
-
-
-
-###### FAP
+##### FAP
 
 Fonte utilizada: http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm
 Outro Link: https://www2.dataprev.gov.br/FapWeb/pages/documentosApoio/documentosDeApoio.xhtml
@@ -206,7 +178,7 @@ $$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*(n_{b93}+n_{obitossembeneficio})+0.1*
 
 ###### Índice de Custo
 
-$$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia}/ * 1000$$
+$$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia} * 1000$$
 
 ###### Percentis
 Percentis são calculados de acordo com os índices nos dois anos anteriores.Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t-1},I_{t-2})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. **O calculo da Posição e Percentil é a área mais desafiadora para o calculo de uma projeção do FAP**.
@@ -218,6 +190,7 @@ $$p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}$$
 O IC, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, frequência $p_{f}$ e custo$p_c$:
 
 $$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
+
 ###### Calculo Final do FAP
 
 
@@ -267,11 +240,6 @@ As despesas com Turnover $D_{tur}$ serão calculadas com base no número de func
 
 $$D_{tur} = (Nev_{af_{>15},k} + Nev_{obito,k}) * c_{sub}$$ 
 
-###### Número de Afastamentos
-O número de afastamentos $n_{afast}$ será estimado de acordo com a probabilidade de afastamento $\rho_{afast}$ e número de funcionários $f$:
-$$n_{afast} = \rho_{afast} * f $$
-
-
 ##### Absenteísmo
 
 As despesas com Absenteísmo $D_{abs}$ serão calculadas com base no número de dias de absenteísmo por problemas relacionados à SST $d_{abs}$, no número de horas trabalhadas por dia $h$ e no custo em mão de obra médio horário $c_{mdo}$.
@@ -286,3 +254,12 @@ $$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
 ##### Categorias a Modelar (Melhor Uso dos Recursos):
 Presenteísmo, Produtividade, Qualidade, Refugo e Retrabalho, MP Insumos e Equipamentos.
+##### Refugo e Retrabalho
+
+D{ref}
+
+Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
+
+É necessário também considerar acidentes de trajeto?
+
+##### MP, Insumos, Equipamentos Operação
