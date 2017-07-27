@@ -1,6 +1,6 @@
 ---
 title: "Modelo Matematico CBR"
-author: "null"
+author: "GMAP | UNISINOS"
 date: "julho de 2017"
 output:
   word_document: default
@@ -136,13 +136,13 @@ $$desc_{plano}(TaxaSinistralidade) =   {...}  $$
 ##### Interrupção Operacional por Acidente/Morte
 
 $$D_{interdicao} = n_{acidentestipico} * dias * lucrocessante$$
+##### Interdições Por Fiscalização
+
+$$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
 
 ##### Reabilitaçãodo Trabalhador
 
 $$D_{reab} = custo_{reab} * nacumulado_i * preab_i $$
-
-##### Interdições Por Fiscalização
-$$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
 
 #### Reduções Fiscais
 
@@ -230,8 +230,8 @@ Exemplo:
 Período Base de cálculo: 2014 e 2015. Cálculo do FAP: 2016. Vigência: 2017.
 
 #### Intangível
-Categorias a Modelar: Imagem da Empresa, Engajamento e Clima organizacional.
-
+##### Imagem da Empresa (a discutir)
+##### Engajamento e Clima organizacional (a discutir)
 #### Melhor Uso dos Recursos
 
 ##### Turnover
@@ -252,14 +252,13 @@ Os dias de absenteísmo levam em consideração os afastamentos menores do que 1
 
 $$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
-##### Categorias a Modelar (Melhor Uso dos Recursos):
-Presenteísmo, Produtividade, Qualidade, Refugo e Retrabalho, MP Insumos e Equipamentos.
 ##### Refugo e Retrabalho
 
-D{ref}
-
-Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
-
-É necessário também considerar acidentes de trajeto?
+$$D_{refug_retr} = cmed_{refretr} * Nev_{tipico,ocupac}$$
 
 ##### MP, Insumos, Equipamentos Operação
+
+$$D_{MP,Ins,Eq} = cmed_{MP,Ins,Eq} * Nev_{tipico,ocupac}$$
+
+##### Qualidade (a discutir)
+##### Produtividade (a discutir)
