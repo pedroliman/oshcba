@@ -1,8 +1,9 @@
 ---
 title: "Modelo Matematico CBR"
-author: 
+author: "null"
 date: "julho de 2017"
 output:
+  word_document: default
   pdf_document:
     keep_tex: yes
     latex_engine: xelatex
@@ -10,7 +11,6 @@ output:
     toc: yes
     toc_depth: 6
   html_document: default
-  word_document: default
 ---
 
 
@@ -20,21 +20,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Modelo Matemático - Razão Benefício-Custo
 Este documento contém uma definição do modelo matemático que suporta a calculadora de custos e benefícios de inciativas em SST.
-
-# Lista de Símbolos e Definições
-
-
-| Símbolo | Definição |
-|-------|-------------------------------------------------------------------------------------------------|
-| $RBC$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
-| $B_{i}$ | Benefício atribuído ao conjunto de iniciativas em questão em valor presente, onde $i$ indexa a categoria de Iniciativa.|
-| $C_i$ | Custo atribuído ao conjunto de inciativas em questão, onde $j$ indexa a categoria de custos.|
-| $\theta$ | Taxa de desconto a utilizar para trazer o valor dos custos e benefícios a valor presente.
-| $Nev_{c,k}$ | Número de Eventos do tipo $k$ com a consequência $c$|
-| $k$ | Índice que indexa os tipos de eventos, $k \in K = \{Típico, Trajeto, Doença Não Ocupacional, Não RelacionadoAoTrabalho\}$ |
-| $c$ | Índice que indexa as consequências dos eventos, $c \in C = \{Afastamento<15, Afastamento>15, Óbito, Sem Afastamento\}$ |
-| $Pev_{k}$ | Percentual de Funcionários que irá sofrer o evento $k$ em um período. |
-| $Pev_c$ | 
 
 
 ## CBR - Razão Benefício-Custo
@@ -130,7 +115,7 @@ Esta subcategoria compreende as despesas evitadas com incapacitação parcial ou
 Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o calculo do FAP e não deveriam ser contados em duplicidade.
 Possibilidade 2: Existem despesas que não estão em nenhuma outra categoria e que deveriam ser contabilizados aqui. A princípio estamos na possibilidade 1. A categoria será excluída caso a possibilidade 1 se confirme.
 
-##### Ações Regressivas (NTEP)
+##### Ações Regressivas
 Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral da iniciativa.
 
 A Ação Regressiva representa o o ressarcimento de pagamento de benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120 :A ação regressiva é a penalização adicional relacionada ao B91 - B94.
@@ -198,56 +183,20 @@ $$ p_{multa_l} = if Nref => Nev then p_{multapriori_l}$$
 
 ##### Reduções Fiscais
 
-FAP, RAT e SAT: As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ .
 
-$$D_{sat} = RAT_{ajust,t-1}* F$$
-Período Base: 2014 e 2015
-Calculo: 2016
-Vigência: 2017
 
-###### Rat Ajustado
-
-$$RAT_{ajust} = (FAP * RAT)$$
-O $RAT$ varia entre 1 e 3, de acordo com o cnae da empresa em questão.
-$$RAT \in {1,2,3}$$
 
 ###### FAP
-
 
 Fonte utilizada: http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm
 Outro Link: https://www2.dataprev.gov.br/FapWeb/pages/documentosApoio/documentosDeApoio.xhtml
 
 
-O FAP, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, frequência $p_{f}$ e custo$p_c$:
-
-$$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
-
-Ajuste 1:
-$$FAP = 0,5 + 0,5 * IC \ if \ (IC < 1, turnover < 0,75) $$
-
-Ajuste 2:
-
-$$FAP = 1 \ if \ IC < 1, (turnover > 0,75)$$
-
-Ajuste 3:
-
-$$FAP = IC - (IC-1)*0,15 \ \ if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} = 0)$$
-
-Ajuste 4:
-
-$$FAP = IC  \ if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} > 0) $$
-
-Percentis são calculados de acordo com os índices nos dois anos anteriores.* Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t-1},I_{t-2})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. Ainda não foi definida uma maneira de estimar esta função.
-
-$$p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}$$
-
-Será definida uma forma para estimar $p_t$.
-
 ###### Índice de Frequência
 
 $$I_f = \frac{(n_{obitossembeneficio}+n_{b92}+n_{b91}+n_{b93}+n_{b94})}{f} * 1000$$
 
-Para fins de calculo do FAP, o índice de frequência deve considerar os dois últimos anos:
+Para fins de calculo do FAP, o índice de frequência deve considerar os dois últimos anos.
 
 $$I_f,t = \frac{I_{f,t-1} + I_{f,t-2}}{2}$$
 
@@ -259,16 +208,56 @@ $$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*(n_{b93}+n_{obitossembeneficio})+0.1*
 
 $$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia}/ * 1000$$
 
-Custos de Benefícios: Considerar tempo médio de afastamento por tipo de afastamento (b91, b92, b93, b94) e o "ticket médio" de cada um destes benefícios.
+###### Percentis
+Percentis são calculados de acordo com os índices nos dois anos anteriores.Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t-1},I_{t-2})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. **O calculo da Posição e Percentil é a área mais desafiadora para o calculo de uma projeção do FAP**.
 
+$$p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}$$
+
+###### Índice Composto
+
+O IC, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, frequência $p_{f}$ e custo$p_c$:
+
+$$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
+###### Calculo Final do FAP
+
+
+Para o Calculo do FAP, o turnover da empresa deve ser calculado considerando os ultimos dois anos. Deve ser observado o item 3.8, que indica que " Serão consideradas no cálculo apenas as rescisões sem justa causa, por iniciativa do empregador, inclusive rescisão antecipada do contrato a termo; e as rescisões por término do contrato a termo."
+
+$$turnover_{FAP} = \frac{\frac{min(admissoes_{t-1}, recisoes{t-1})}{f_{t-1}} + \frac{min(admissoes_{t-2}, recisoes_{t-2})}{f_{t-2}}}{2}$$
+
+Ajuste 1 - Aplicado para os casos onde o IC < 1, de modo que o FAP será no mínimo 0,5.
+$$FAP = 0,5 + 0,5 * IC \ if \ (IC < 1, turnover_{FAP} < 0,75) $$
+
+Ajuste 2 - aplicado para os casos onde a empresa obteve turnover maior do que 0,75.
+
+$$FAP = 1 \ if \ IC < 1, (turnover_{FAP} > 0,75)$$
+
+Ajuste 3 - aplicado para os casos onde a empresa pode receber um desconto (bônus) de 0,15 em seu FAP.
+
+$$FAP = IC - (IC-1)*0,15 \ \ if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} = 0)$$
+
+Ajuste 4 - aplicado para o caso onde a empresa não pode obter o desconto (bônus) de 0,15.
+
+$$FAP = IC  \ if \ (IC > 1, n_{b92,t-2}+n_{b93t-2} > 0) $$
+Ajuste 5 - Se a empresa tem menos do que dois anos, o FAP será igual a 1
+
+$$FAP = 1  \ if \ (T_{idadeempresa} <= 2) $$
+
+###### RAT Ajustado
+
+O $RAT$ varia entre 1 e 3, de acordo com o cnae da empresa em questão.
+$$RAT \in \{1,2,3\}$$
+
+$$RAT_{ajust} = (FAP * RAT)$$
+
+As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ . Observar que o RAT ajustado calculado em um determinado ano será usado no ano seguinte para o calculo da despesa.
+
+$$D_{sat} = RAT_{ajust,t-1}* F$$
+Exemplo:
+Período Base de cálculo: 2014 e 2015. Cálculo do FAP: 2016. Vigência: 2017.
 
 #### Intangível
-
-##### Imagem da Empresa
-
-##### Engajamento / Clima Organizacional
-
-
+Categorias a Modelar: Imagem da Empresa, Engajamento e Clima organizacional.
 
 #### Melhor Uso dos Recursos
 
@@ -276,13 +265,7 @@ Custos de Benefícios: Considerar tempo médio de afastamento por tipo de afasta
 
 As despesas com Turnover $D_{tur}$ serão calculadas com base no número de funcionários afastados por problemas relacionados à SST $n_{afast}$ e no custo médio de substituição dos funcionários$c_{sub}$.
 
-$$D_{tur} = (Nev_{af_{<15},k} + Nev_{obito,k}) * c_{sub}$$ 
-
-Número de Afastamentos é calculado de acordo com a probabilidade de morte $p_{morte}$ e a probabilidade de afastamento por período menor que 15 dias $p_{>15}$
-
-$$n_{afast} = p_{morte}*f + p_{>15}*f$$
-
-
+$$D_{tur} = (Nev_{af_{>15},k} + Nev_{obito,k}) * c_{sub}$$ 
 
 ###### Número de Afastamentos
 O número de afastamentos $n_{afast}$ será estimado de acordo com a probabilidade de afastamento $\rho_{afast}$ e número de funcionários $f$:
@@ -297,27 +280,9 @@ $$D_{abs} = d_{abs} * h * c_{mdo}$$
 
 ###### Dias de Absenteísmo
 
-$$ d_{abs} = (Nev_{af_{<15},k}} + Nfalta)*D_{medioafast_{<15}}$$
+Os dias de absenteísmo levam em consideração os afastamentos menores do que 15 dias $Nev_{af<15,k}$ e as faltas.
 
-##### Presenteísmo
+$$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
-
-##### Produtividade
-
-
-##### Qualidade
-Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
-##### Refugo e Retrabalho
-Usar o número de acidentes típicos e doenças ocupacionais como proxies para o custo em qualidade, refugo e retrabalho?
-
-É necessário também considerar acidentes de trajeto?
-
-##### MP, Insumos, Equipamentos Operação
-
-
-### Variáveis Intermediárias
-
-
-### Custos
-
-#### Custos de Implementação
+##### Categorias a Modelar (Melhor Uso dos Recursos):
+Presenteísmo, Produtividade, Qualidade, Refugo e Retrabalho, MP Insumos e Equipamentos.

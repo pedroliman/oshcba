@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## tabela de Símbolos
+## Lista de Símbolos e Definições
 | Símbolo | Definição |
 |-------|-------------------------------------------------------------------------------------------------|
 | $RBC$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
