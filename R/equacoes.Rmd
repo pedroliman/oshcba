@@ -166,6 +166,8 @@ Outro Link: https://www2.dataprev.gov.br/FapWeb/pages/documentosApoio/documentos
 
 ###### Índice de Frequência
 
+Os óbitos sem benefício são exatamente isso: Óbitos acidentários que não receberam benefício (por algum motivo).
+
 $$I_f = \frac{(n_{obitossembeneficio}+n_{b92}+n_{b91}+n_{b93}+n_{b94})}{f} * 1000$$
 
 Para fins de calculo do FAP, o índice de frequência deve considerar os dois últimos anos.
@@ -181,9 +183,9 @@ $$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*(n_{b93}+n_{obitossembeneficio})+0.1*
 $$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia} * 1000$$
 
 ###### Percentis
-Percentis são calculados de acordo com os índices nos dois anos anteriores.Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t-1},I_{t-2})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. **O calculo da Posição e Percentil é a área mais desafiadora para o calculo de uma projeção do FAP**.
+Percentis são calculados de acordo com os índices nos dois anos anteriores.Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. **O calculo da Posição e Percentil é a área mais desafiadora para o calculo de uma projeção do FAP**. Será escolhida a alternativa "B". Curva aproximada a partir dos dados da empresa.
 
-$$p_t = \frac{100*(Pos(I_{t-1},I_{t-2})-1)}{n-1}$$
+$$p_t = \frac{100*(Pos(I_{t})-1)}{n-1}$$
 
 ###### Índice Composto
 
