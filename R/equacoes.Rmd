@@ -11,7 +11,7 @@ output:
     toc: yes
     toc_depth: 6
   html_document: default
----
+<!-- --- -->
 
 
 ```{r setup, include=FALSE}
@@ -50,7 +50,13 @@ O número de faltas será calculado a partir da multiplicação do número de fu
 
 $$N_{falta} = f * T_{falta}$$ 
 
+### Ligação entre Eventos e B's
+
+O quadro a seguir apresenta a ligação entre os eventos e os benefícios calculados.
+![Quadro de Eventos e B's calculados](../figures/quadro_beneficios.png)
+
 #### B91 - Auxílio Doença Acidentário.
+
 Após o calculo dos eventos serão calculados os benefícios gerados a partir deste benefícios.
 
 $$N_{b91} = Nev_{ocupacional, af>15}$$
@@ -76,14 +82,17 @@ Deve-se notar que, para fins de FAP, os eventos não devem considerar os acident
 
 #### B31 - Auxílio Doença Previdenciário
 
+Os Auxílios por Doença Previdenciário serão calculados a partir dos eventos não relacionados ao trabalho $Nev_{NRelacionadoAoTrabalho, af>15}$.
 $$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15}$$
 
 #### B32 - Aposentadoria Invalidez Previdenciário
 
+As aposentadorias por invalidez previdenciárias serão calculadas a partir dos eventos não relacionados ao trabalho $Nev_{NRelacionadoAoTrabalho, af>15}$.
 $$N_{b32} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
 
 #### Numero de benefícios acumulados 
 
+O número de benefícios acumulado será calculado de acordo com o número de benefícios concedido até o período $t$ em questão e o número de benefícios inicial.
 $$NB_{i,t} = \sum_{t=1}^{t} N_i,t + N_i,inicial \ \forall \ i \  \in \ B$$
 
 #### Despesas Evitáveis
@@ -95,6 +104,7 @@ $${D}_{reclamatorias} = c_{medrec}*n_{reclamatorias} $$
 
 ###### Número de Reclamatórias Trabalhistas
 
+O número de reclamatórias trabalhistas será calculado considerando o número de funcionários desligados total multiplicado pela probabilidade de ajuizar e ganhar uma reclamatória trabalhista.
 $$n_{reclamatorias} = f_{desligados} * p_{ajuizarEganharreclamatoria} $$
 
 
@@ -110,10 +120,12 @@ Esta subcategoria compreende as despesas evitadas com ações regressivas do INS
 
 ###### Ações Regressivas Relacionadas ao INSS
 
+As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular a esta função.
 $$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress} * (f_{crise}*crise) * tregress_{i}  $$
 
 ###### Ações Regressivas Relacionadas ao Plano de Saúde
 
+As despesas com ações regressivas relacionadas ao plano de saúde serão calculadas de forma similar, considerando os afastamentos acumulados, o percentual de tratamento no SUS e no Plano de Saúde e o custo médio do evento no plano de saúde.
 $$D_{açõesregrSUS} =  AfastamenAcumulad * PercTratSus * (f_{crise}*crise) * PercCobrSUSEPlano * cmed$$
 
 ##### Ausência para Tratamento
@@ -137,38 +149,38 @@ $$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{0,reaj} * \sum_{k=1}^{K} {\sum_{c=1
 
 ##### Interrupção Operacional por Acidente/Morte
 
-$$D_{interdicao} = n_{acidentestipico} * dias * lucrocessante$$
+As despesas com interrupção operacional serão calculadas considerando o número de acidentes típicos, o tempo médio de interrução e o lucro cessante médio diário oriúndo de cada acidente.
+$$D_{interdicao} = n_{acidentestipico} * dias_{interr,acidente} * lucrocessante$$
 
 ##### Interdições Por Fiscalização
-
-$$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
+As despesas com interdições por fiscalização serão calculadas de acordo com a probabilidade de interdição, o número médio de dias relacionados à interdição por fiscalização e o lucro cessante médio diário oriúndo de cada interdição. Adicionalmente, esta equação pode ser modulada pela projeção de uma crise financeira.
+$$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias_{interr,fiscalizacao} * lucrocessante $$
 
 ##### Reabilitaçãodo Trabalhador
 
 Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados (seja por mais do que 30 dias ou por mais do que 15 dias), e PCD's.
-
 $$D_{reab} = custo_{reab} * ((Nev_{c, af>15} + Nev_{c, af<15}) * preab + N_{PCDs}) $$
 
 #### Reduções Fiscais
 
 ##### Exposição à Multas
 
+As despesas oriúndas da exposição à multa serão calculadas considerando-se o número de multas aplicadas e o custo médio da multa. Adicionalmente, o número de multas também pode ser modulado pela ocorrência de uma crise.
 $$D_{multas}= (f_{crise}*crise) * N_l * C_{med_l}$$
 
 ###### Número de multas
-
+O número de múltas aplicado será calculado de acordo com o atingimento da legislação (variável binária 0 ou 1) e a probabilidade de multa dado que não haja atendimento completo à legislação.
 $$N_l = Atendlegisl_l * p_{multa_l}$$
 
 ###### Probabilidade de multa
-
-$$ p_{multa_l} =  p_{multapriori_l} * fator_{l} * (Nev_{tipico} + Nev_{doenocup})$$
+A probabilidade de multa será modulada a partir de uma probabilidade de multa a priori, e de acordo com os eventos de acidentes típicos e doenças ocupacionais. Cada acidente ocorrido aumentará a probabilidade de multa nas unidades definidas em $fator_{l}$.
+$$ p_{multa_l} =  p_{multapriori_l} + fator_{l} * (Nev_{tipico} + Nev_{doenocup})$$
 
 ##### FAP
 
-Fonte utilizada: http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm
+Fonte para o calculo do FAP utilizada: <http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm>
 
-
-###### Índice de Frequência
+###### Índices de Frequência, Gravidade e Custo
 
 Os óbitos sem benefício são exatamente isso: Óbitos acidentários que não receberam benefício (por algum motivo).
 
@@ -178,11 +190,11 @@ Para fins de calculo do FAP, o índice de frequência deve considerar os dois ú
 
 $$I_f,t = \frac{I_{f,t-1} + I_{f,t-2}}{2}$$
 
-###### Índice de gravidade
+O índice de gravidade será calculado a partir desta fórmula:
 
 $$I_g = \frac{(0.1*n_{b91}+0.3*n_{b92}+0.5*(n_{b93}+n_{obitossembeneficio})+0.1*n_{b94})}{f}* 1000$$
 
-###### Índice de Custo
+E o índice de custo será calculado a partir desta fórmula:
 
 $$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia} * 1000$$
 
@@ -198,7 +210,6 @@ O IC, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, f
 $$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
 
 ###### Calculo Final do FAP
-
 
 Para o Calculo do FAP, o turnover da empresa deve ser calculado considerando os ultimos dois anos. Deve ser observado o item 3.8, que indica que " Serão consideradas no cálculo apenas as rescisões sem justa causa, por iniciativa do empregador, inclusive rescisão antecipada do contrato a termo; e as rescisões por término do contrato a termo."
 
@@ -288,9 +299,12 @@ $$D_{presenteismo} = Perc_{present} * f * h * c_{mdo}$$
 
 ##### Refugo e Retrabalho
 
+As despesas com refugo e retrabalho serão calculadas considerando o número de eventos típicos e doenças ocupacionais, e um custo médio em refugo e retrabalho por evento.
+
 $$D_{refug_retr} = cmed_{refretr} * Nev_{tipico,ocupac}$$
 
 ##### MP, Insumos, Equipamentos Operação
+De modo similar, as despesas com matéria prima, insumos e equipamentos serão calculadas considerando o número de eventos típicos e doenças ocupacionais, e um custo médio por evento.
 
 $$D_{MP,Ins,Eq} = cmed_{MP,Ins,Eq} * Nev_{tipico,ocupac}$$
 
