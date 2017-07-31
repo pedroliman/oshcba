@@ -48,7 +48,7 @@ $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 #### Calculo de Faltas
 O número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_{falta}$, conforme equação abaixo: 
 
-$$Nfalta = f * T_falta$$ 
+$$N_{falta} = f * T_{falta}$$ 
 
 #### B91 - Auxílio Doença Acidentário.
 Após o calculo dos eventos serão calculados os benefícios gerados a partir deste benefícios.
@@ -127,22 +127,27 @@ Esta subcategoria compreende as despesas evitadas com medicamento e atendimento 
 $$D_{medicas} = (\sum_{k=1}^{K} n_{acidentesk}) * d_{medio}$$
 
 ##### Redução de Valores do plano de Saúde 
-Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral da iniciativa.
+Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral da iniciativa. A despesa com o plano de saúde de cada período será calculada de acordo com a despesa do ano anterior, acrescida de um percentual de reajuste estimado.
 
-$$D_{planosaude} = D_{planosaudebase} * desc_{plano}$$
+$$D_{planosaude,t} = D_{planosaude,t-1} * (1 + Reaj_{estimado,t})$$
 
-$$desc_{plano}(TaxaSinistralidade) =   {...}  $$
+O reajuste estimado será obtido por meio de uma regressão, comparada ao número de acidentes total $\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c}}}$, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_1$ serão estimados a priori, e aplicados pelo modelo a cada ano.
+
+$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{0,reaj} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}} $$
 
 ##### Interrupção Operacional por Acidente/Morte
 
 $$D_{interdicao} = n_{acidentestipico} * dias * lucrocessante$$
+
 ##### Interdições Por Fiscalização
 
 $$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias * lucrocessante $$
 
 ##### Reabilitaçãodo Trabalhador
 
-$$D_{reab} = custo_{reab} * nacumulado_i * preab_i $$
+Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados (seja por mais do que 30 dias ou por mais do que 15 dias), e PCD's.
+
+$$D_{reab} = custo_{reab} * ((Nev_{c, af>15} + Nev_{c, af<15}) * preab + N_{PCDs}) $$
 
 #### Reduções Fiscais
 
@@ -161,7 +166,6 @@ $$ p_{multa_l} =  p_{multapriori_l} * fator_{l} * (Nev_{tipico} + Nev_{doenocup}
 ##### FAP
 
 Fonte utilizada: http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm
-Outro Link: https://www2.dataprev.gov.br/FapWeb/pages/documentosApoio/documentosDeApoio.xhtml
 
 
 ###### Índice de Frequência
@@ -232,8 +236,30 @@ Exemplo:
 Período Base de cálculo: 2014 e 2015. Cálculo do FAP: 2016. Vigência: 2017.
 
 #### Intangível
-##### Imagem da Empresa (a discutir)
+
+##### Imagem da Empresa
+
+Os benefícios da inciativa relacionados à imagem foram desmembradas em duas variáveis. Uma variável considera o ganho obtido com expansão de receita, e uma segunda apresenta o ganho relacionado às despesas com contratação. A variável  $D_{imagem, receita}$ será informada como dado de entrada, considerando-se sua especificidade relacionada à inciativa.
+
+$$D_{imagem}  = D_{imagem, contratacao} + D_{imagem, receita}$$
+
+As despesas com imagem relacionadas a contratação serão estimadas considerando o tempo de contratação médio, custo de contratação e número médio de funcionários contratados.
+$$D_{imagem, contratacao} = t_{contrat} * custo_{contrat} * n_{contrat}$$
+
+A variável de tempo de contratação será estimada por meio de uma regressão linear, considerando o número de eventos do ano anterior (considerando acidentes com afastamento maior do que 15 dias e óbitos).
+
+$$t_{contrat} = \beta_{0,tcontrat} + \beta_{1,tcontrat} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}} $$
+
 ##### Engajamento e Clima organizacional (a discutir)
+
+As despesas relacionadas a engajamento e clima organizacional serão calculadas a partir de desligamentos voluntários, projetados.
+
+$$D_{clima} = Des_{voluntarios} * c_{sub}$$ 
+
+A variável de desligamento voluntário será calculada por meio de uma regressão linear, considerando os eventos calculados.
+
+$$Des_{voluntarios} = \beta_{0,desvolunt} + \beta_{1,desvolunt} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}} $$
+
 #### Melhor Uso dos Recursos
 
 ##### Turnover
@@ -254,6 +280,12 @@ Os dias de absenteísmo levam em consideração os afastamentos menores do que 1
 
 $$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
+##### Presenteísmo
+
+Assim como o absenteísmo, o presenteísmo será calculado considerando o custo médio da mão de obra, o número de horas trabalhadas e o índice de presenteísmo. O índice será informado para a situação com iniciativa e sem iniciativa.
+
+$$D_{presenteismo} = Perc_{present} * f * h * c_{mdo}$$
+
 ##### Refugo e Retrabalho
 
 $$D_{refug_retr} = cmed_{refretr} * Nev_{tipico,ocupac}$$
@@ -262,5 +294,13 @@ $$D_{refug_retr} = cmed_{refretr} * Nev_{tipico,ocupac}$$
 
 $$D_{MP,Ins,Eq} = cmed_{MP,Ins,Eq} * Nev_{tipico,ocupac}$$
 
-##### Qualidade (a discutir)
-##### Produtividade (a discutir)
+##### Qualidade
+
+Os ganhos em qualidade $D_{qual,t}$ serão calculados considerando os savings médios unitários em qualidade $sav_{qual}$projetados pela iniciativa, multiplicados pela produção projetada do período.
+
+$$D_{qual,t} = sav_{qual} * prod_{proj,t}$$
+
+##### Produtividade
+
+Os ganhos em produtividade $D_{prod,t}$ serão calculados considerando os savings médios unitários em mão-de-obra $sav_{MDO}$projetados pela iniciativa, multiplicados pela produção projetada do período.
+$$D_{prod,t} = sav_{MDO} * prod_{proj,t}$$
