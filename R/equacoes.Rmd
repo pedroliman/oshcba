@@ -1,7 +1,7 @@
 ---
-title: "Modelo Matematico CBR"
+title: "Modelo Matematico - Calculadora SST/FPS"
 author: "GMAP | UNISINOS"
-date: "julho de 2017"
+date: "31 julho de 2017"
 output:
   word_document: default
   pdf_document:
@@ -11,8 +11,7 @@ output:
     toc: yes
     toc_depth: 6
   html_document: default
-<!-- --- -->
-
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -50,7 +49,7 @@ O número de faltas será calculado a partir da multiplicação do número de fu
 
 $$N_{falta} = f * T_{falta}$$ 
 
-### Ligação entre Eventos e B's
+### Ligação entre Eventos e Variáveis Previdenciárias
 
 O quadro a seguir apresenta a ligação entre os eventos e os benefícios calculados.
 ![Quadro de Eventos e B's calculados](../figures/quadro_beneficios.png)
@@ -95,7 +94,11 @@ $$N_{b32} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
 O número de benefícios acumulado será calculado de acordo com o número de benefícios concedido até o período $t$ em questão e o número de benefícios inicial.
 $$NB_{i,t} = \sum_{t=1}^{t} N_i,t + N_i,inicial \ \forall \ i \  \in \ B$$
 
+### Categorias de Benefícios
+
+
 #### Despesas Evitáveis
+
 
 ##### Despesas com Reclamatórias Trabalhistas
 Esta subcategoria compreende as despesas evitadas com reclamatórias trabalhistas (objeto da ação relacionadas à doenças e acidentes do trabalho) após a implementação integral da iniciativa.
@@ -145,7 +148,7 @@ $$D_{planosaude,t} = D_{planosaude,t-1} * (1 + Reaj_{estimado,t})$$
 
 O reajuste estimado será obtido por meio de uma regressão, comparada ao número de acidentes total $\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c}}}$, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_1$ serão estimados a priori, e aplicados pelo modelo a cada ano.
 
-$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{0,reaj} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}} $$
+$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{1,reaj} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}$$
 
 ##### Interrupção Operacional por Acidente/Morte
 
@@ -199,9 +202,12 @@ E o índice de custo será calculado a partir desta fórmula:
 $$I_c = \frac{\sum_{i=91}^{94} n_{i}*cmed_{i}}{folhamédia} * 1000$$
 
 ###### Percentis
-Percentis são calculados de acordo com os índices nos dois anos anteriores.Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão. **O calculo da Posição e Percentil é a área mais desafiadora para o calculo de uma projeção do FAP**. Será escolhida a alternativa "B". Curva aproximada a partir dos dados da empresa.
+Percentis são calculados de acordo com os índices nos dois anos anteriores.Os percentis dependem do posicionamento da empresa em relação às demais. Específicamente a função $Pos(I_{t})$ é calculada pela previdência de acordo com os índices de todas as empresas no mesmo subgrupo do CNAE da empresa em questão.
 
 $$p_t = \frac{100*(Pos(I_{t})-1)}{n-1}$$
+
+Considerando a necessidade de estimar o percentil a partir dos eventos, será utilizada uma regressão linear relacionando o percentil ao número de eventos observados na empresa.
+$$p_t = \beta_{0,percent} +\beta_{1,percent} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t \in{(-1,-2)}}$$
 
 ###### Índice Composto
 
@@ -259,7 +265,7 @@ $$D_{imagem, contratacao} = t_{contrat} * custo_{contrat} * n_{contrat}$$
 
 A variável de tempo de contratação será estimada por meio de uma regressão linear, considerando o número de eventos do ano anterior (considerando acidentes com afastamento maior do que 15 dias e óbitos).
 
-$$t_{contrat} = \beta_{0,tcontrat} + \beta_{1,tcontrat} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}} $$
+$$t_{contrat} = \beta_{0,tcontrat} + \beta_{1,tcontrat} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}$$
 
 ##### Engajamento e Clima organizacional (a discutir)
 
