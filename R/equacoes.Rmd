@@ -1,7 +1,7 @@
 ---
 title: "Modelo Matematico - Calculadora SST/FPS"
 author: "GMAP | UNISINOS"
-date: "31 julho de 2017"
+date: "2 de agosto de 2017"
 output:
   word_document: default
   pdf_document:
@@ -206,8 +206,10 @@ Percentis são calculados de acordo com os índices nos dois anos anteriores.Os 
 
 $$p_t = \frac{100*(Pos(I_{t})-1)}{n-1}$$
 
-Considerando a necessidade de estimar o percentil a partir dos eventos, será utilizada uma regressão linear relacionando o percentil ao número de eventos observados na empresa.
-$$p_t = \beta_{0,percent} +\beta_{1,percent} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t \in{(-1,-2)}}$$
+Considerando a necessidade de estimar o percentil a partir dos eventos, será utilizada uma regressão linear relacionando o percentil ao número de eventos observados na empresa. Considerando que o FAP é calculado utilizando os últimos dois anos, a regressão também deve considerar este mesmo período.
+
+$$p_t = \beta_{0,percent} + \beta_{1,percent} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1, t-2}}}$$
+
 
 ###### Índice Composto
 
