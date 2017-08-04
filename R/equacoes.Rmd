@@ -67,6 +67,7 @@ $$I_{ga} = \frac{0.3 * Nev_{af_{>15},k} + 0.5 * Nev_{obito, k} + 0.1 * (Nev_{af<
 
 $$Turn_{geral} = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Deslig_{involuntar}}{f}$$
 
+$$f_{desligacumulado} = f_{desligados_inicial} + \sum_{t=1}^{t} f_t * Turn_{geral,t} $$
 
 ### Ligação entre Eventos e Variáveis Previdenciárias
 
@@ -126,8 +127,9 @@ $${D}_{reclamatorias} = c_{medrec}*n_{reclamatorias} $$
 
 ###### Número de Reclamatórias Trabalhistas
 
-O número de reclamatórias trabalhistas será calculado considerando o número de funcionários desligados total multiplicado pela probabilidade de ajuizar e ganhar uma reclamatória trabalhista.
-$$n_{reclamatorias} = f_{desligados} * p_{ajuizarEganharreclamatoria} $$
+O número de reclamatórias trabalhistas será calculado considerando o número de funcionários desligados total multiplicado pela probabilidade de ajuizar e ganhar uma reclamatória trabalhista cujo objeto da ação está relacionado à saúde e Segurança do Trabalho.
+
+$$n_{reclamatorias} = f_{desligacumulado} * p_{ajuizarEganharreclamatoria} $$
 
 
 ##### Acidente / Doença Ocupacional - Invalidez
@@ -137,13 +139,12 @@ Esta subcategoria compreende as despesas evitadas com incapacitação parcial ou
 Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o calculo do FAP e não deveriam ser contados em duplicidade.
 Possibilidade 2: Existem despesas que não estão em nenhuma outra categoria e que deveriam ser contabilizados aqui. A princípio estamos na possibilidade 1. A categoria será excluída caso a possibilidade 1 se confirme.
 
-##### Ações Regressivas
+##### Ações Regressivas INSS
 Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral da iniciativa. A Ação Regressiva representa o o ressarcimento de pagamento de benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120 :A ação regressiva é a penalização adicional relacionada ao B91 - B94.
 
-###### Ações Regressivas Relacionadas ao INSS
+As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular a esta função. O custo médio ponderado dos benefícios acumulados será calculado de acordo com os mesmos custos médios informados para fins de FAP. Assume-se que as despesas de ressarcimento da empresa para com o INSS são as mesmas despesas que o INSS teve com o indivíduo que originou a ação regressiva.
 
-As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular a esta função.
-$$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress} * (f_{crise}*crise) * tregress_{i}  $$
+$$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress,} * (1+(f_{crise}*crise))  * \frac{\sum_{i=1}^{B} nacumulado_i *cmed_{i}}{\sum_{i=1}^{B} nacumulado_i} $$
 
 ##### Ausência para Tratamento
 
@@ -153,7 +154,7 @@ Esta subcategoria compreende as despesas evitadas com a ausência do trabalhador
 
 Esta subcategoria compreende as despesas evitadas com medicamento e atendimento médico para tratamento dos acidentes de trabalho após a implementação integral da iniciativa.
 
-$$D_{medicas} = (\sum_{k=1}^{K} n_{acidentesk}) * d_{medio}$$
+$$D_{medicas} = d_{medio} * (\sum_{k=1}^{K'} {\sum_{c=1}^{C'} {n_{acidentes \ k,c}}}) \ onde \  K' = \{1,3\} \ e \ C' = \{2,3,4\}  $$
 
 ##### Reajustes do plano de Saúde 
 Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral da iniciativa. A despesa com o plano de saúde de cada período será calculada de acordo com a despesa do ano anterior, acrescida de um percentual de reajuste estimado.
@@ -166,32 +167,42 @@ $$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{f,reaj} * I_{fa} + \beta_{g,reaj} *
 
 ##### Interrupção Operacional por Acidente/Morte
 
-As despesas com interrupção operacional serão calculadas considerando o número de acidentes típicos, o tempo médio de interrução e o lucro cessante médio diário oriúndo de cada acidente.
+As despesas com interrupção operacional serão calculadas considerando o número de acidentes típicos, o tempo de interrução (o qual pode ser estimado pelo número total de dias de interrupção sobre o número total de acidentes) e o lucro cessante médio diário oriúndo de cada acidente.
+
+
+Opção 1: Coletar os dias médios de interrupção geral.
+Opção 2: Estimar os dias de interrupção de modo separado por tipo de acidentes (ex.: Óbito, Afastamento maior que 15, menor que 15, ou sem Afastamento.). Possívelmente, há como manter os dias de interrupção por óbito em separado.
+
 $$D_{interdicao} = n_{acidentestipico} * dias_{interr,acidente} * lucrocessante$$
 
 ##### Interdições Por Fiscalização
-As despesas com interdições por fiscalização serão calculadas de acordo com a probabilidade de interdição, o número médio de dias relacionados à interdição por fiscalização e o lucro cessante médio diário oriúndo de cada interdição. Adicionalmente, esta equação pode ser modulada pela projeção de uma crise financeira.
-$$D_{interdicao} = p_{interdicao} * (f_{crise}*crise) * dias_{interr,fiscalizacao} * lucrocessante $$
+As despesas com interdições por fiscalização serão calculadas de acordo com a probabilidade de interdição, o número médio de dias relacionados à interdição por fiscalização e o lucro cessante médio diário oriúndo de cada interdição. Adicionalmente, esta equação pode ser modulada pela projeção de uma crise financeira. O evento de interdição por fiscalização $Evento_{interdicao}$ será estimado com uma distribuição binomial.
 
-##### Reabilitaçãodo Trabalhador
+$$D_{interdicao} = Evento_{interdicao} * (1+(f_{crise}*crise)) * dias_{interr,fiscalizacao} * lucrocessante $$
 
-Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados (seja por mais do que 30 dias ou por mais do que 15 dias), e PCD's.
-$$D_{reab} = custo_{reab} * ((Nev_{c, af>15} + Nev_{c, af<15}) * preab + N_{PCDs}) $$
+##### Reabilitação do Trabalhador
+
+Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados (seja por mais do que 30 dias ou por mais do que 15 dias). O custo de reabilitação contém todos os custos relacionados à reabilitação, inclusive os custos de manutenção do reabilitado. Os custos de manutenção em períodos posteriores não são contabilizados. Custos relacionados à iniciativas de reabilitação de grupos de risco e PCDs serão considerados no modelo por meio da redução do risco de eventos. Desta maneira, não serão contabilizados como um benefício direto nesta categoria.
+
+$$D_{reab} = custo_{reab} * \sum_{c=1}^{C}(Nev_{c, af>15} + Nev_{c, af<15}) * preab $$
 
 #### Reduções Fiscais
 
 ##### Exposição à Multas
 
 As despesas oriúndas da exposição à multa serão calculadas considerando-se o número de multas aplicadas e o custo médio da multa. Adicionalmente, o número de multas também pode ser modulado pela ocorrência de uma crise.
-$$D_{multas}= (f_{crise}*crise) * N_l * C_{med_l}$$
+
+Opção 1: Considerar a Exposição á multas de modo geral.
+Opção 2: Estimar custos médios de multa, e probabilidades de multa de modo individualizado (para cada NR).
+
+$$D_{multas}= (1+(f_{crise}*crise)) * N_{multa_l}' * C_{med_l}$$
 
 ###### Número de multas
-O número de múltas aplicado será calculado de acordo com o atingimento da legislação (variável binária 0 ou 1) e a probabilidade de multa dado que não haja atendimento completo à legislação.
-$$N_l = Atendlegisl_l * p_{multa_l}$$
+O número de múltas aplicado será calculado de acordo com o atingimento da legislação (variável binária 0 ou 1) e o número de multas estimado pela regressão.
+$$N_{multa_l}' = (1 - Atendlegisl_l) * N_{multa_l}$$
 
-###### Probabilidade de multa
-A probabilidade de multa será modulada a partir de uma probabilidade de multa a priori, e de acordo com os eventos de acidentes típicos e doenças ocupacionais. Cada acidente ocorrido aumentará a probabilidade de multa nas unidades definidas em $fator_{l}$.
-$$ p_{multa_l} =  p_{multapriori_l} + fator_{l} * (Nev_{tipico} + Nev_{doenocup})$$
+O número de multas será estimado de acordo com os eventos de acidentes típicos e doenças ocupacionais.
+$$ N_{multa_l} =  \beta_{0,multa_l} + \beta_{1,multa_l} * (Nev_{tipico} + Nev_{doenocup})$$
 
 ##### FAP
 
