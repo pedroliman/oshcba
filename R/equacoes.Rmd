@@ -65,8 +65,9 @@ $$I_{ga} = \frac{0.3 * Nev_{af_{>15},k} + 0.5 * Nev_{obito, k} + 0.1 * (Nev_{af<
 
 #### Turnover Geral
 
+O Turnover Geral é uma variável intermediária que impactará sobre o calculo do FAP e outras variáveis relacionadas a Turnover.
 $$Turn_{geral} = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Deslig_{involuntar}}{f}$$
-
+O Turnover geral, a cada ano, gerará um número de funcionários desligados que será acumulado ao longo do tempo.
 $$f_{desligacumulado} = f_{desligados_inicial} + \sum_{t=1}^{t} f_t * Turn_{geral,t} $$
 
 ### Ligação entre Eventos e Variáveis Previdenciárias
@@ -338,7 +339,7 @@ $$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
 ##### Presenteísmo
 
-Assim como o absenteísmo, o presenteísmo será calculado considerando o custo médio da mão de obra, o número de horas trabalhadas e o índice de presenteísmo. O índice será informado para a situação com iniciativa e sem iniciativa.
+Assim como o absenteísmo, o presenteísmo será calculado considerando o custo médio da mão de obra, o número de horas trabalhadas e o índice de presenteísmo. O índice será informado para a situação com iniciativa e sem iniciativa. A decisão a ser tomada é como estimar o percentual de presenteísmo: Se informado ou coletado via instrumento específico.
 
 $$D_{presenteismo} = Perc_{present} * f * h * c_{mdo}$$
 
@@ -364,7 +365,6 @@ Opção 2: Regressão a partir dos custos e índices de frequência e gravidade:
 $$D_{qual,t} = var_{volumevenda,t} * margemmed_{unitario,t} * prod_{proj,t}$$
 
 $$var_{volumevenda,t} = \beta_{0,volumevenda} +\beta_{f,volumevenda} * I_{fa} + \beta_{g,volumevenda} * I_{ga} + \beta_{PIB,volumevenda} * var_{PIB}$$
-
 
 ##### Produtividade
 
