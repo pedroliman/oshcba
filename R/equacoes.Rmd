@@ -57,10 +57,11 @@ O índice de frequência considera todos os eventos, sobre o número de funcion�
 $$I_{fa} = \frac{\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}}{f} * 1000$$
 
 O índice de gravidade ponderará os eventos, considerando os mesmos pesos atribuídos no calculo do FAP.
-$$I_{ga} = \frac{(0.3 * Nev_{af_{>15},k} + 0.5 * Nev_{obito, k} + 0.1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15},k}))}{f}* 1000$$
+$$I_{ga} = \frac{0.3 * Nev_{af_{>15},k} + 0.5 * Nev_{obito, k} + 0.1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15,k})}{f}* 1000$$
 
 #### Turnover Geral
-$$Turn_geral = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Turn_{informado}}{f}$$
+
+$$Turn_{geral} = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Deslig_{involuntar}}{f}$$
 
 
 ### Ligação entre Eventos e Variáveis Previdenciárias
@@ -162,7 +163,7 @@ $$D_{planosaude,t} = D_{planosaude,t-1} * (1 + Reaj_{estimado,t})$$
 
 O reajuste estimado (parcela variável, excluindo variações inflacionárias) será obtido por meio de uma regressão, comparada aos índices de frequência e gravidade, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_f$ e $B_g$serão estimados a priori, e aplicados pelo modelo a cada ano.
 
-$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{f,reaj} * I_{fa} + \beta_{g,reaj} * I_{ga} $$
+$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{f,reaj} * I_{fa} + \beta_{g,reaj} * I_{ga}$$
 
 ##### Interrupção Operacional por Acidente/Morte
 
@@ -237,6 +238,9 @@ Para o Calculo do FAP, o turnover da empresa deve ser calculado considerando os 
 
 $$turnover_{FAP} = \frac{\frac{min(admissoes_{t-1}, recisoes{t-1})}{f_{t-1}} + \frac{min(admissoes_{t-2}, recisoes_{t-2})}{f_{t-2}}}{2}$$
 
+Para fins de modelagem, o turnover FAP utilizará o calculo do Turnover geral mencionado anteriormente, ainda assim considerando a ponderação de dois anos anteriores.
+$$turnover_{FAP} = \frac{Turn_{geral,t-1} + Turn_{geral,t-2}}{2}$$
+
 Ajuste 1 - Aplicado para os casos onde o IC < 1, de modo que o FAP será no mínimo 0,5.
 $$FAP = 0,5 + 0,5 * IC \ if \ (IC < 1, turnover_{FAP} < 0,75) $$
 
@@ -272,20 +276,22 @@ Período Base de cálculo: 2014 e 2015. Cálculo do FAP: 2016. Vigência: 2017.
 
 ##### Imagem da Empresa
 
-Os benefícios da inciativa relacionados à imagem foram desmembradas em duas variáveis. Uma variável considera o ganho obtido com expansão de receita, e uma segunda apresenta o ganho relacionado às despesas com contratação. A variável  $D_{imagem, receita}$ será informada como dado de entrada, considerando-se sua especificidade relacionada à inciativa.
+Os benefícios da inciativa relacionados à imagem foram desmembradas em duas variáveis. Uma variável considera o ganho obtido com expansão de receita, e uma segunda apresenta o ganho relacionado às despesas com contratação.
 
 $$D_{imagem}  = D_{imagem, contratacao} + D_{imagem, receita}$$
+4 alternativas pensadas para estimar a variável $D_{imagem, receita}$ são estas:
+A) Ganho de Mercado Informado;
+B) Ganho de Mercado Informado apenas quando se atende a uma taxa máxima de frequência e gravidade (considerando as taxas do INSS);
+C) Regressão considerando os índices do INSS e PIB, explicando a variação das propostas ($Propostas * chance de conversão * Receita * margem média$);
+D) Não fazer nada: Não inserir o ganho de receita via imagem no modelo.
 
 As despesas com imagem relacionadas a contratação serão estimadas considerando o tempo de contratação médio, custo de contratação e número médio de funcionários contratados.
-
-
-Turnover Voluntário + Turnover "Normal"
 
 $$D_{imagem, contratacao} =  \frac{t_{contrat,t}}{t_{contrat,t0}} * cmed * Turn_geral * f$$
 
 A variável de tempo de contratação será estimada por meio de uma regressão linear, considerando o número de eventos do ano anterior (considerando acidentes com afastamento maior do que 15 dias e óbitos).
 
-$$t_{contrat} = \beta_{0,tcontrat} + \beta_{f,tcontrat} * I_{fa} + \beta_{g,tcontrat} * I_{ga}$$
+$$t_{contrat} = \beta_{0,tcontrat} + \beta_{f,tcontrat} * I_{fa} + \beta_{g,tcontrat} * I_{ga} + \beta_{PIB,tcontrat} * var_{PIB}$$
 
 ##### Engajamento e Clima organizacional
 
@@ -298,7 +304,7 @@ $$Deslig_{voluntarios} = Perc_{desligvoluntarios} * f $$
 
 A variável de percentual de desligamento voluntário será calculada por meio de uma regressão linear, considerando os eventos calculados.
 
-$$Perc_{desligvoluntarios} = \beta_{0,desvolunt} +\beta_{f,desvolunt} * I_{fa} + \beta_{g,desvolunt} * I_{ga} $$
+$$Perc_{desligvoluntarios} = \beta_{0,desvolunt} +\beta_{f,desvolunt} * I_{fa} + \beta_{g,desvolunt} * I_{ga} + \beta_{PIB,desvolunt} * var_{PIB}$$
 
 #### Melhor Uso dos Recursos
 
@@ -341,9 +347,25 @@ $$D_{MP,Ins,Eq} = cmed_{MP,Ins,Eq} * Nev_{tipico,ocupac}$$
 
 Os ganhos em qualidade $D_{qual,t}$ serão calculados considerando os savings médios unitários em qualidade $sav_{qual}$projetados pela iniciativa, multiplicados pela produção projetada do período.
 
-$$D_{qual,t} = sav_{qual} * prod_{proj,t}$$
+Opção 1: Variação no Volume de Venda Projetada:
+$$D_{qual,t} = var_{volumevenda,t} * margemmed_{unitario,t} * prod_{proj,t}$$
+
+Opção 2: Regressão a partir dos custos e índices de frequência e gravidade:
+$$D_{qual,t} = var_{volumevenda,t} * margemmed_{unitario,t} * prod_{proj,t}$$
+
+$$var_{volumevenda,t} = \beta_{0,volumevenda} +\beta_{f,volumevenda} * I_{fa} + \beta_{g,volumevenda} * I_{ga} + \beta_{PIB,volumevenda} * var_{PIB}$$
+
 
 ##### Produtividade
 
 Os ganhos em produtividade $D_{prod,t}$ serão calculados considerando os savings médios unitários em mão-de-obra $sav_{MDO}$projetados pela iniciativa, multiplicados pela produção projetada do período.
+
+Opção 1: Saving unitário informado da inciativa
 $$D_{prod,t} = sav_{MDO} * prod_{proj,t}$$
+
+Opção 2: Regressão a partir dos custos e índices de frequência e gravidade:
+O custo médio unitário será igual ao total produzido e os custo operacional.
+
+$$D_{prod,t} = varcustomed_{unitario,t} * customed_{unitario,t} * prod_{proj,t}$$
+
+$$varcustomed_{unitario,t} = \beta_{0,customed} +\beta_{f,customed} * I_{fa} + \beta_{g,customed} * I_{ga} + \beta_{PIB,customed} * var_{PIB}$$
