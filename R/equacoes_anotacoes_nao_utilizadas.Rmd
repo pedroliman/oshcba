@@ -20,7 +20,6 @@ Possibilidade 1: Considerar uma única probabilidade de ajuizar e ganhar uma aç
 Possibilidade 2: Separar o ajuizamento da ação do ganho da ação. Desta maneira é possível calcular o custo em ações mesmo quando o funcionário não ganhou a ação. A princípio estamos na possibilidade 1.
 
 ### Ações Regressivas
-Dúvida: O NTEP já estará contabilizado integralmente pelo FAP? Sim: Então precisa estar aqui. Não: Então
 Dúvida 2: Crise econômica deve modular esta probabilidade? Que variáveis de contexto devem modular que variáveis de input?
 
 

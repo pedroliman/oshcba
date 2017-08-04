@@ -49,6 +49,20 @@ O número de faltas será calculado a partir da multiplicação do número de fu
 
 $$N_{falta} = f * T_{falta}$$ 
 
+#### Índices de Gravidade e Frequência Ampliados
+
+Os índices de frequência e gravidade ampliados serão usados como variáveis independentes nas regressões relacionadas à reajuste do plano de saúde, tempo de contratação e desligamento voluntário.
+O índice de frequência considera todos os eventos, sobre o número de funcionários.
+
+$$I_{fa} = \frac{\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}}{f} * 1000$$
+
+O índice de gravidade ponderará os eventos, considerando os mesmos pesos atribuídos no calculo do FAP.
+$$I_{ga} = \frac{(0.3 * Nev_{af_{>15},k} + 0.5 * Nev_{obito, k} + 0.1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15},k}))}{f}* 1000$$
+
+#### Turnover Geral
+$$Turn_geral = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Turn_{informado}}{f}$$
+
+
 ### Ligação entre Eventos e Variáveis Previdenciárias
 
 O quadro a seguir apresenta a ligação entre os eventos e os benefícios calculados.
@@ -146,9 +160,9 @@ Esta subcategoria compreende as despesas evitadas com planos de saúde via alter
 
 $$D_{planosaude,t} = D_{planosaude,t-1} * (1 + Reaj_{estimado,t})$$
 
-O reajuste estimado será obtido por meio de uma regressão, comparada ao número de acidentes total $\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c}}}$, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_1$ serão estimados a priori, e aplicados pelo modelo a cada ano.
+O reajuste estimado (parcela variável, excluindo variações inflacionárias) será obtido por meio de uma regressão, comparada aos índices de frequência e gravidade, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_f$ e $B_g$serão estimados a priori, e aplicados pelo modelo a cada ano.
 
-$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{1,reaj} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}$$
+$$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{f,reaj} * I_{fa} + \beta_{g,reaj} * I_{ga} $$
 
 ##### Interrupção Operacional por Acidente/Morte
 
@@ -208,7 +222,7 @@ $$p_t = \frac{100*(Pos(I_{t})-1)}{n-1}$$
 
 Considerando a necessidade de estimar o percentil a partir dos eventos, será utilizada uma regressão linear relacionando o percentil ao número de eventos observados na empresa. Considerando que o FAP é calculado utilizando os últimos dois anos, a regressão também deve considerar este mesmo período.
 
-$$p_t = \beta_{0,percent} + \beta_{1,percent} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1, t-2}}}$$
+$$p_t = \beta_{0,percent} + \beta_{1,percent} *  +\beta_{t,percent} * I_t \ \forall t \in \{f,g,c\}$$
 
 
 ###### Índice Composto
@@ -263,31 +277,38 @@ Os benefícios da inciativa relacionados à imagem foram desmembradas em duas va
 $$D_{imagem}  = D_{imagem, contratacao} + D_{imagem, receita}$$
 
 As despesas com imagem relacionadas a contratação serão estimadas considerando o tempo de contratação médio, custo de contratação e número médio de funcionários contratados.
-$$D_{imagem, contratacao} = t_{contrat} * custo_{contrat} * n_{contrat}$$
+
+
+Turnover Voluntário + Turnover "Normal"
+
+$$D_{imagem, contratacao} =  \frac{t_{contrat,t}}{t_{contrat,t0}} * cmed * Turn_geral * f$$
 
 A variável de tempo de contratação será estimada por meio de uma regressão linear, considerando o número de eventos do ano anterior (considerando acidentes com afastamento maior do que 15 dias e óbitos).
 
-$$t_{contrat} = \beta_{0,tcontrat} + \beta_{1,tcontrat} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}$$
+$$t_{contrat} = \beta_{0,tcontrat} + \beta_{f,tcontrat} * I_{fa} + \beta_{g,tcontrat} * I_{ga}$$
 
-##### Engajamento e Clima organizacional (a discutir)
+##### Engajamento e Clima organizacional
 
-As despesas relacionadas a engajamento e clima organizacional serão calculadas a partir de desligamentos voluntários, projetados.
+As despesas relacionadas a engajamento e clima organizacional serão calculadas a partir de desligamentos voluntários projetados.
 
-$$D_{clima} = Des_{voluntarios} * c_{sub}$$ 
+$$D_{clima} = Deslig_{voluntarios} * c_{sub}$$ 
 
-A variável de desligamento voluntário será calculada por meio de uma regressão linear, considerando os eventos calculados.
 
-$$Des_{voluntarios} = \beta_{0,desvolunt} + \beta_{1,desvolunt} * \sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}} $$
+$$Deslig_{voluntarios} = Perc_{desligvoluntarios} * f $$ 
+
+A variável de percentual de desligamento voluntário será calculada por meio de uma regressão linear, considerando os eventos calculados.
+
+$$Perc_{desligvoluntarios} = \beta_{0,desvolunt} +\beta_{f,desvolunt} * I_{fa} + \beta_{g,desvolunt} * I_{ga} $$
 
 #### Melhor Uso dos Recursos
 
-##### Turnover
+##### Despesas com Turnover SST / FPS
 
 As despesas com Turnover $D_{tur}$ serão calculadas com base no número de funcionários afastados por problemas relacionados à SST $n_{afast}$ e no custo médio de substituição dos funcionários$c_{sub}$.
 
 $$D_{tur} = (Nev_{af_{>15},k} + Nev_{obito,k}) * c_{sub}$$ 
 
-##### Absenteísmo
+##### Despesas com Absenteísmo
 
 As despesas com Absenteísmo $D_{abs}$ serão calculadas com base no número de dias de absenteísmo por problemas relacionados à SST $d_{abs}$, no número de horas trabalhadas por dia $h$ e no custo em mão de obra médio horário $c_{mdo}$.
 
