@@ -39,6 +39,10 @@ Exemplificando, se uma empresa, sem uma iniciativa em SST terá $20000$ reais em
 
 $$B_{abs} = {D}_{abs, inic} - {D}_{abs, asis} = (-15000)-(-20000) = 5000$$
 
+O benefício relativo da dimensão $i$ pode ser calculado considerando o seu valor e o benefício Total
+
+$$B_{i,p} = \frac{B_{i}}{\sum_{i=1}^{I} B_{i}}$$
+
 ### Cálculo dos Eventos
 Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, e o percentual de funcionários $Pev_c$ que sofrerá o evento $c$, e o percentual do tipo de acidente $k$ ocorrer $Pev_{k}$. Os eventos $c$ pertecem ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
 
@@ -141,11 +145,6 @@ Esta subcategoria compreende as despesas evitadas com ações regressivas do INS
 As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular a esta função.
 $$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress} * (f_{crise}*crise) * tregress_{i}  $$
 
-###### Ações Regressivas Relacionadas ao Plano de Saúde
-
-As despesas com ações regressivas relacionadas ao plano de saúde serão calculadas de forma similar, considerando os afastamentos acumulados, o percentual de tratamento no SUS e no Plano de Saúde e o custo médio do evento no plano de saúde.
-$$D_{açõesregrSUS} =  AfastamenAcumulad * PercTratSus * (f_{crise}*crise) * PercCobrSUSEPlano * cmed$$
-
 ##### Ausência para Tratamento
 
 Esta subcategoria compreende as despesas evitadas com a ausência do trabalhador afastado para tratamento após a implementação integral da iniciativa. Os custos desta categoria já estão incluidos na categoria de absenteísmo.
@@ -156,12 +155,12 @@ Esta subcategoria compreende as despesas evitadas com medicamento e atendimento 
 
 $$D_{medicas} = (\sum_{k=1}^{K} n_{acidentesk}) * d_{medio}$$
 
-##### Redução de Valores do plano de Saúde 
+##### Reajustes do plano de Saúde 
 Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral da iniciativa. A despesa com o plano de saúde de cada período será calculada de acordo com a despesa do ano anterior, acrescida de um percentual de reajuste estimado.
 
 $$D_{planosaude,t} = D_{planosaude,t-1} * (1 + Reaj_{estimado,t})$$
 
-O reajuste estimado (parcela variável, excluindo variações inflacionárias) será obtido por meio de uma regressão, comparada aos índices de frequência e gravidade, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_f$ e $B_g$serão estimados a priori, e aplicados pelo modelo a cada ano.
+O reajuste estimado (parcela variável, excluindo variações inflacionárias) será obtido por meio de uma regressão, comparada aos índices de frequência e gravidade, considerando a soma de acidentes do ano anterior. Deve-se observar que o intercepto $B_0$ e o coeficiente $B_f$ e $B_g$serão estimados a priori, e aplicados pelo modelo a cada ano. As ações regressivas relacionadas ao SUS contra o plano de saúde entrarão indiretamente nesta regressão (presente nos índices).
 
 $$Reaj_{estimado,t} = \beta_{0,reaj} +\beta_{f,reaj} * I_{fa} + \beta_{g,reaj} * I_{ga}$$
 
