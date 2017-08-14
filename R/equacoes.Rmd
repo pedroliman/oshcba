@@ -1,5 +1,5 @@
 ---
-title: "Modelo Matematico - Calculadora SST/FPS"
+title: "Modelo Matemático - Calculadora SST/FPS"
 author: "GMAP | UNISINOS"
 date: "2 de agosto de 2017"
 output:
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Modelo Matemático - Razão Benefício-Custo
-Este documento contém uma definição do modelo matemático que suporta a calculadora de custos e benefícios de inciativas em SST.
+Este documento contém uma definição do modelo matemático que suporta a calculadora de custos e benefícios de inciativas em SST. Esta calculadora foi desenvolvida no âmbito do projeto Proposição e desenvolvimento de um modelo e método sistêmico para a mensuração dos impactos diretos e indiretos dos investimentos em programas de SST e FPS.
 
 
 ## CBR - Razão Benefício-Custo
@@ -27,9 +27,9 @@ A razão benefício-custo ${RBC}$ corresponde à razão do somatório dos custos
 $${RBC} = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
 
 ### Fluxo de Caixa em Valor Presente
-Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente.
+Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente. Os fluxos de caixa a serem descontados incluem os custos e benefícios das iniciativas.
 
-$$B_i(t) = \frac{b_i}{(1+\theta)^t}$$
+$$FC_i(t) = \frac{fc_i}{(1+\theta)^t}$$
 
 ### Cálculo dos Benefícios da Iniciativa
 Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
@@ -37,18 +37,18 @@ Em todos os casos, o benefício será calculado a partir da diferença em valore
 $$B_i = {D}_{i, inic} - {D}_{i, asis}$$
 Exemplificando, se uma empresa, sem uma iniciativa em SST terá $20000$ reais em desepesas com absenteísmo, e com esta iniciativa terá $15000$, o benefício oriúndo desta inciativa, apenas relacionado a absenteísmo será:
 
-$$B_{abs} = {D}_{abs, inic} - {D}_{abs, asis} = (-15000)-(-20000) = 5000$$
+$$B_{abs} = {D}_{abs, inic} - {D}_{abs, asis} = (-15.000)-(-20.000) = 5.000$$
 
-O benefício relativo da dimensão $i$ pode ser calculado considerando o seu valor e o benefício Total
+O benefício relativo da dimensão $i$ pode ser calculado considerando o seu valor e o benefício Total.
 
 $$B_{i,p} = \frac{B_{i}}{\sum_{i=1}^{I} B_{i}}$$
 
 ### Cálculo dos Eventos
-Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, e o percentual de funcionários $Pev_c$ que sofrerá o evento $c$, e o percentual do tipo de acidente $k$ ocorrer $Pev_{k}$. Os eventos $c$ pertecem ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
+Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, do o percentual de funcionários $Pev_c$ que sofrerá o evento $c$, e do da percentual destes acidentes que são do tipo $k$, $Pev_{k}$. Os eventos $c$ pertecem ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
 
 $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 
-#### Calculo de Faltas
+#### Cálculo de Faltas
 O número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_{falta}$, conforme equação abaixo: 
 
 $$N_{falta} = f * T_{falta}$$ 
@@ -60,12 +60,12 @@ O índice de frequência considera todos os eventos, sobre o número de funcion�
 
 $$I_{fa} = \frac{\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}}{f} * 1000$$
 
-O índice de gravidade ponderará os eventos, considerando os mesmos pesos atribuídos no calculo do FAP.
-$$I_{ga} = \frac{0.3 * Nev_{af_{>15},k} + 0.5 * Nev_{obito, k} + 0.1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15,k})}{f}* 1000$$
+O índice de gravidade ponderará os eventos, considerando os mesmos pesos atribuídos no cálculo do FAP.
+$$I_{ga} = \frac{0,3 * Nev_{af_{>15},k} + 0,5 * Nev_{obito, k} + 0,1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15,k})}{f}* 1.000$$
 
 #### Turnover Geral
 
-O Turnover Geral é uma variável intermediária que impactará sobre o calculo do FAP e outras variáveis relacionadas a Turnover.
+O Turnover Geral é uma variável intermediária que impactará sobre o cálculo do FAP e outras variáveis relacionadas a Turnover.
 $$Turn_{geral} = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Deslig_{involuntar}}{f}$$
 O Turnover geral, a cada ano, gerará um número de funcionários desligados que será acumulado ao longo do tempo.
 $$f_{desligacumulado} = f_{desligados_inicial} + \sum_{t=1}^{t} f_t * Turn_{geral,t} $$
@@ -75,9 +75,9 @@ $$f_{desligacumulado} = f_{desligados_inicial} + \sum_{t=1}^{t} f_t * Turn_{gera
 O quadro a seguir apresenta a ligação entre os eventos e os benefícios calculados.
 ![Quadro de Eventos e B's calculados](../figures/quadro_beneficios.png)
 
-#### B91 - Auxílio Doença Acidentário.
+#### B91 - Auxílio Doença Acidentário
 
-Após o calculo dos eventos serão calculados os benefícios gerados a partir deste benefícios.
+Após o cálculo dos eventos serão calculados os benefícios gerados a partir dos mesmos.
 
 $$N_{b91} = Nev_{ocupacional, af>15}$$
 
@@ -110,7 +110,7 @@ $$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15}$$
 As aposentadorias por invalidez previdenciárias serão calculadas a partir dos eventos não relacionados ao trabalho $Nev_{NRelacionadoAoTrabalho, af>15}$.
 $$N_{b32} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
 
-#### Numero de benefícios acumulados 
+#### Número de benefícios acumulados 
 
 O número de benefícios acumulado será calculado de acordo com o número de benefícios concedido até o período $t$ em questão e o número de benefícios inicial.
 $$NB_{i,t} = \sum_{t=1}^{t} N_i,t + N_i,inicial \ \forall \ i \  \in \ B$$
@@ -137,13 +137,13 @@ $$n_{reclamatorias} = f_{desligacumulado} * p_{ajuizarEganharreclamatoria} $$
 
 Esta subcategoria compreende as despesas evitadas com incapacitação parcial ou total provocada por acidente típico, doença ocupacional ou acidente de trajeto após a implementação integral da iniciativa.
 
-Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o calculo do FAP e não deveriam ser contados em duplicidade.
+Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o cálculo do FAP e não deveriam ser contados em duplicidade.
 Possibilidade 2: Existem despesas que não estão em nenhuma outra categoria e que deveriam ser contabilizados aqui. A princípio estamos na possibilidade 1. A categoria será excluída caso a possibilidade 1 se confirme.
 
 ##### Ações Regressivas INSS
-Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral da iniciativa. A Ação Regressiva representa o o ressarcimento de pagamento de benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120 :A ação regressiva é a penalização adicional relacionada ao B91 - B94.
+Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral da iniciativa. A Ação Regressiva representa o ressarcimento de pagamento de benefícios acidentários do empregador ao INSS. Lei 8213/91, artigo 120 :A ação regressiva é a penalização adicional relacionada ao B91 - B94.
 
-As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular a esta função. O custo médio ponderado dos benefícios acumulados será calculado de acordo com os mesmos custos médios informados para fins de FAP. Assume-se que as despesas de ressarcimento da empresa para com o INSS são as mesmas despesas que o INSS teve com o indivíduo que originou a ação regressiva.
+As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular esta função. O custo médio ponderado dos benefícios acumulados será calculado de acordo com os mesmos custos médios informados para fins de FAP. Assume-se que as despesas de ressarcimento da empresa para com o INSS são as mesmas despesas que o INSS teve com o indivíduo que originou a ação regressiva.
 
 $$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress,} * (1+(f_{crise}*crise))  * \frac{\sum_{i=1}^{B} nacumulado_i *cmed_{i}}{\sum_{i=1}^{B} nacumulado_i} $$
 
@@ -183,7 +183,7 @@ $$D_{interdicao} = Evento_{interdicao} * (1+(f_{crise}*crise)) * dias_{interr,fi
 
 ##### Reabilitação do Trabalhador
 
-Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados (seja por mais do que 30 dias ou por mais do que 15 dias). O custo de reabilitação contém todos os custos relacionados à reabilitação, inclusive os custos de manutenção do reabilitado. Os custos de manutenção em períodos posteriores não são contabilizados. Custos relacionados à iniciativas de reabilitação de grupos de risco e PCDs serão considerados no modelo por meio da redução do risco de eventos. Desta maneira, não serão contabilizados como um benefício direto nesta categoria.
+Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados por mais do que 15 dias. O custo de reabilitação contém todos os custos relacionados à reabilitação, inclusive os custos de manutenção do reabilitado, inclusive para além do período de simulação. Custos relacionados à iniciativas de reabilitação de grupos de risco e PCDs serão considerados no modelo por meio da redução do risco de eventos. Desta maneira, não serão contabilizados como um benefício direto nesta categoria.
 
 $$D_{reab} = custo_{reab} * \sum_{c=1}^{C}(Nev_{c, af>15} + Nev_{c, af<15}) * preab $$
 
@@ -207,7 +207,7 @@ $$ N_{multa_l} =  \beta_{0,multa_l} + \beta_{1,multa_l} * (Nev_{tipico} + Nev_{d
 
 ##### FAP
 
-Fonte para o calculo do FAP utilizada: <http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm>
+Fonte para o cálculo do FAP utilizada: <http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm>
 
 ###### Índices de Frequência, Gravidade e Custo
 
@@ -215,7 +215,7 @@ Os óbitos sem benefício são exatamente isso: Óbitos acidentários que não r
 
 $$I_f = \frac{(n_{obitossembeneficio}+n_{b92}+n_{b91}+n_{b93}+n_{b94})}{f} * 1000$$
 
-Para fins de calculo do FAP, o índice de frequência deve considerar os dois últimos anos.
+Para fins de cálculo do FAP, o índice de frequência deve considerar os dois últimos anos.
 
 $$I_f,t = \frac{I_{f,t-1} + I_{f,t-2}}{2}$$
 
@@ -243,13 +243,13 @@ O IC, por sua vez, é calculado de acordo com os percentis de gravidade $p_g$, f
 
 $$IC = (0,5*p_g + 0,35*p_{f}+0,15*p_c)0,02$$
 
-###### Calculo Final do FAP
+###### Cálculo Final do FAP
 
-Para o Calculo do FAP, o turnover da empresa deve ser calculado considerando os ultimos dois anos. Deve ser observado o item 3.8, que indica que " Serão consideradas no cálculo apenas as rescisões sem justa causa, por iniciativa do empregador, inclusive rescisão antecipada do contrato a termo; e as rescisões por término do contrato a termo."
+Para o cálculo do FAP, o turnover da empresa deve ser calculado considerando os ultimos dois anos. Deve ser observado o item 3.8, que indica que " Serão consideradas no cálculo apenas as rescisões sem justa causa, por iniciativa do empregador, inclusive rescisão antecipada do contrato a termo; e as rescisões por término do contrato a termo."
 
 $$turnover_{FAP} = \frac{\frac{min(admissoes_{t-1}, recisoes{t-1})}{f_{t-1}} + \frac{min(admissoes_{t-2}, recisoes_{t-2})}{f_{t-2}}}{2}$$
 
-Para fins de modelagem, o turnover FAP utilizará o calculo do Turnover geral mencionado anteriormente, ainda assim considerando a ponderação de dois anos anteriores.
+Para fins de modelagem, o turnover FAP utilizará o cálculo do Turnover geral mencionado anteriormente, ainda assim considerando a ponderação de dois anos anteriores.
 $$turnover_{FAP} = \frac{Turn_{geral,t-1} + Turn_{geral,t-2}}{2}$$
 
 Ajuste 1 - Aplicado para os casos onde o IC < 1, de modo que o FAP será no mínimo 0,5.
@@ -272,12 +272,12 @@ $$FAP = 1  \ if \ (T_{idadeempresa} <= 2) $$
 
 ###### RAT Ajustado
 
-O $RAT$ varia entre 1 e 3, de acordo com o cnae da empresa em questão.
+O $RAT$ varia entre 1 e 3, de acordo com o CNAE da empresa em questão.
 $$RAT \in \{1,2,3\}$$
 
 $$RAT_{ajust} = (FAP * RAT)$$
 
-As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ . Observar que o RAT ajustado calculado em um determinado ano será usado no ano seguinte para o calculo da despesa.
+As despesas com seguro acidentário do trabalho $D_{sat}$ serão calculadas de acordo com as estimativas do $FAP$ ($0,005 - 0,02$) e $RAT$ . Observar que o RAT ajustado calculado em um determinado ano será usado no ano seguinte para o cálculo da despesa.
 
 $$D_{sat} = RAT_{ajust,t-1}* F$$
 Exemplo:
@@ -339,7 +339,7 @@ $$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
 ##### Presenteísmo
 
-Assim como o absenteísmo, o presenteísmo será calculado considerando o custo médio da mão de obra, o número de horas trabalhadas e o índice de presenteísmo. O índice será informado para a situação com iniciativa e sem iniciativa. A decisão a ser tomada é como estimar o percentual de presenteísmo: Se informado ou coletado via instrumento específico.
+Assim como o absenteísmo, o presenteísmo será calculado considerando o custo médio da mão de obra, o número de horas trabalhadas e o índice de presenteísmo. O índice será informado para a situação com iniciativa e sem iniciativa. A decisão a ser tomada é como estimar o percentual de presenteísmo (ou seja, se o percentual de presenteísmo atual será informado diretamente ou estimado por meio de um instrumento específico).
 
 $$D_{presenteismo} = Perc_{present} * f * h * c_{mdo}$$
 

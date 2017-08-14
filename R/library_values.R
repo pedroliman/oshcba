@@ -24,6 +24,8 @@ oshcba_options = list(
   vetor_eventos_k = c("Tipico", "Trajeto", "DoenOcup", "NRelac"),
   vetor_consequencias_c = c("Afmenor15", "Afmaior15", "Safast", "Obito"),
 
+  # Variaveis
+
   # Vetor de Funcoes a Calcular
   v_funcoes = c("calcular_absenteismo", "calcular_eventos", "calcular_faltas", "calcular_turnover", "calcular_multas", "calcular_acoes_regressivas_inss"),
 
