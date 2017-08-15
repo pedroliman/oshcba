@@ -11,8 +11,10 @@ calcular_eventos = function(parametros) {
   vetor_inputs_eventos = paste(prefixo_inputs, eventos_k, sep = separador)
   vetor_inputs_consequencias = paste(prefixo_inputs, consequencias_c, sep = separador)
 
-  matriz_outputs = outer(consequencias_c, eventos_k, FUN = paste, sep = separador)
-  vetor_outputs = paste(prefixo_outputs, as.vector(matriz_outputs), sep = separador)
+  matriz_outputs = outer(paste(prefixo_outputs, consequencias_c, sep = separador), eventos_k, FUN = paste, sep = separador)
+  colnames(matriz_outputs) = eventos_k
+  rownames(matriz_outputs) = consequencias_c
+  vetor_outputs = as.vector(matriz_outputs)
 
   df_valores_input_eventos = parametros[vetor_inputs_eventos]
   df_valores_input_conseq = parametros[vetor_inputs_consequencias]
