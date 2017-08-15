@@ -59,9 +59,9 @@ formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
 }
 
 
-############# BENEFICIOS PREVIDENCIARIOS #################
+############# BENEFICIOS PREVIDENCIARIOS E ACIDENTARIOS #################
 
-calcular_benef_prev = function(parametros) {
+calcular_beneficios_inss = function(parametros) {
 
   matriz_eventos = obter_matriz_eventos(parametros)
 
@@ -75,8 +75,7 @@ calcular_benef_prev = function(parametros) {
   parametros[variavel] = rowSums(parametros[vetor_soma])
 
 
-
-  # Nb92
+  # Nb 92
   variavel = "NB_92"
   colunas = c("Tipico", "Trajeto", "DoenOcup")
   linhas = c("Afmaior15")
@@ -84,6 +83,40 @@ calcular_benef_prev = function(parametros) {
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
   parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+
+  # Nb 93
+  variavel = "NB_93"
+  colunas = c("Tipico", "Trajeto", "DoenOcup")
+  linhas = c("Obito")
+  vetor_soma = matriz_eventos[linhas, colunas]
+
+  parametros[variavel] = rowSums(parametros[vetor_soma])
+
+  # Nb 94
+  variavel = "NB_94"
+  colunas = c("Tipico", "Trajeto")
+  linhas = c("Afmaior15")
+  vetor_soma = matriz_eventos[linhas, colunas]
+
+  parametros[variavel] = rowSums(parametros[vetor_soma])
+
+  # Nb 31
+  variavel = "NB_31"
+  colunas = c("NRelac")
+  linhas = c("Afmaior15")
+  vetor_soma = matriz_eventos[linhas, colunas]
+
+  parametros[variavel] = rowSums(parametros[vetor_soma])
+
+  # Nb 32
+  variavel = "NB_32"
+  colunas = c("NRelac")
+  linhas = c("Afmaior15")
+  vetor_soma = matriz_eventos[linhas, colunas]
+
+  parametros[variavel] = rowSums(parametros[vetor_soma])
+  parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+  parametros
 
 }
 

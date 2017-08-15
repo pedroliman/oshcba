@@ -93,7 +93,7 @@ A probabilidade de invalidez P_{inval} será igual para cada tipo de acidente $k
 
 #### B93 - Pensão por Morte Acidentária
 
-$$N_{b93} = Nev_{obito, k}, onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional)$$
+$$N_{b93} = \sum_{k=1}^{K93}Nev_{obito, k}, onde \ K93 = \{típico \ , trajeto \  ou \ doença \ ocupacional\}$$
 
 #### B94 - Auxílio Acidente
 
