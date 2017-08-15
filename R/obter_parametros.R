@@ -125,6 +125,10 @@ obter_parametros = function(Inputs) {
   custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
   parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
   message("02. obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
+
+  # Ordenando o Df para o Calculo Iterativo
+  parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
+
   return(parametros)
 }
 

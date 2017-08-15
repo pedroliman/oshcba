@@ -65,7 +65,6 @@ calcular_beneficios_inss = function(parametros) {
 
   matriz_eventos = obter_matriz_eventos(parametros)
 
-
   # Nb 91
   variavel = "NB_91"
   colunas = c("DoenOcup")
@@ -116,7 +115,28 @@ calcular_beneficios_inss = function(parametros) {
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
   parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+
+  # Beneficios Acumulados
+
+  beneficios = c("NB_91", "NB_92", "NB_93", "NB_94", "NB_31", "NB_32")
+  sufixo_inicial = "_Inicial"
+  sufixo_acumulado = "_Acumulado"
+  beneneficios_iniciais = paste(beneficios,sufixo_inicial, sep="")
+  beneneficios_acumulados = paste(beneficios,sufixo_acumulado, sep="")
+
+  ano_inicial = min(parametros$Ano)
+
+  # # Calculando o N Acumulado de modo Recursivo
+  # for (l in 1:nrow(parametros)) {
+  #   parametros[l,beneneficios_acumulados] = if (parametros[l,"Ano"] == ano_inicial) {
+  #     parametros[l,beneneficios_iniciais] + parametros[l,beneficios]
+  #   } else {
+  #     parametros[l,beneficios] + parametros[l-1,beneficios]
+  #   }
+  # }
+
   parametros
+
 
 }
 
@@ -260,7 +280,7 @@ calcular_acoes_regressivas_inss = function(parametros){
   AnoMaximo = max(parametros$Ano)
 
   # Ordenando o Df para o Calculo Iterativo
-  parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
+  # parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
 
   # Calculando o N Acumulado de modo Recursivo
   for (l in 1:nrow(parametros)) {
