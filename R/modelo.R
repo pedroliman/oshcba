@@ -11,9 +11,7 @@ calcular_eventos = function(parametros) {
   vetor_inputs_eventos = paste(prefixo_inputs, eventos_k, sep = separador)
   vetor_inputs_consequencias = paste(prefixo_inputs, consequencias_c, sep = separador)
 
-  matriz_outputs = outer(paste(prefixo_outputs, consequencias_c, sep = separador), eventos_k, FUN = paste, sep = separador)
-  colnames(matriz_outputs) = eventos_k
-  rownames(matriz_outputs) = consequencias_c
+  matriz_outputs = obter_matriz_eventos(parametros)
   vetor_outputs = as.vector(matriz_outputs)
 
   df_valores_input_eventos = parametros[vetor_inputs_eventos]
@@ -30,6 +28,19 @@ calcular_eventos = function(parametros) {
   parametros[vetor_outputs] = formula_eventos_e_consequencias(f = parametros$Funcionarios, P_result = df_inputs)
   parametros
 
+}
+
+
+obter_matriz_eventos = function(parametros) {
+  separador = oshcba_options$separador_dimensoes
+  prefixo_outputs = oshcba_options$pref_n_ev
+  eventos_k = oshcba_options$vetor_eventos_k
+  consequencias_c = oshcba_options$vetor_consequencias_c
+
+  matriz_outputs = outer(paste(prefixo_outputs, consequencias_c, sep = separador), eventos_k, FUN = paste, sep = separador)
+  colnames(matriz_outputs) = eventos_k
+  rownames(matriz_outputs) = consequencias_c
+  matriz_outputs
 }
 
 formula_eventos_e_consequencias = function(f, P_result) {
