@@ -59,6 +59,35 @@ formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
 }
 
 
+############# BENEFICIOS PREVIDENCIARIOS #################
+
+calcular_benef_prev = function(parametros) {
+
+  matriz_eventos = obter_matriz_eventos(parametros)
+
+
+  # Nb 91
+  variavel = "NB_91"
+  colunas = c("DoenOcup")
+  linhas = c("Afmaior15")
+  vetor_soma = matriz_eventos[linhas, colunas]
+
+  parametros[variavel] = rowSums(parametros[vetor_soma])
+
+
+
+  # Nb92
+  variavel = "NB_92"
+  colunas = c("Tipico", "Trajeto", "DoenOcup")
+  linhas = c("Afmaior15")
+  vetor_soma = matriz_eventos[linhas, colunas]
+
+  parametros[variavel] = rowSums(parametros[vetor_soma])
+  parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+
+}
+
+
 ############# FALTAS #################
 calcular_faltas = function(parametros) {
 

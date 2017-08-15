@@ -88,7 +88,7 @@ $$N_{b91} = Nev_{ocupacional, af>15}$$
 O número de benefícios concedidos $N_{b92}$ será igual ao número de afastamentos menor do que quinze dias $Nev_{af_{<15},k}$.
 
 
-$$N_{b92} = Nev_{af_{>15},k} * P_{inval} , onde \ k = (típico \ , trajeto \  ou \ doença \ ocupacional) $$
+$$N_{b92} = \sum_{k=1}^{K92}{Nev_{af_{>15},k}}  * P_{inval} , onde \ K92 = \{típico \ , trajeto \  ou \ doença \ ocupacional\} $$
 A probabilidade de invalidez P_{inval} será igual para cada tipo de acidente $k$.
 
 #### B93 - Pensão por Morte Acidentária
