@@ -295,12 +295,31 @@ calcular_presenteismo = function(parametros) {
 ############# REFUGO E RETRABALHO #################
 calcular_refugo_retrabalho = function(parametros) {
 
-  # Eventos Despesas Médicas
+  # Eventos
 
   # Variaveis de Input e Outputs
   nome_evento_agregado = "EventosRefugoeRetrabalho"
   custo_medio = "CustoMedioRefugoRetrabalho"
   nome_despesa = "DespesasRefugoERetrabalho"
+
+  # Eventos a somar
+  vetor_acidentes = c("Tipico", "DoenOcup")
+  vetor_eventos = c("Afmaior15", "Afmenor15", "Safast", "Obito")
+
+  # Usando Funcao para calcular eventos com custo médio
+  calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
+
+}
+
+############# MP, Insumos, Equipamento, Operação #################
+calcular_mp_insumos = function(parametros) {
+
+  # Eventos
+
+  # Variaveis de Input e Outputs
+  nome_evento_agregado = "EventosMPInsumos"
+  custo_medio = "CustoMedioMPInsumos"
+  nome_despesa = "DespesasMPInsumos"
 
   # Eventos a somar
   vetor_acidentes = c("Tipico", "DoenOcup")
