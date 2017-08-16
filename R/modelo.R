@@ -119,24 +119,25 @@ calcular_beneficios_inss = function(parametros) {
   # Beneficios Acumulados
 
   beneficios = c("NB_91", "NB_92", "NB_93", "NB_94", "NB_31", "NB_32")
+  ano_inicial = min(parametros$Ano)
   sufixo_inicial = "_Inicial"
   sufixo_acumulado = "_Acumulado"
-  beneneficios_iniciais = paste(beneficios,sufixo_inicial, sep="")
-  beneneficios_acumulados = paste(beneficios,sufixo_acumulado, sep="")
 
-  ano_inicial = min(parametros$Ano)
+  for (b in beneficios) {
+    b_incial = paste(b,sufixo_inicial, sep="")
+    b_acumulado = paste(b,sufixo_acumulado, sep="")
+    # Calculando o N Acumulado de modo Recursivo
+    for (l in 1:nrow(parametros)) {
+      parametros[l,b_acumulado] = if (parametros[l,"Ano"] == ano_inicial) {
+        parametros[l,b_incial] + parametros[l,b]
+      } else {
+        parametros[l,b] + parametros[l-1,b_acumulado]
+      }
+    }
 
-  # # Calculando o N Acumulado de modo Recursivo
-  # for (l in 1:nrow(parametros)) {
-  #   parametros[l,beneneficios_acumulados] = if (parametros[l,"Ano"] == ano_inicial) {
-  #     parametros[l,beneneficios_iniciais] + parametros[l,beneficios]
-  #   } else {
-  #     parametros[l,beneficios] + parametros[l-1,beneficios]
-  #   }
-  # }
+  }
 
   parametros
-
 
 }
 
