@@ -224,6 +224,27 @@ calcular_absenteismo = function(parametros){
 }
 
 
+calcular_presenteismo = function(parametros) {
+
+  # Nomes de Variáveis
+  perc_presenteismo = "PercPresenteismo"
+  horas_presenteismo = "HorasPresenteismo"
+  funcionarios = "Funcionarios"
+  horas_por_dia = "HorasPorDia"
+  custo_mdo = "CustoMDO"
+  despesa_presenteismo = "DespesaPresenteismo"
+
+  # Calculando HOras de Presenteísmo
+  parametros[horas_presenteismo] = parametros[funcionarios] * parametros[perc_presenteismo] * parametros[horas_por_dia]
+
+  # Calculando Despesa em Presenteismo
+  parametros[despesa_presenteismo] = parametros[horas_presenteismo] * parametros[custo_mdo]
+
+  parametros
+
+}
+
+
 ############ MULTAS ##################
 calcular_multas = function(parametros){
 
