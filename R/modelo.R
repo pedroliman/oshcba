@@ -69,7 +69,7 @@ calcular_beneficios_inss = function(parametros) {
   variavel = "NB_91"
   colunas = c("DoenOcup")
   linhas = c("Afmaior15")
-  vetor_soma = matriz_eventos[linhas, colunas]
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
 
@@ -78,7 +78,7 @@ calcular_beneficios_inss = function(parametros) {
   variavel = "NB_92"
   colunas = c("Tipico", "Trajeto", "DoenOcup")
   linhas = c("Afmaior15")
-  vetor_soma = matriz_eventos[linhas, colunas]
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
   parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
@@ -87,7 +87,7 @@ calcular_beneficios_inss = function(parametros) {
   variavel = "NB_93"
   colunas = c("Tipico", "Trajeto", "DoenOcup")
   linhas = c("Obito")
-  vetor_soma = matriz_eventos[linhas, colunas]
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
 
@@ -95,7 +95,7 @@ calcular_beneficios_inss = function(parametros) {
   variavel = "NB_94"
   colunas = c("Tipico", "Trajeto")
   linhas = c("Afmaior15")
-  vetor_soma = matriz_eventos[linhas, colunas]
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
 
@@ -103,7 +103,7 @@ calcular_beneficios_inss = function(parametros) {
   variavel = "NB_31"
   colunas = c("NRelac")
   linhas = c("Afmaior15")
-  vetor_soma = matriz_eventos[linhas, colunas]
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
 
@@ -111,7 +111,7 @@ calcular_beneficios_inss = function(parametros) {
   variavel = "NB_32"
   colunas = c("NRelac")
   linhas = c("Afmaior15")
-  vetor_soma = matriz_eventos[linhas, colunas]
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
   parametros[variavel] = rowSums(parametros[vetor_soma])
   parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
@@ -136,6 +136,54 @@ calcular_beneficios_inss = function(parametros) {
     }
 
   }
+
+  parametros
+
+}
+
+
+############# DESPESAS MÉDICAS #################
+calcular_despesasmedicas = function(parametros) {
+
+  # Eventos Despesas Médicas
+
+  # Variaveis de Input e Outputs
+  nome_evento_agregado = "EventosDespesasMedicas"
+  custo_medio = "DespesaMedicaMedia"
+  nome_despesa = "DespesasMedicas"
+
+  # Eventos a somar
+  vetor_acidentes = c("Tipico", "DoenOcup")
+  vetor_eventos = c("Afmaior15", "Afmenor15", "Safast")
+
+
+  # Usando Funcao para calcular eventos com custo médio
+  calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
+
+}
+
+############# EVENTOS COM CUSTO MEDIO #################
+calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa) {
+
+  # Eventos Despesas Médicas
+  matriz_eventos = obter_matriz_eventos(parametros)
+
+  # Variaveis de Input e Outputs
+  eventos = nome_evento_agregado
+  customedio = custo_medio
+  despesa = nome_despesa
+
+
+  # Eventos a somar
+  colunas = vetor_acidentes
+  linhas = vetor_eventos
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+
+  # Somando Eventos
+  parametros[eventos] = rowSums(parametros[vetor_soma])
+
+  # Calculando Despesas
+  parametros[despesa] = parametros[eventos] * parametros[customedio]
 
   parametros
 
@@ -223,7 +271,7 @@ calcular_absenteismo = function(parametros){
 
 }
 
-
+############ PRESENTEÍSMO ##################
 calcular_presenteismo = function(parametros) {
 
   # Nomes de Variáveis
