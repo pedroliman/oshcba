@@ -27,7 +27,7 @@ oshcba_options = list(
   # Variaveis
 
   # Vetor de Funcoes a Calcular
-  v_funcoes = c("calcular_absenteismo", "calcular_eventos", "calcular_faltas", "calcular_turnover", "calcular_multas", "calcular_acoes_regressivas_inss", "calcular_beneficios_inss", "calcular_presenteismo", "calcular_despesasmedicas"),
+  v_funcoes = c("calcular_absenteismo", "calcular_eventos", "calcular_faltas", "calcular_turnover", "calcular_multas", "calcular_acoes_regressivas_inss", "calcular_beneficios_inss", "calcular_presenteismo", "calcular_despesasmedicas", "calcular_refugo_retrabalho"),
 
   # Iteracoes a realizar
   iteracoes = 2
