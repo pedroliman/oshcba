@@ -141,6 +141,32 @@ calcular_beneficios_inss = function(parametros) {
 
 }
 
+############# ÍNDICES AMPLIADOS #################
+
+calcular_indices_ampliados = function(parametros) {
+
+  # Índice de Frequência
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
+  indicefrequencia = c("IndiceFrequenciaAmpliado")
+  eventosfrequencia = c("EventosIndiceFrequenciaAmpliado")
+  f = c("Funcionarios")
+
+  # Eventos a somar
+  colunas = vetor_acidentes
+  linhas = vetor_eventos
+  matriz_eventos = obter_matriz_eventos(parametros)
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+
+  # Somando Eventos
+  parametros[eventosfrequencia] = rowSums(parametros[vetor_soma])
+
+  # Calculando Índice de Frequência
+  parametros[indicefrequencia] =  (parametros[eventosfrequencia] / parametros[f]) * 1000
+  parametros
+
+}
+
 
 ############# DESPESAS MÉDICAS #################
 calcular_despesasmedicas = function(parametros) {
@@ -207,8 +233,6 @@ formula_faltas = function(f, T_faltas) {
 }
 
 
-
-
 ############ TURNOVER ##################
 
 calcular_turnover = function(parametros) {
@@ -231,8 +255,6 @@ calcular_turnover = function(parametros) {
   parametros
 
 }
-
-
 
 ############ ABSENTEISMO ##################
 calcular_absenteismo = function(parametros){
@@ -330,6 +352,26 @@ calcular_mp_insumos = function(parametros) {
 
 }
 
+
+############# Engajamento e Clima (desligamentos voluntarios) #################
+# calcular_engajamento = function(parametros) {
+#
+#   # Eventos
+#
+#   # Variaveis de Input e Outputs
+#   nome_evento_agregado = "DesligVoluntarios"
+#   custo_medio = "CustoMedSubstitu"
+#   nome_despesa = "DespesasClima"
+#
+#   # Eventos a somar
+#   vetor_acidentes = c("Tipico", "DoenOcup")
+#   vetor_eventos = c("Afmaior15", "Afmenor15", "Safast", "Obito")
+#
+#   # Usando Funcao para calcular eventos com custo médio
+#   calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
+#
+# }
+#
 
 ############ MULTAS ##################
 calcular_multas = function(parametros){
