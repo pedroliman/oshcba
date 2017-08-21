@@ -152,29 +152,44 @@ calcular_indices_ampliados = function(parametros) {
   eventosfrequencia = c("EventosIndiceFrequenciaAmpliado")
   f = c("Funcionarios")
 
-  # Eventos a somar
-  colunas = vetor_acidentes
-  linhas = vetor_eventos
-  matriz_eventos = obter_matriz_eventos(parametros)
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
-
   # Somando Eventos
-  parametros[eventosfrequencia] = rowSums(parametros[vetor_soma])
+  parametros[eventosfrequencia] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
   # Calculando Índice de Frequência
   parametros[indicefrequencia] =  (parametros[eventosfrequencia] / parametros[f]) * 1000
 
 
   # Índice de Gravidade
+  indicegravidade = "IndiceGravidadeAmpliado"
 
-  # Para este índice, calculo as parcelas da soma separadamente
   # Afastamento maior que 15 dias (peso 0.3)
-
-
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmaior15")
+  Nev_maior15 = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
 
   # Obitos (peso 0.5)
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Obito")
+  Obitos = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
 
   # Outros Eventos (peso 0.1)
+
+  # Afastamentos menores que 15 dias
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmenor15")
+  Nev_menor15 = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+
+  # Eventos sem Afastamentos
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Safast")
+  Nev_SAfast = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  # Faltas
+  Faltas = parametros[c("NFaltas")]
+
+  # Calculando o Índice de Gravidade Ampliado
+  parametros[indicegravidade] =  ((0.3 * Nev_maior15 + 0.5 * Obitos + 0.1 * Nev_menor15 + 0.09 * Nev_SAfast + 0.01 * Faltas) / parametros[f]) * 1000
 
   parametros
 
@@ -229,7 +244,7 @@ somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
   linhas = vetor_eventos
   vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
-  # Retornando o Row Sums
+  # Retornando o Row Sums (que é uma coluna de eventos)
   rowSums(parametros[vetor_soma])
 }
 
