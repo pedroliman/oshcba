@@ -387,24 +387,37 @@ calcular_mp_insumos = function(parametros) {
 
 
 ############# Engajamento e Clima (desligamentos voluntarios) #################
-# calcular_engajamento = function(parametros) {
-#
-#   # Eventos
-#
-#   # Variaveis de Input e Outputs
-#   nome_evento_agregado = "DesligVoluntarios"
-#   custo_medio = "CustoMedSubstitu"
-#   nome_despesa = "DespesasClima"
-#
-#   # Eventos a somar
-#   vetor_acidentes = c("Tipico", "DoenOcup")
-#   vetor_eventos = c("Afmaior15", "Afmenor15", "Safast", "Obito")
-#
-#   # Usando Funcao para calcular eventos com custo médio
-#   calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
-#
-# }
-#
+calcular_engajamento = function(parametros) {
+
+  # Outputs
+  perc = c("PercDesligamentoVoluntarios")
+  deslig = c("DesligamentosVoluntarios")
+  despesas = c("DespesasClima")
+
+  # Inputs
+  beta0 = c("Beta0DesligVoluntarios")
+  betafreq = c("BetaFreqDesligVoluntarios")
+  betagrav = c("BetaGravDesligVoluntarios")
+  betapib = c("BetaPIBDesigVoluntarios")
+  varpib = c("VarPIB")
+  customed = c("CustoMedSubstitu")
+  If = c("IndiceFrequenciaAmpliado")
+  Ig = c("IndiceGravidadeAmpliado")
+  func = c("Funcionarios")
+
+
+  # Calculando Perc Deslig Voluntarios
+  parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+
+  # Calculando Desligamento Voluntários
+  parametros[deslig] = round(parametros[perc] * parametros[func], 0)
+
+  # Calculando Custos com Desligamentos Voluntários
+  parametros[despesas] = parametros[deslig] * parametros[customed]
+
+  parametros
+}
+
 
 ############ MULTAS ##################
 calcular_multas = function(parametros){
