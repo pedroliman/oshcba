@@ -163,6 +163,19 @@ calcular_indices_ampliados = function(parametros) {
 
   # Calculando Índice de Frequência
   parametros[indicefrequencia] =  (parametros[eventosfrequencia] / parametros[f]) * 1000
+
+
+  # Índice de Gravidade
+
+  # Para este índice, calculo as parcelas da soma separadamente
+  # Afastamento maior que 15 dias (peso 0.3)
+
+
+
+  # Obitos (peso 0.5)
+
+  # Outros Eventos (peso 0.1)
+
   parametros
 
 }
@@ -191,28 +204,33 @@ calcular_despesasmedicas = function(parametros) {
 ############# EVENTOS COM CUSTO MEDIO #################
 calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa) {
 
-  # Eventos Despesas Médicas
-  matriz_eventos = obter_matriz_eventos(parametros)
-
   # Variaveis de Input e Outputs
   eventos = nome_evento_agregado
   customedio = custo_medio
   despesa = nome_despesa
 
-
-  # Eventos a somar
-  colunas = vetor_acidentes
-  linhas = vetor_eventos
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
-
   # Somando Eventos
-  parametros[eventos] = rowSums(parametros[vetor_soma])
+  parametros[eventos] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
   # Calculando Despesas
   parametros[despesa] = parametros[eventos] * parametros[customedio]
 
   parametros
 
+}
+
+somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
+
+  # Eventos Despesas Médicas
+  matriz_eventos = obter_matriz_eventos(parametros)
+
+  # Eventos a somar
+  colunas = vetor_acidentes
+  linhas = vetor_eventos
+  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+
+  # Retornando o Row Sums
+  rowSums(parametros[vetor_soma])
 }
 
 
