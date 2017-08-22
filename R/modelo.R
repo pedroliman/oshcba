@@ -231,16 +231,15 @@ calcular_reajustes_plano = function(parametros) {
   # Calculando Despesas do Plano de Saúde, de acordo com o ano, para os anos iniciais
   ano_inicial = min(parametros$Ano)
 
-  # Usando Mutate
-  dplyr::mutate(parametros,
-                DespesasPlanodeSaude = ifelse(Ano == 2017, 100, 200)
-                )
 
-  # parametros[despesas] = ifelse(parametros$Ano == ano_inicial,
-  #                               parametros[despesas_inicial],
-  #                               200 #dplyr::lag(parametros[despesas]) * parametros[reaj]
-  #                               # parametros[l-1,despesas] * parametros[reaj]
-  #                               )
+  # Calculando as Despesas Iterativamente
+  for (l in 1:nrow(parametros)) {
+    parametros[l,despesas] = if (parametros[l,"Ano"] == ano_inicial) {
+      parametros[l,despesas_inicial]
+    } else {
+      parametros[l-1,despesas] * parametros[l,reaj]
+    }
+  }
 
   parametros
 }
