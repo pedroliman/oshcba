@@ -195,6 +195,21 @@ calcular_indices_ampliados = function(parametros) {
 
 }
 
+############# RECLAMATÓRIAS TRABALHISTAS #################
+
+calcular_reclamatorias = function(parametros) {
+
+  # Calculando Número de Reclamatórias
+  parametros["NReclamatorias"] = parametros["FuncionariosDesligadosAcumulado"] * parametros["PReclamatoria"]
+
+  # Calculando Despesas com Reclamatórias
+  parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * parametros["CustoMedioReclamatorias"]
+
+  parametros
+}
+
+
+
 ############# TURNOVER GERAL #################
 
 calcular_turnovergeral = function(parametros) {
