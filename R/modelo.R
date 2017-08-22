@@ -244,7 +244,22 @@ calcular_reajustes_plano = function(parametros) {
   parametros
 }
 
+############# REABILITAÇÃO #################
 
+calcular_reabilitacao = function(parametros) {
+
+  # Calculando Reabilitados
+  acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  eventos = c("Afmenor15", "Afmaior15")
+
+  # Calculando Reabilitados
+  parametros["EventosReabilitacao"] = round(somar_eventos(parametros,vetor_acidentes = acidentes, vetor_eventos = eventos) * parametros["PercentualReabilitacao"], 0)
+
+  # Calculando Custo de Reabilitação
+  parametros["DespesasReabilitacao"] = parametros["EventosReabilitacao"] * parametros["CustoMedioReabilitacao"]
+
+  parametros
+}
 
 ############# TURNOVER GERAL #################
 
