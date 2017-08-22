@@ -43,6 +43,7 @@ oshcba_options = list(
     ,"calcular_engajamento"
     ,"calcular_turnovergeral"
     ,"calcular_reclamatorias"
+    ,"calcular_reajustes_plano"
   ),
   #v_funcoes = c("calcular_absenteismo", "calcular_eventos", "calcular_faltas", "calcular_turnover", "calcular_multas", "calcular_acoes_regressivas_inss", "calcular_beneficios_inss", "calcular_presenteismo", "calcular_despesasmedicas", "calcular_refugo_retrabalho", "calcular_mp_insumos"),
 

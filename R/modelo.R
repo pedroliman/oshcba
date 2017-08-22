@@ -142,7 +142,6 @@ calcular_beneficios_inss = function(parametros) {
 }
 
 ############# ÍNDICES AMPLIADOS #################
-
 calcular_indices_ampliados = function(parametros) {
 
   # Índice de Frequência
@@ -204,6 +203,44 @@ calcular_reclamatorias = function(parametros) {
 
   # Calculando Despesas com Reclamatórias
   parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * parametros["CustoMedioReclamatorias"]
+
+  parametros
+}
+
+############# REAJUSTES DO PLANO DE SAÚDE #################
+
+calcular_reajustes_plano = function(parametros) {
+
+  #Outputs
+  reaj = "ReajustePlanoEstimado"
+  despesas = "DespesasPlanodeSaude"
+
+  # Inputs
+  despesas_inicial = "DespesasPlanoInicial"
+
+  beta0 = "Beta0ReajustePlano"
+  betafreq = "BetaFreqReajustePlano"
+  betagrav = "BetaGravReajustePlano"
+
+  indicefreq = "IndiceFrequenciaAmpliado"
+  indicegrav = "IndiceGravidadeAmpliado"
+
+  # Calculando Reajuste Estimado
+  parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
+
+  # Calculando Despesas do Plano de Saúde, de acordo com o ano, para os anos iniciais
+  ano_inicial = min(parametros$Ano)
+
+  # Usando Mutate
+  dplyr::mutate(parametros,
+                DespesasPlanodeSaude = ifelse(Ano == 2017, 100, 200)
+                )
+
+  # parametros[despesas] = ifelse(parametros$Ano == ano_inicial,
+  #                               parametros[despesas_inicial],
+  #                               200 #dplyr::lag(parametros[despesas]) * parametros[reaj]
+  #                               # parametros[l-1,despesas] * parametros[reaj]
+  #                               )
 
   parametros
 }
@@ -291,8 +328,6 @@ calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_ev
   parametros
 
 }
-
-
 
 ############# FUNÇÕES GENERALIZADAS #################
 somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
