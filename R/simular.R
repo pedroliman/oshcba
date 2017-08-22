@@ -146,5 +146,10 @@ exportar_dados_simulados = function(parametros) {
   return(arquivo)
 }
 
-
+#'@export
+simular_e_mostrar_resultados = function() {
+  results = simular_cba(modo = "completo")
+  View(results$Resultados_Descontados)
+  View(results$Resultados_CBR)
+}
 

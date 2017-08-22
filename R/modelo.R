@@ -195,6 +195,49 @@ calcular_indices_ampliados = function(parametros) {
 
 }
 
+############# TURNOVER GERAL #################
+
+calcular_turnovergeral = function(parametros) {
+
+  # Variáveis
+  # Outputs
+  turn_geral = c("TurnoverGeral")
+  fdesl = c("FuncionariosDesligados")
+  fdesl_acum = c("FuncionariosDesligadosAcumulado")
+
+  deslvol = c("DesligamentosVoluntarios")
+  deslinvol = c("DesligamentosInvoluntarios")
+  deslgini = c("FuncDesligadosInicial")
+  f = c("Funcionarios")
+
+  # Somando Afastamentos maior que 15
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmaior15")
+
+  AfMaior15 = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  # Somando Obitos
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Obito")
+
+  Obitos = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  Desligvolunt = parametros[deslvol]
+
+  Desliginvol = parametros[deslinvol]
+
+  # Desligamentos Total
+  parametros[fdesl] = AfMaior15 + Obitos + Desligvolunt + Desliginvol
+
+  # Desligamento Acumulado
+  parametros[fdesl_acum] = acumular_valores(parametros, x = fdesl, x_inicial = deslgini, x_acumulado = fdesl_acum)
+
+  #Turnover Geral
+  parametros[turn_geral] = parametros[fdesl] / parametros[f]
+
+  parametros
+
+}
 
 ############# DESPESAS MÉDICAS #################
 calcular_despesasmedicas = function(parametros) {
@@ -234,6 +277,9 @@ calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_ev
 
 }
 
+
+
+############# FUNÇÕES GENERALIZADAS #################
 somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
 
   # Eventos Despesas Médicas
@@ -246,6 +292,21 @@ somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
 
   # Retornando o Row Sums (que é uma coluna de eventos)
   rowSums(parametros[vetor_soma])
+}
+
+acumular_valores = function(parametros, x, x_inicial, x_acumulado){
+
+  ano_inicial = min(parametros$Ano)
+  # Calculando o N Acumulado de modo Recursivo
+  for (l in 1:nrow(parametros)) {
+    parametros[l,x_acumulado] = if (parametros[l,"Ano"] == ano_inicial) {
+      parametros[l,x_inicial] + parametros[l,x]
+    } else {
+      parametros[l,x] + parametros[l-1,x_acumulado]
+    }
+  }
+  parametros[x_acumulado]
+
 }
 
 
