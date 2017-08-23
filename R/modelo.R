@@ -141,6 +141,169 @@ calcular_beneficios_inss = function(parametros) {
 
 }
 
+############# ÍNDICES AMPLIADOS #################
+calcular_indices_ampliados = function(parametros) {
+
+  # Índice de Frequência
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
+  indicefrequencia = c("IndiceFrequenciaAmpliado")
+  eventosfrequencia = c("EventosIndiceFrequenciaAmpliado")
+  f = c("Funcionarios")
+
+  # Somando Eventos
+  parametros[eventosfrequencia] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+
+  # Calculando Índice de Frequência
+  parametros[indicefrequencia] =  (parametros[eventosfrequencia] / parametros[f]) * 1000
+
+
+  # Índice de Gravidade
+  indicegravidade = "IndiceGravidadeAmpliado"
+
+  # Afastamento maior que 15 dias (peso 0.3)
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmaior15")
+  Nev_maior15 = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  # Obitos (peso 0.5)
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Obito")
+  Obitos = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  # Outros Eventos (peso 0.1)
+
+  # Afastamentos menores que 15 dias
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmenor15")
+  Nev_menor15 = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+
+  # Eventos sem Afastamentos
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Safast")
+  Nev_SAfast = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  # Faltas
+  Faltas = parametros[c("NFaltas")]
+
+  # Calculando o Índice de Gravidade Ampliado
+  parametros[indicegravidade] =  ((0.3 * Nev_maior15 + 0.5 * Obitos + 0.1 * Nev_menor15 + 0.09 * Nev_SAfast + 0.01 * Faltas) / parametros[f]) * 1000
+
+  parametros
+
+}
+
+############# RECLAMATÓRIAS TRABALHISTAS #################
+
+calcular_reclamatorias = function(parametros) {
+
+  # Calculando Número de Reclamatórias
+  parametros["NReclamatorias"] = parametros["FuncionariosDesligadosAcumulado"] * parametros["PReclamatoria"]
+
+  # Calculando Despesas com Reclamatórias
+  parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * parametros["CustoMedioReclamatorias"]
+
+  parametros
+}
+
+############# REAJUSTES DO PLANO DE SAÚDE #################
+
+calcular_reajustes_plano = function(parametros) {
+
+  #Outputs
+  reaj = "ReajustePlanoEstimado"
+  despesas = "DespesasPlanodeSaude"
+
+  # Inputs
+  despesas_inicial = "DespesasPlanoInicial"
+
+  beta0 = "Beta0ReajustePlano"
+  betafreq = "BetaFreqReajustePlano"
+  betagrav = "BetaGravReajustePlano"
+
+  indicefreq = "IndiceFrequenciaAmpliado"
+  indicegrav = "IndiceGravidadeAmpliado"
+
+  # Calculando Reajuste Estimado
+  parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
+
+  # Calculando Despesas do Plano de Saúde, de acordo com o ano, para os anos iniciais
+  ano_inicial = min(parametros$Ano)
+
+
+  # Calculando as Despesas Iterativamente
+  for (l in 1:nrow(parametros)) {
+    parametros[l,despesas] = if (parametros[l,"Ano"] == ano_inicial) {
+      parametros[l,despesas_inicial]
+    } else {
+      parametros[l-1,despesas] * parametros[l,reaj]
+    }
+  }
+
+  parametros
+}
+
+############# REABILITAÇÃO #################
+
+calcular_reabilitacao = function(parametros) {
+
+  # Calculando Reabilitados
+  acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  eventos = c("Afmenor15", "Afmaior15")
+
+  # Calculando Reabilitados
+  parametros["EventosReabilitacao"] = round(somar_eventos(parametros,vetor_acidentes = acidentes, vetor_eventos = eventos) * parametros["PercentualReabilitacao"], 0)
+
+  # Calculando Custo de Reabilitação
+  parametros["DespesasReabilitacao"] = parametros["EventosReabilitacao"] * parametros["CustoMedioReabilitacao"]
+
+  parametros
+}
+
+############# TURNOVER GERAL #################
+
+calcular_turnovergeral = function(parametros) {
+
+  # Variáveis
+  # Outputs
+  turn_geral = c("TurnoverGeral")
+  fdesl = c("FuncionariosDesligados")
+  fdesl_acum = c("FuncionariosDesligadosAcumulado")
+
+  deslvol = c("DesligamentosVoluntarios")
+  deslinvol = c("DesligamentosInvoluntarios")
+  deslgini = c("FuncDesligadosInicial")
+  f = c("Funcionarios")
+
+  # Somando Afastamentos maior que 15
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Afmaior15")
+
+  AfMaior15 = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  # Somando Obitos
+  vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
+  vetor_eventos = c("Obito")
+
+  Obitos = somar_eventos(parametros,vetor_acidentes,vetor_eventos)
+
+  Desligvolunt = parametros[deslvol]
+
+  Desliginvol = parametros[deslinvol]
+
+  # Desligamentos Total
+  parametros[fdesl] = AfMaior15 + Obitos + Desligvolunt + Desliginvol
+
+  # Desligamento Acumulado
+  parametros[fdesl_acum] = acumular_valores(parametros, x = fdesl, x_inicial = deslgini, x_acumulado = fdesl_acum)
+
+  #Turnover Geral
+  parametros[turn_geral] = parametros[fdesl] / parametros[f]
+
+  parametros
+
+}
 
 ############# DESPESAS MÉDICAS #################
 calcular_despesasmedicas = function(parametros) {
@@ -165,27 +328,48 @@ calcular_despesasmedicas = function(parametros) {
 ############# EVENTOS COM CUSTO MEDIO #################
 calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa) {
 
-  # Eventos Despesas Médicas
-  matriz_eventos = obter_matriz_eventos(parametros)
-
   # Variaveis de Input e Outputs
   eventos = nome_evento_agregado
   customedio = custo_medio
   despesa = nome_despesa
 
+  # Somando Eventos
+  parametros[eventos] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+
+  # Calculando Despesas
+  parametros[despesa] = parametros[eventos] * parametros[customedio]
+
+  parametros
+
+}
+
+############# FUNÇÕES GENERALIZADAS #################
+somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
+
+  # Eventos Despesas Médicas
+  matriz_eventos = obter_matriz_eventos(parametros)
 
   # Eventos a somar
   colunas = vetor_acidentes
   linhas = vetor_eventos
   vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
-  # Somando Eventos
-  parametros[eventos] = rowSums(parametros[vetor_soma])
+  # Retornando o Row Sums (que é uma coluna de eventos)
+  rowSums(parametros[vetor_soma])
+}
 
-  # Calculando Despesas
-  parametros[despesa] = parametros[eventos] * parametros[customedio]
+acumular_valores = function(parametros, x, x_inicial, x_acumulado){
 
-  parametros
+  ano_inicial = min(parametros$Ano)
+  # Calculando o N Acumulado de modo Recursivo
+  for (l in 1:nrow(parametros)) {
+    parametros[l,x_acumulado] = if (parametros[l,"Ano"] == ano_inicial) {
+      parametros[l,x_inicial] + parametros[l,x]
+    } else {
+      parametros[l,x] + parametros[l-1,x_acumulado]
+    }
+  }
+  parametros[x_acumulado]
 
 }
 
@@ -205,8 +389,6 @@ calcular_faltas = function(parametros) {
 formula_faltas = function(f, T_faltas) {
   round(x = f*T_faltas, digits = 0)
 }
-
-
 
 
 ############ TURNOVER ##################
@@ -231,8 +413,6 @@ calcular_turnover = function(parametros) {
   parametros
 
 }
-
-
 
 ############ ABSENTEISMO ##################
 calcular_absenteismo = function(parametros){
@@ -328,6 +508,39 @@ calcular_mp_insumos = function(parametros) {
   # Usando Funcao para calcular eventos com custo médio
   calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
 
+}
+
+
+############# Engajamento e Clima (desligamentos voluntarios) #################
+calcular_engajamento = function(parametros) {
+
+  # Outputs
+  perc = c("PercDesligamentoVoluntarios")
+  deslig = c("DesligamentosVoluntarios")
+  despesas = c("DespesasClima")
+
+  # Inputs
+  beta0 = c("Beta0DesligVoluntarios")
+  betafreq = c("BetaFreqDesligVoluntarios")
+  betagrav = c("BetaGravDesligVoluntarios")
+  betapib = c("BetaPIBDesigVoluntarios")
+  varpib = c("VarPIB")
+  customed = c("CustoMedSubstitu")
+  If = c("IndiceFrequenciaAmpliado")
+  Ig = c("IndiceGravidadeAmpliado")
+  func = c("Funcionarios")
+
+
+  # Calculando Perc Deslig Voluntarios
+  parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+
+  # Calculando Desligamento Voluntários
+  parametros[deslig] = round(parametros[perc] * parametros[func], 0)
+
+  # Calculando Custos com Desligamentos Voluntários
+  parametros[despesas] = parametros[deslig] * parametros[customed]
+
+  parametros
 }
 
 
