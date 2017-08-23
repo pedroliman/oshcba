@@ -246,7 +246,7 @@ $(document).ready(function () {
 <td>Número de Reclamatórias trabalhistas relacionadas a SST.</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(f_{desligados}\)</span></td>
+<td><span class="math inline">\(f_{desligacumulado}\)</span></td>
 <td>Número de Funcionários desligados pela empresa.</td>
 </tr>
 <tr class="odd">
@@ -259,11 +259,11 @@ $(document).ready(function () {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(p_iacaoregressiva\)</span></td>
-<td>a.</td>
+<td>Probabilidade de acontecer uma ação regressiva.</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(tregressiva_{i}\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(cmedregressiva_{i}\)</span></td>
+<td>Custo médio de uma ação regressiva do tipo <span class="math inline">\(i\)</span>.</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(f_{crise}\)</span></td>
@@ -274,72 +274,100 @@ $(document).ready(function () {
 <td>a.</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
+<td><span class="math inline">\(Nacumulado_{i}\)</span></td>
+<td>Número de benefícios acumulados do tipo <span class="math inline">\(i\)</span>, para <span class="math inline">\(B\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D\)</span>_{medicas}</td>
+<td>Despesas evitadas com medicamento e atendimento médico para tratamento dos acidentes de trabalho.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Dmed_{medicas}\)</span></td>
+<td>Despesa médica média com medicamento e atendimento médico.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_{planosaude,t}\)</span></td>
+<td>Despesas evitadas com planos de saúde via alteração da taxa de sinistralidade.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(D_{planosaude, t-1}\)</span></td>
+<td>Despesas com o plano de saúde do período anterior.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Reaj_{estimado, t}\)</span></td>
+<td>Percentual de reajuste estimado no período <span class="math inline">\(t\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Dinterdicao_{evento}\)</span></td>
+<td>Despesas evitadas com interrupção operacional originados por acidentes ou óbitos.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(dias_{interr, evento}\)</span></td>
+<td>Dias médios interruptidos por eventos.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(lucrocessante\)</span></td>
+<td>Lucro cessante médio diário oriundo de cada acidente.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Dinterdicao_{fiscalizacao}\)</span></td>
+<td>Despesas evitadas com interdições por fiscalização.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Evento_{fiscalizacao}\)</span></td>
+<td>Probabilidade de acontecer um evento de interdização por fiscalização.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(dias_{interr, fiscalizacao}\)</span></td>
+<td>Dias médios interruptidos por fiscalização.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Dreab\)</span></td>
+<td>Despesas com reabilitação do trabalhador a.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(custo_{reab}\)</span></td>
+<td>Custos médio com a reabilitação do trabalhador.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p_{reab}\)</span></td>
 <td>a.</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(D_{multas}\)</span></td>
+<td>Despesas oriundas por exposição à multas.</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(Nmultas'_{l}\)</span></td>
+<td>Número de multas aplicadas oriundas da lei <span class="math inline">\(l\)</span>.</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(Cmedmulta_{l}\)</span></td>
+<td>Custo médio da multa originada pela lei <span class="math inline">\(l\)</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(Atendlegisl_{l}\)</span></td>
+<td>Atendimento da legislação</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(Nmultas_{l}\)</span></td>
+<td>Número de multas estimados de acordo com os eventos de acidentes típicos e doenças ocupacionais.</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(If\)</span></td>
+<td>Índice de frequência do FAP</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(Ig\)</span></td>
+<td>Índice de gravidade do FAP</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(Ic\)</span></td>
+<td>Índice de custo do FAP</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>a.</td>
+<td><span class="math inline">\(p_{t}\)</span></td>
+<td>Percentil de acorodo com o posicionamento da empresa em relação as demais, onde <span class="math inline">\(t \in {f,g,c}\)</span></td>
 </tr>
 </tbody>
 </table>

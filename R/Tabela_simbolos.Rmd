@@ -1,7 +1,7 @@
 ---
 title: "Tabela_Símbolos"
-author: "Pedro Lima"
-date: "26 de julho de 2017"
+author: "Pedro Lima"; "Tobias Kunrath"
+date: "22 de agosto de 2017"
 output: html_document
 ---
 
@@ -39,27 +39,68 @@ knitr::opts_chunk$set(echo = TRUE)
 | ${D}_{reclamatorias}$ | Despesas evitadas com reclamatórias trabalhistas. |
 | $c_{medrec}$ | Custo Médio da Reclamatória.|
 | $n_{reclamatorias}$ | Número de Reclamatórias trabalhistas relacionadas a SST.|
-| $f_{desligados}$ | Número de Funcionários desligados pela empresa.|
+| $f_{desligacumulado}$ | Número de Funcionários desligados pela empresa.|
 | $p_{ajuizarEganharreclamatoria}$ | Probabilidade de um funcionário demitido entrar com uma reclamatória e ganhar a causa.|
 | $D_{ações regressivas INSS}$ | Despesas relacionadas a Ações Regressivas.|
-| $p_iacaoregressiva$ | a.|
-| $tregressiva_{i}$ | a.|
+| $p_iacaoregressiva$ | Probabilidade de acontecer uma ação regressiva.|
+| $cmedregressiva_{i}$ | Custo médio de uma ação regressiva do tipo $i$.|
 | $f_{crise}$ | a.|
 | $crise$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
-| $a$ | a.|
+| $Nacumulado_{i}$ |Número de benefícios acumulados do tipo $i$, para \forall $B$ |
+| $D$_{medicas} | Despesas evitadas com medicamento e atendimento médico para tratamento dos acidentes de trabalho.|
+| $Dmed_{medicas}$ | Despesa médica média com medicamento e atendimento médico.|
+| $D_{planosaude,t}$ | Despesas evitadas com planos de saúde via alteração da taxa de sinistralidade.|
+| $D_{planosaude, t-1}$ | Despesas com o plano de saúde do período anterior.|
+| $Reaj_{estimado, t}$ | Percentual de reajuste estimado no período $t$.|
+| $Dinterdicao_{evento}$ | Despesas evitadas com interrupção operacional originados por acidentes ou óbitos.|
+| $dias_{interr, evento}$ | Dias médios interruptidos por eventos.|
+| $lucrocessante$ | Lucro cessante médio diário oriundo de cada acidente.|
+| $Dinterdicao_{fiscalizacao}$ | Despesas evitadas com interdições por fiscalização.|
+| $Evento_{fiscalizacao}$ | Probabilidade de acontecer um evento de interdização por fiscalização.|
+| $dias_{interr, fiscalizacao}$ | Dias médios interruptidos por fiscalização.|
+| $Dreab$ | Despesas com reabilitação do trabalhador a.|
+| $custo_{reab}$ | Custos médio com a reabilitação do trabalhador.|
+| $p_{reab}$ | a.| Percentual de trabalhadores reabilitados.|
+| $D_{multas}$ | Despesas oriundas por exposição à multas.|
+| $Nmultas'_{l}$ | Número de multas aplicadas oriundas da lei $l$.|
+| $Cmedmulta_{l}$ | Custo médio da multa originada pela lei $l$ |
+| $Atendlegisl_{l}$ | Atendimento da legislação |
+| $Nmultas_{l}$ | Número de multas estimados de acordo com os eventos de acidentes típicos e doenças ocupacionais.|
+| $If$ | Índice de frequência do FAP |
+| $Ig$ | Índice de gravidade do FAP |
+| $Ic$ | Índice de custo do FAP | 
+| $p_{t}$ | Percentil de acorodo com o posicionamento da empresa em relação as demais, onde $t \in {f,g,c}$ | 
+| $IC$ | Índice composto do FAP | 
+| $Dimagem$ | a. |
+| $Dimagem, contratacao$ | 
+| $Dimagem, receita$ | 
+| $t_{contrat}$ | Tempo de contratação médio de um funcionário. |
+| $cmed_{contratacao}$ | Custo médio de contratação de um funcionário. |
+| $D_{clima}$ | Despesas relacionadas a clima organizacional. |
+| $Deslig_{voluntarios}$ | Funcionários desligados de forma voluntária. | 
+| $c_{sub}$ | Custo de substituição de um funcionário. | 
+| $Perc_{desligvoluntarios}$ | Percentual de desligamento voluntário. | 
+| $Dtur$ | Despesas com turnover. | 
+| $Dabs$ | Despesas com absenteísmo. |
+| $d_{abs}$ | Número de dias de absenteísmo por problemas relacionados à SST e FPS. |
+| $c_{mdo}$ | Custo médio horário da mão de obra. |
+| $Nfalta$ | Número total de faltas. |
+| $D_{medioafast<15}$ | Dias médios de afastamento menores que 15 dias. |
+| $Dpresenteismo$ | Despesas com presenteísmo. |
+| $Perc_{present}$ | Percentual de presenteísmo. |
+| $D_{refugretr}$ | Despesas com refugo e retrabalho. |
+| $cmed_{refretr}$ | Custo médio em refugo e retrabalho por evento. |
+| $D_{MP,Ins,Eq}$ | Despesas com matéria prima, insumos e equipamentos. |
+| $cmed_{MP, Ins, Eq}$ | Custo médio com matéria prima, insumos e equipamentos por evento. |
+| $D_{qual, t}$ | Ganhos obtidos com elevação da qualidade dos produtos e serviços devido a melhora do ambiente seguro e saudável. | 
+| $var_{volumevenda, t}$ | Variação no volume de venda projetada no período $t$. | 
+| $margemmed_{unitario, t}$ | Margem média de contribuição unitária no período $t$. |
+| $prod_{proj, t}$ | Produção projetada no período $t$. | 
+| $D_{prod, t}$ | Ganhos obtidos pela elevação da produtividade da mão-de-obra devido ao ambiente seguro e saudável. | 
+| $varcustomed_{unitario, t}$ | Variação no custo médio unitário de produção. |
+| $customed_{unitario, t}$ | Custo médio unitário de produção no período $t$. |
+| $prod_{proj, t}$ | Volume de produção projetada no período $t$. | 
+
+
+
+
