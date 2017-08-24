@@ -1,16 +1,15 @@
 ---
 title: "Modelo Matemático - Calculadora SST/FPS"
 author: "GMAP | UNISINOS"
-date: "2 de agosto de 2017"
+date: "24 de agosto de 2017"
 output:
-  word_document: default
   pdf_document:
     keep_tex: yes
-    latex_engine: xelatex
     number_sections: yes
     toc: yes
     toc_depth: 6
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -21,17 +20,17 @@ knitr::opts_chunk$set(echo = TRUE)
 Este documento contém uma definição do modelo matemático que suporta a calculadora de custos e benefícios de inciativas em SST. Esta calculadora foi desenvolvida no âmbito do projeto Proposição e desenvolvimento de um modelo e método sistêmico para a mensuração dos impactos diretos e indiretos dos investimentos em programas de SST e FPS.
 
 
-## CBR - Razão Benefício-Custo
+## CBR - Razão Benefício-Custo (OK)
 A razão benefício-custo ${RBC}$ corresponde à razão do somatório dos custos $C_i$ onde $i$ representa o índice de custos e $B_j$ os benefícios a valor presente.
 
 $${RBC} = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
 
-### Fluxo de Caixa em Valor Presente
+### Fluxo de Caixa em Valor Presente (OK)
 Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente. Os fluxos de caixa a serem descontados incluem os custos e benefícios das iniciativas.
 
 $$FC_i(t) = \frac{fc_i}{(1+\theta)^t}$$
 
-### Cálculo dos Benefícios da Iniciativa
+### Cálculo dos Benefícios da Iniciativa (OK)
 Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
 
 $$B_i = {D}_{i, inic} - {D}_{i, asis}$$
@@ -43,17 +42,17 @@ O benefício relativo da dimensão $i$ pode ser calculado considerando o seu val
 
 $$B_{i,p} = \frac{B_{i}}{\sum_{i=1}^{I} B_{i}}$$
 
-### Cálculo dos Eventos
+### Cálculo dos Eventos (OK)
 Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, do o percentual de funcionários $Pev_c$ que sofrerá o evento $c$, e do da percentual destes acidentes que são do tipo $k$, $Pev_{k}$. Os eventos $c$ pertecem ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
 
 $$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 
-#### Cálculo de Faltas
+#### Cálculo de Faltas (OK)
 O número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_{falta}$, conforme equação abaixo: 
 
 $$N_{falta} = f * T_{falta}$$ 
 
-#### Índices de Gravidade e Frequência Ampliados
+#### Índices de Gravidade e Frequência Ampliados (OK)
 
 Os índices de frequência e gravidade ampliados serão usados como variáveis independentes nas regressões relacionadas à reajuste do plano de saúde, tempo de contratação e desligamento voluntário.
 O índice de frequência considera todos os eventos, sobre o número de funcionários.
@@ -63,26 +62,26 @@ $$I_{fa} = \frac{\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}}{f} 
 O índice de gravidade ponderará os eventos, considerando os mesmos pesos atribuídos no cálculo do FAP.
 $$I_{ga} = \frac{0,3 * Nev_{af_{>15},k} + 0,5 * Nev_{obito, k} + 0,1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15,k})}{f}* 1.000$$
 
-#### Turnover Geral
+#### Turnover Geral (OK)
 
 O Turnover Geral é uma variável intermediária que impactará sobre o cálculo do FAP e outras variáveis relacionadas a Turnover.
 $$Turn_{geral} = \frac{Nev_{af_{>15},k} + Nev_{obito,k} + Deslig_{voluntarios} + Deslig_{involuntar}}{f}$$
 O Turnover geral, a cada ano, gerará um número de funcionários desligados que será acumulado ao longo do tempo.
 $$f_{desligacumulado} = f_{desligados_inicial} + \sum_{t=1}^{t} f_t * Turn_{geral,t} $$
 
-### Ligação entre Eventos e Variáveis Previdenciárias
+### Ligação entre Eventos e Variáveis Previdenciárias (OK)
 
 O quadro a seguir apresenta a ligação entre os eventos e os benefícios calculados.
 ![Quadro de Eventos e B's calculados](../figures/quadro_beneficios.png)
 
-#### B91 - Auxílio Doença Acidentário
+#### B91 - Auxílio Doença Acidentário (OK)
 
 Após o cálculo dos eventos serão calculados os benefícios gerados a partir dos mesmos.
 
 $$N_{b91} = Nev_{ocupacional, af>15}$$
 
 
-#### B92 - Aposentadoria por Invalidez Acidentária
+#### B92 - Aposentadoria por Invalidez Acidentária (OK)
 
 
 O número de benefícios concedidos $N_{b92}$ será igual ao número de afastamentos menor do que quinze dias $Nev_{af_{<15},k}$.
@@ -91,26 +90,26 @@ O número de benefícios concedidos $N_{b92}$ será igual ao número de afastame
 $$N_{b92} = \sum_{k=1}^{K92}{Nev_{af_{>15},k}}  * P_{inval} , onde \ K92 = \{típico \ , trajeto \  ou \ doença \ ocupacional\} $$
 A probabilidade de invalidez P_{inval} será igual para cada tipo de acidente $k$.
 
-#### B93 - Pensão por Morte Acidentária
+#### B93 - Pensão por Morte Acidentária (OK)
 
 $$N_{b93} = \sum_{k=1}^{K93}Nev_{obito, k}, onde \ K93 = \{típico \ , trajeto \  ou \ doença \ ocupacional\}$$
 
-#### B94 - Auxílio Acidente
+#### B94 - Auxílio Acidente (OK)
 
 $$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico})$$
 Deve-se notar que, para fins de FAP, os eventos não devem considerar os acidentes de trajetos. Caso o número de benefícios separado por espécie seja apenas relevante para o FAP, os acidentes de trajetos devem ser removidos das fórmulas acima. Caso contrário, devem ser criadas variáveis em separado para fins de FAP e para outros fins.
 
-#### B31 - Auxílio Doença Previdenciário
+#### B31 - Auxílio Doença Previdenciário (OK)
 
 Os Auxílios por Doença Previdenciário serão calculados a partir dos eventos não relacionados ao trabalho $Nev_{NRelacionadoAoTrabalho, af>15}$.
 $$N_{b31} = Nev_{NRelacionadoAoTrabalho, af>15}$$
 
-#### B32 - Aposentadoria Invalidez Previdenciário
+#### B32 - Aposentadoria Invalidez Previdenciário (OK)
 
 As aposentadorias por invalidez previdenciárias serão calculadas a partir dos eventos não relacionados ao trabalho $Nev_{NRelacionadoAoTrabalho, af>15}$.
 $$N_{b32} = Nev_{NRelacionadoAoTrabalho, af>15} * P_{Invalidez}$$
 
-#### Número de benefícios acumulados 
+#### Número de benefícios acumulados (OK)
 
 O número de benefícios acumulado será calculado de acordo com o número de benefícios concedido até o período $t$ em questão e o número de benefícios inicial.
 $$NB_{i,t} = \sum_{t=1}^{t} N_i,t + N_i,inicial \ \forall \ i \  \in \ B$$
@@ -138,6 +137,7 @@ $$n_{reclamatorias} = f_{desligacumulado} * p_{ajuizarEganharreclamatoria} $$
 Esta subcategoria compreende as despesas evitadas com incapacitação parcial ou total provocada por acidente típico, doença ocupacional ou acidente de trajeto após a implementação integral da iniciativa.
 
 Possibilidade 1: Todos os custos incorridos nesta rúbrica entram para o cálculo do FAP e não deveriam ser contados em duplicidade.
+
 Possibilidade 2: Existem despesas que não estão em nenhuma outra categoria e que deveriam ser contabilizados aqui. A princípio estamos na possibilidade 1. A categoria será excluída caso a possibilidade 1 se confirme.
 
 ##### Ações Regressivas INSS
@@ -145,7 +145,7 @@ Esta subcategoria compreende as despesas evitadas com ações regressivas do INS
 
 As despesas com ações regressivas relacionadas ao INSS serão calculadas considerando o número de benefícios acumulado, e a probabilidade de incidência de uma ação regressiva, e a despesa média relacionada a uma ação regressiva. Além disso, um cenário de crise poderá modular esta função. O custo médio ponderado dos benefícios acumulados será calculado de acordo com os mesmos custos médios informados para fins de FAP. Assume-se que as despesas de ressarcimento da empresa para com o INSS são as mesmas despesas que o INSS teve com o indivíduo que originou a ação regressiva.
 
-$$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress,} * (1+(f_{crise}*crise))  * \frac{\sum_{i=1}^{B} nacumulado_i *cmed_{i}}{\sum_{i=1}^{B} nacumulado_i} $$
+$$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress,} * (1+(f_{crise}*crise))  * \frac{\sum_{i=1}^{B} (nacumulado_i *cmed_{i})}{\sum_{i=1}^{B} nacumulado_i} $$
 
 ##### Ausência para Tratamento
 
@@ -155,9 +155,9 @@ Esta subcategoria compreende as despesas evitadas com a ausência do trabalhador
 
 Esta subcategoria compreende as despesas evitadas com medicamento e atendimento médico para tratamento dos acidentes de trabalho após a implementação integral da iniciativa.
 
-$$D_{medicas} = d_{medio} * (\sum_{k=1}^{K'} {\sum_{c=1}^{C'} {n_{acidentes \ k,c}}}) \ onde \  K' = \{1,3\} \ e \ C' = \{2,3,4\}  $$
+$$D_{medicas} = d_{medio} * (\sum_{k=1}^{K'} {\sum_{c=1}^{C'} {n_{acidentes \ k,c}}}) \ onde \  K' = \{{Típico},{Doença\ Ocupacional}\} \ e \ C' = \{{>15},<15,Sem\ Afast\}$$
 
-##### Reajustes do plano de Saúde 
+##### Reajustes do plano de Saúde (OK)
 Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral da iniciativa. A despesa com o plano de saúde de cada período será calculada de acordo com a despesa do ano anterior, acrescida de um percentual de reajuste estimado.
 
 $$D_{planosaude,t} = D_{planosaude,t-1} * (1 + Reaj_{estimado,t})$$
@@ -172,16 +172,25 @@ As despesas com interrupção operacional serão calculadas considerando o núme
 
 
 Opção 1: Coletar os dias médios de interrupção geral.
+
 Opção 2: Estimar os dias de interrupção de modo separado por tipo de acidentes (ex.: Óbito, Afastamento maior que 15, menor que 15, ou sem Afastamento.). Possívelmente, há como manter os dias de interrupção por óbito em separado.
 
-$$D_{interdicao} = n_{acidentestipico} * dias_{interr,acidente} * lucrocessante$$
+$$D_{interdicao,acidente} = n_{acidentestipico} * dias_{interr,acidente} * lucrocessante$$
 
 ##### Interdições Por Fiscalização
 As despesas com interdições por fiscalização serão calculadas de acordo com a probabilidade de interdição, o número médio de dias relacionados à interdição por fiscalização e o lucro cessante médio diário oriúndo de cada interdição. Adicionalmente, esta equação pode ser modulada pela projeção de uma crise financeira. O evento de interdição por fiscalização $Evento_{interdicao}$ será estimado com uma distribuição binomial.
 
-$$D_{interdicao} = Evento_{interdicao} * (1+(f_{crise}*crise)) * dias_{interr,fiscalizacao} * lucrocessante $$
+Pergunta 1: Toda interdição gera uma multa?
 
-##### Reabilitação do Trabalhador
+Pergunta 2: Toda multa gera uma interdição?
+
+Se 1= Sim e 2 = Não, então pode-se vincular os eventos de interdição com multa, incluindo uma probabilidade de multa gerar interdição.
+Se 1 e 2 = Sim, então todos os eventos de multa gerarão interdição.
+Se 1 e 2 = Não, o formato atual deve ser mantido.
+
+$$D_{interdicao, fiscalizacao} = Evento_{interdicao} * (1+(f_{crise}*crise)) * dias_{interr,fiscalizacao} * lucrocessante $$
+
+##### Reabilitação do Trabalhador (OK)
 
 Trabalhadores passíveis de esforços de reabilitação incluem trabalhadores préviamente afastados por mais do que 15 dias. O custo de reabilitação contém todos os custos relacionados à reabilitação, inclusive os custos de manutenção do reabilitado, inclusive para além do período de simulação. Custos relacionados à iniciativas de reabilitação de grupos de risco e PCDs serão considerados no modelo por meio da redução do risco de eventos. Desta maneira, não serão contabilizados como um benefício direto nesta categoria.
 
@@ -194,7 +203,11 @@ $$D_{reab} = custo_{reab} * \sum_{c=1}^{C}(Nev_{c, af>15} + Nev_{c, af<15}) * pr
 As despesas oriúndas da exposição à multa serão calculadas considerando-se o número de multas aplicadas e o custo médio da multa. Adicionalmente, o número de multas também pode ser modulado pela ocorrência de uma crise.
 
 Opção 1: Considerar a Exposição á multas de modo geral.
-Opção 2: Estimar custos médios de multa, e probabilidades de multa de modo individualizado (para cada NR).
+
+Opção 2: Criar 5 slots de números de multas a considerar. (Com este formato será possível segregar categorias de multa de acordo com a empresa, ou, no limite, usar apenas um dos slots).
+
+Opção 3: Estimar custos médios de multa, e probabilidades de multa de modo individualizado (para cada NR).
+
 
 $$D_{multas}= (1+(f_{crise}*crise)) * N_{multa_l}' * C_{med_l}$$
 
@@ -205,7 +218,7 @@ $$N_{multa_l}' = (1 - Atendlegisl_l) * N_{multa_l}$$
 O número de multas será estimado de acordo com os eventos de acidentes típicos e doenças ocupacionais.
 $$ N_{multa_l} =  \beta_{0,multa_l} + \beta_{1,multa_l} * (Nev_{tipico} + Nev_{doenocup})$$
 
-##### FAP
+##### FAP (OK)
 
 Fonte para o cálculo do FAP utilizada: <http://sislex.previdencia.gov.br/paginas/72/MF-CNP/2017/1329.htm>
 
@@ -291,9 +304,13 @@ Os benefícios da inciativa relacionados à imagem foram desmembradas em duas va
 
 $$D_{imagem}  = D_{imagem, contratacao} + D_{imagem, receita}$$
 4 alternativas pensadas para estimar a variável $D_{imagem, receita}$ são estas:
+
 A) Ganho de Mercado Informado;
+
 B) Ganho de Mercado Informado apenas quando se atende a uma taxa máxima de frequência e gravidade (considerando as taxas do INSS);
+
 C) Regressão considerando os índices do INSS e PIB, explicando a variação das propostas ($Propostas * chance de conversão * Receita * margem média$);
+
 D) Não fazer nada: Não inserir o ganho de receita via imagem no modelo.
 
 As despesas com imagem relacionadas a contratação serão estimadas considerando o tempo de contratação médio, custo de contratação e número médio de funcionários contratados.
@@ -304,7 +321,7 @@ A variável de tempo de contratação será estimada por meio de uma regressão 
 
 $$t_{contrat} = \beta_{0,tcontrat} + \beta_{f,tcontrat} * I_{fa} + \beta_{g,tcontrat} * I_{ga} + \beta_{PIB,tcontrat} * var_{PIB}$$
 
-##### Engajamento e Clima organizacional
+##### Engajamento e Clima organizacional (OK)
 
 As despesas relacionadas a engajamento e clima organizacional serão calculadas a partir de desligamentos voluntários projetados.
 
@@ -319,13 +336,13 @@ $$Perc_{desligvoluntarios} = \beta_{0,desvolunt} +\beta_{f,desvolunt} * I_{fa} +
 
 #### Melhor Uso dos Recursos
 
-##### Despesas com Turnover SST / FPS
+##### Despesas com Turnover SST / FPS (OK)
 
 As despesas com Turnover $D_{tur}$ serão calculadas com base no número de funcionários afastados por problemas relacionados à SST $n_{afast}$ e no custo médio de substituição dos funcionários$c_{sub}$.
 
 $$D_{tur} = (Nev_{af_{>15},k} + Nev_{obito,k}) * c_{sub}$$ 
 
-##### Despesas com Absenteísmo
+##### Despesas com Absenteísmo (OK)
 
 As despesas com Absenteísmo $D_{abs}$ serão calculadas com base no número de dias de absenteísmo por problemas relacionados à SST $d_{abs}$, no número de horas trabalhadas por dia $h$ e no custo em mão de obra médio horário $c_{mdo}$.
 
@@ -337,7 +354,7 @@ Os dias de absenteísmo levam em consideração os afastamentos menores do que 1
 
 $$ d_{abs} = Nev_{af<15,k} * D_{medioafast<15} + Nfalta$$
 
-##### Presenteísmo
+##### Presenteísmo (OK)
 
 Assim como o absenteísmo, o presenteísmo será calculado considerando o custo médio da mão de obra, o número de horas trabalhadas e o índice de presenteísmo. O índice será informado para a situação com iniciativa e sem iniciativa. A decisão a ser tomada é como estimar o percentual de presenteísmo (ou seja, se o percentual de presenteísmo atual será informado diretamente ou estimado por meio de um instrumento específico).
 
@@ -379,3 +396,94 @@ O custo médio unitário será igual ao total produzido e os custo operacional.
 $$D_{prod,t} = varcustomed_{unitario,t} * customed_{unitario,t} * prod_{proj,t}$$
 
 $$varcustomed_{unitario,t} = \beta_{0,customed} +\beta_{f,customed} * I_{fa} + \beta_{g,customed} * I_{ga} + \beta_{PIB,customed} * var_{PIB}$$
+
+## Lista de Símbolos e Definições
+| **Símbolo** | **Definição** |
+|-------|-------------------------------------------------------------------------------------------------|
+| $\theta$ | Taxa de desconto a utilizar para trazer o valor dos custos e benefícios a valor presente.
+| $Atendlegisl_{l}$ | Atendimento da legislação |
+| $B_{i}$ | Benefício atribuído ao conjunto de iniciativas em questão em valor presente, onde $i$ indexa a categoria de Iniciativa.|
+| $B_i$ | Benefício gerado pela iniciativa (ou iniciativas) avaliadas, na categoria $i$, em unidades monetárias. |
+| $c$ | Índice que indexa os tipos de eventos.|
+| $c_{mdo}$ | Custo médio horário da mão de obra. |
+| $c_{medrec}$ | Custo Médio da Reclamatória.|
+| $c_{sub}$ | Custo de substituição de um funcionário. | 
+| $C_i$ | Custo atribuído ao conjunto de inciativas em questão, onde $j$ indexa a categoria de custos.|
+| $cmed_{contratacao}$ | Custo médio de contratação de um funcionário. |
+| $cmed_{MP, Ins, Eq}$ | Custo médio com matéria prima, insumos e equipamentos por evento. |
+| $cmed_{refretr}$ | Custo médio em refugo e retrabalho por evento. |
+| $Cmedmulta_{l}$ | Custo médio da multa originada pela lei $l$ |
+| $cmedregressiva_{i}$ | Custo médio de uma ação regressiva do tipo $i$.|
+| $crise$ | Variável que indica a projeção de uma crise no ano em questão.|
+| $custo_{reab}$ | Custos médio com a reabilitação do trabalhador.|
+| $customed_{unitario, t}$ | Custo médio unitário de produção no período $t$. |
+| $D$_{medicas} | Despesas evitadas com medicamento e atendimento médico para tratamento dos acidentes de trabalho.|
+| $d_{abs}$ | Número de dias de absenteísmo por problemas relacionados à SST e FPS. |
+| $D_{ações regressivas INSS}$ | Despesas relacionadas a Ações Regressivas.|
+| $D_{clima}$ | Despesas relacionadas a clima organizacional. |
+| $D_{i, asis}$ | Despesa ocorrida na categoria $i$, considerando o cenário as is.|
+| $D_{i, inic}$ | Despesa ocorrida na categoria $i$, considerando a realização da iniciativa. |
+| $D_{medioafast<15}$ | Dias médios de afastamento menores que 15 dias. |
+| $D_{MP,Ins,Eq}$ | Despesas com matéria prima, insumos e equipamentos. |
+| $D_{multas}$ | Despesas oriundas por exposição à multas.|
+| $D_{planosaude, t-1}$ | Despesas com o plano de saúde do período anterior.|
+| $D_{planosaude,t}$ | Despesas evitadas com planos de saúde via alteração da taxa de sinistralidade.|
+| $D_{prod, t}$ | Ganhos obtidos pela elevação da produtividade da mão-de-obra devido ao ambiente seguro e saudável. | 
+| $D_{qual, t}$ | Ganhos obtidos com elevação da qualidade dos produtos e serviços devido a melhora do ambiente seguro e saudável. | 
+| $D_{reclamatorias}$ | Despesas evitadas com reclamatórias trabalhistas. |
+| $D_{refugretr}$ | Despesas com refugo e retrabalho. |
+| $Dabs$ | Despesas com absenteísmo. |
+| $Deslig_{voluntarios}$ | Funcionários desligados de forma voluntária. | 
+| $dias_{interr, evento}$ | Dias médios interruptidos por eventos.|
+| $dias_{interr, fiscalizacao}$ | Dias médios interruptidos por fiscalização.|
+| $Dimagem$ | Despesa total relacionada à imagem da empresa. |
+| $Dimagem, contratacao$ | Despesa relacionada à imagem da empresa, ocorrida em função do aumento de tempo de contratação em função de eventos acidentários. | 
+| $Dimagem, receita$ | Ganho relacionado à imagem da empresa, obtido em função de aumento de receita. | 
+| $Dinterdicao_{evento}$ | Despesas evitadas com interrupção operacional originados por acidentes ou óbitos.|
+| $Dinterdicao_{fiscalizacao}$ | Despesas evitadas com interdições por fiscalização.|
+| $Dmed_{medicas}$ | Despesa médica média com medicamento e atendimento médico.|
+| $Dpresenteismo$ | Despesas com presenteísmo. |
+| $Dreab$ | Despesas com reabilitação do trabalhador.|
+| $Dtur$ | Despesas com turnover. | 
+| $Evento_{fiscalizacao}$ | Probabilidade de acontecer um evento de interdização por fiscalização.|
+| $f$ | Número de Funcionários da Empresa.|
+| $f_{crise}$ | Fator multiplicativo relacionado à ocorrência de uma crise financeira.|
+| $f_{desligacumulado}$ | Número de Funcionários desligados pela empresa.|
+| $IC$ | Índice composto do FAP. | 
+| $Ic$ | Índice de custo do FAP. | 
+| $If$ | Índice de frequência do FAP. |
+| $Ig$ | Índice de gravidade do FAP. |
+| $k$ | Índice que indexa os tipos de acidentes. |
+| $lucrocessante$ | Lucro cessante médio diário oriundo de cada acidente.|
+| $margemmed_{unitario, t}$ | Margem média de contribuição unitária no período $t$. |
+| $N_{b31}$ | Número de Auxílios Doença Previdenciário. |
+| $N_{b32}$ | Número de Aposentadorias Invalidez Previdenciário. |
+| $N_{b91}$ | Número de Auxílios Doença Acidentário.|
+| $N_{b92}$ | Número de Aposentadorias por Invalidez Acidentária.|
+| $N_{b93}$ | Número de Pensões por Morte Acidentária.|
+| $N_{b94}$ | Número de Auxílio Acidente. |
+| $n_{reclamatorias}$ | Número de Reclamatórias trabalhistas relacionadas a SST.|
+| $Nacumulado_{i}$ |Número de benefícios acumulados do tipo $i\ \forall\ B$ |
+| $NB_{i,t}$ | Número de benefícios acumulados, considerando o período atual e os períodos anteriores. $i$ indexa os tipos de benefícios, $i \in \ I =\{N_{b91}, N_{b92}, N_{b93}, N_{b94}\}$. |
+| $Nev_{c,k}$ | Número de Eventos $c$ gerados a partir do acidente do tipo $k$.|
+| $Nfalta$ | Número total de faltas. |
+| $Nmultas'_{l}$ | Número de multas aplicadas oriundas da lei $l$.|
+| $Nmultas_{l}$ | Número de multas estimados de acordo com os eventos de acidentes típicos e doenças ocupacionais.|
+| $p_{ajuizarEganharreclamatoria}$ | Probabilidade de um funcionário demitido entrar com uma reclamatória e ganhar a causa.|
+| $P_{Invalidez}$ | Percentual dos Acidentes com afastamento maior do que quinze dias que gera invalidez. |
+| $p_{reab}$ | a.| Percentual de trabalhadores reabilitados.|
+| $p_{t}$ | Percentil de acorodo com o posicionamento da empresa em relação as demais, onde $t \in {f,g,c}$ | 
+| $p_iacaoregressiva$ | Probabilidade de acontecer uma ação regressiva.|
+| $Perc_{desligvoluntarios}$ | Percentual de desligamento voluntário. | 
+| $Perc_{present}$ | Percentual de presenteísmo. |
+| $Pev_{c}$ | Probabilidade do evento $c$ ocorrer. |
+| $Pev_{k}$ | Percentual de Funcionários que irá sofrer o evento $k$ em um período. Equivalente ao percentual de funcionários da empresa a sofrer o evento. |
+| $Pev_{k}$ | Probabilidade do tipo de acidente $k$ ocorrer. Equivalente ao percentual de funcionários da empresa a sofrer o evento.|
+| $prod_{proj, t}$ | Produção projetada no período $t$. | 
+| $prod_{proj, t}$ | Volume de produção projetada no período $t$. | 
+| $RBC$ | Razão Benefício-Custo. Para 1 Real investido na iniciativa indicada, retornam $\alpha$ reais.|
+| $Reaj_{estimado, t}$ | Percentual de reajuste estimado no período $t$.|
+| $t_{contrat}$ | Tempo de contratação médio de um funcionário. |
+| $T_falta$ | Taxa de Faltas. (Faltas por Funcionário por Período).|
+| $var_{volumevenda, t}$ | Variação no volume de venda projetada no período $t$. | 
+| $varcustomed_{unitario, t}$ | Variação no custo médio unitário de produção. |
