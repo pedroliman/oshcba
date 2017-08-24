@@ -627,7 +627,7 @@ calcular_acoes_regressivas_inss = function(parametros){
 
 }
 
-############ IMAGEM ##################
+############ IMAGEM - TEMPO DE CONTRATAÇÃO ##################
 calcular_imagem_contracacao = function(parametros) {
 
   # Inputs
@@ -639,7 +639,6 @@ calcular_imagem_contracacao = function(parametros) {
   If = c("IndiceFrequenciaAmpliado")
   Ig = c("IndiceGravidadeAmpliado")
 
-
   # Calculando Tempo de Contratacao Estimado
   parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
 
@@ -649,6 +648,17 @@ calcular_imagem_contracacao = function(parametros) {
   parametros
 }
 
+
+############ IMAGEM - GANHO DE RECEITA ##################
+calcular_imagem_receita = function(parametros) {
+
+  parametros["HouveGanhoImagemReceita"] = ifelse(
+    all(c(parametros["IndiceFrequenciaAmpliado"] <= parametros["IFrMaximoImagem"], parametros["IndiceGravidadeAmpliado"] <= parametros["IGrMaximoImagem"])),
+        TRUE,
+        FALSE)
+  parametros["GanhoImagemReceita"] = parametros["HouveGanhoImagemReceita"] * parametros["GanhoImagemReceitaEsperado"]
+  parametros
+}
 
 
 ############ PRODUTIVIDADE ##################
