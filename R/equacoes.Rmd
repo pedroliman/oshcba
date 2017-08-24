@@ -315,7 +315,7 @@ D) Não fazer nada: Não inserir o ganho de receita via imagem no modelo.
 
 As despesas com imagem relacionadas a contratação serão estimadas considerando o tempo de contratação médio, custo de contratação e número médio de funcionários contratados.
 
-$$D_{imagem, contratacao} =  \frac{t_{contrat,t}}{t_{contrat,t0}} * cmed * Turn_geral * f$$
+$$D_{imagem, contratacao} =  (t_{contrat,t} - t_{contrat,t0}) * cmed_{diario} * Turn_geral * f$$
 
 A variável de tempo de contratação será estimada por meio de uma regressão linear, considerando o número de eventos do ano anterior (considerando acidentes com afastamento maior do que 15 dias e óbitos).
 

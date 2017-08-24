@@ -627,6 +627,29 @@ calcular_acoes_regressivas_inss = function(parametros){
 
 }
 
+############ IMAGEM ##################
+calcular_imagem_contracacao = function(parametros) {
+
+  # Inputs
+  beta0 = c("Beta0TempoContratacao")
+  betafreq = c("BetaFreqTempoContratacao")
+  betagrav = c("BetaGravTempoContratacao")
+  betapib = c("BetaPIBTempoContratacao")
+  varpib = c("VarPIB")
+  If = c("IndiceFrequenciaAmpliado")
+  Ig = c("IndiceGravidadeAmpliado")
+
+
+  # Calculando Tempo de Contratacao Estimado
+  parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+
+
+  # Calculando Despesas com Contratacao relacionadas à Imagem
+  parametros["DespesasImagemContratacao"] = (parametros["TempoContratacaoEstimado"] - parametros["TempoContratacaoPadrao"]) * parametros["CustoMedSubstituporTempo"] * parametros["TurnoverGeral"] * parametros["Funcionarios"]
+  parametros
+}
+
+
 
 ############ PRODUTIVIDADE ##################
 calcular_produtividade = function(parametros) {
