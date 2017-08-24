@@ -552,21 +552,55 @@ calcular_multas = function(parametros){
    n_multas_l * -cmed
   }
 
-  numero_multas_l = function(atend_legislacao, crise, fator_crise, numero_multas_a_priori) {
-    numero_multas = (1 - atend_legislacao) * numero_multas_a_priori * (1 + (crise * fator_crise))
+  numero_multas_l = function(atend_legislacao, numero_multas_a_priori) {
+    numero_multas = (1 - atend_legislacao) * numero_multas_a_priori
     numero_multas = if((numero_multas[1,]) < 0) {0} else {round(numero_multas,0)}
     numero_multas
   }
 
-  # Calculando Numero de Multas para uma Lei
-  parametros["NumeroMultas_Lei1"] = numero_multas_l(atend_legislacao = parametros["Atendimento_Lei1"],
-                                                    crise = parametros["Crise"],
-                                                    fator_crise = parametros["FatorCrise"],
-                                                    numero_multas_a_priori = parametros["NumeroMultasAPriori_Lei1"])
 
-  # Calculando Despesa com Multas para uma Lei
-  parametros["DespesaMultas"] = despesa_multas(n_multas_l = parametros["NumeroMultas_Lei1"],
-                                               cmed = parametros["CustoMedioMulta_Lei1"])
+  atendimento_a_lei = c("Atendimento_Lei1", "Atendimento_Lei2", "Atendimento_Lei3", "Atendimento_Lei4", "Atendimento_Lei5")
+
+  numero_multas_a_priori = c("NumeroMultasAPriori_Lei1", "NumeroMultasAPriori_Lei2", "NumeroMultasAPriori_Lei3", "NumeroMultasAPriori_Lei4", "NumeroMultasAPriori_Lei5")
+
+  numero_multas = c("NumeroMultas_Lei1", "NumeroMultas_Lei2", "NumeroMultas_Lei3", "NumeroMultas_Lei4", "NumeroMultas_Lei5")
+
+  beta0 = c("Beta0Multa1", "Beta0Multa2", "Beta0Multa3", "Beta0Multa4", "Beta0Multa5")
+
+  beta1 = c("Beta1Multa1", "Beta1Multa2", "Beta1Multa3", "Beta1Multa4", "Beta1Multa5")
+
+  custo_medio_multa = c("CustoMedioMulta_Lei1", "CustoMedioMulta_Lei2", "CustoMedioMulta_Lei3", "CustoMedioMulta_Lei4", "CustoMedioMulta_Lei5")
+
+  ## Isto deve ser testado!! (Aqui pode ter erro)
+  acidentes = c("Tipico", "DoenOcup")
+  eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
+
+
+  # Calculando o Número de Multas com a Regressão
+  parametros[numero_multas_a_priori] = parametros[beta0] + parametros[beta1] * somar_eventos(parametros,vetor_acidentes = acidentes, vetor_eventos = eventos)
+
+
+  # Ajustando para que o Numero de multas não seja menor que zero
+  parametros[numero_multas_a_priori] = parametros[numero_multas_a_priori] * as.data.frame(parametros[numero_multas_a_priori] > 0)
+
+
+  parametros[numero_multas] = ((1 - parametros[atendimento_a_lei]) * parametros[numero_multas_a_priori])
+
+  ajustar_crise = function(x) {
+    x = x * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
+    x
+  }
+
+  # Aplicando o Fator Crise - Usar
+  parametros[numero_multas] = as.data.frame(purrr::map(parametros[numero_multas],ajustar_crise))
+
+  # Arredondado
+  parametros[numero_multas] = round(parametros[numero_multas],0)
+
+  # Ajustando variáveis negativas e Arredondando
+  parametros["DespesaMultas"] = rowSums(despesa_multas(n_multas_l = parametros[numero_multas],
+                                               cmed = parametros[custo_medio_multa]))
+
   parametros
 
 }
@@ -679,7 +713,6 @@ calcular_qualidade = function(parametros) {
 conferir_params = function(parametros, inputs) {
 
   mensagem = "Confira seu arquivo de dados. Voce nao informou todos os parametros."
-
   # Conferir se os parmetros contem as variaveis necessarias
   if (!all(inputs %in% colnames(parametros))) {
     stop(mensagem, call. = TRUE)

@@ -153,7 +153,6 @@ simular_e_mostrar_resultados = function() {
   View(results$Resultados_Descontados)
   View(results$Resultados_CBR)
   colnames(results$Resultados_Descontados)
-
-  results$Resultados_Descontados
+  results
 }
 
