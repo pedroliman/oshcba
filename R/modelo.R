@@ -628,6 +628,20 @@ calcular_acoes_regressivas_inss = function(parametros){
 }
 
 
+############ PRODUTIVIDADE ##################
+calcular_produtividade = function(parametros) {
+  parametros["GanhoProdutividade"] = parametros["SavingProdutividade"] * parametros["ProducaoProjetada"]
+  parametros
+}
+
+############ QUALIDADE ##################
+calcular_qualidade = function(parametros) {
+  parametros["GanhoQualidade"] = parametros["VarVolumeVendaQualidade"] * parametros["MargemMedUnitaria"] *  parametros["ProducaoProjetada"]
+  parametros
+}
+
+
+
 ### FUNCOES NAO UTILIZADAS ####
 conferir_params = function(parametros, inputs) {
 
