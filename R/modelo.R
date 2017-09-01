@@ -711,6 +711,29 @@ calcular_qualidade = function(parametros) {
 }
 
 
+############ INTERRUPÇÃO OPERACIONAL POR ACIDENTE ##################
+calcular_interrupcao_acidentes = function(parametros) {
+
+  vetor_acidentes = c("Tipico")
+  vetor_eventos = c("Afmenor15", "Afmaior15", "Safast")
+  SomaOutros = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+
+  vetor_eventos = c("Obito")
+  SomaObitos = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+
+  parametros["DiasTotaisInterrupcaoAcidente"] = parametros["DiasInterrupcaoAcidenteObito"] * SomaObitos + parametros["DiasInterrupcaoAcidenteOutros"] * SomaOutros
+  parametros["DespesasInterrupcaoAcidentes"] = parametros["DiasTotaisInterrupcaoAcidente"] * parametros["LucroCessanteDiario"]
+  parametros
+}
+
+
+############ INTERRUPÇÃO OPERACIONAL POR FISCALIZAÇÃO ##################
+calcular_interdicao_fiscalizacao = function(parametros) {
+  parametros["DespesasInterdicaoFiscalizacao"] = parametros["EventoInterdicao"] * parametros["DiasInterdicaoFiscalizacao"] * parametros["LucroCessanteDiario"] * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
+  parametros
+}
+
+
 
 ### FUNCOES NAO UTILIZADAS ####
 conferir_params = function(parametros, inputs) {
