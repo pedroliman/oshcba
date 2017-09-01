@@ -11,6 +11,10 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = inputs$Funcoes_Inputs,
                                 output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes)
 
+  message("03. simular.R/simular: Simulando FAP.")
+  resultados = calcular_fap(parametros = resultados, historico = inputs$HistoricoFAP)
+
+
   message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
 
   # Descontando Variaveis Monetarias

@@ -1,21 +1,6 @@
 ##### FAP #######
 
-
-
-calcular_fap = function() {
-  resultados = simular_cba(modo = "completo")
-
-
-  # Retirar da funcao
-  parametros = resultados$Resultados
-
-  oshcba_options = obter_oshcba_options()
-
-  inputs = carregar_inputs(abas_a_ler = oshcba_options$abas_a_ler,
-                           nomes_inputs = oshcba_options$nomes_inputs)
-
-  historico = inputs$HistoricoFAP
-
+calcular_fap = function(parametros, historico) {
 
   # Calculando o Custo Total em Beneficios considerando dados simulados
   parametros["CustoTotalBeneficiosFAP"] =
