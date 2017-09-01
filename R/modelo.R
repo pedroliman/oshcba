@@ -609,9 +609,12 @@ calcular_multas = function(parametros){
 ############ ACOES REGRESSIVAS ##################
 calcular_acoes_regressivas_inss = function(parametros){
 
-  vetor_eventos_acao_regressiva_inss_afmaior15 = c("Nev_Afmaior15_Tipico", "Nev_Afmaior15_Trajeto", "Nev_Afmaior15_DoenOcup")
+  # vetor_eventos_acao_regressiva_inss_afmaior15 = c("Nev_Afmaior15_Tipico", "Nev_Afmaior15_Trajeto", "Nev_Afmaior15_DoenOcup")
+  #
+  # vetor_eventos_acao_regressiva_inss_obitos = c("Nev_Obito_Tipico", "Nev_Obito_Trajeto", "Nev_Obito_DoenOcup")
 
-  vetor_eventos_acao_regressiva_inss_obitos = c("Nev_Obito_Tipico", "Nev_Obito_Trajeto", "Nev_Obito_DoenOcup")
+  beneficios = c("NB_91_Acumulado", "NB_92_Acumulado", "NB_93_Acumulado", "NB_94_Acumulado")
+  custos_medios = c("CustoMedio_NB_91", "CustoMedio_NB_92", "CustoMedio_NB_93", "CustoMedio_NB_94")
 
 
   # Vai ter que mudar quando tivermos mais do que uma lei
@@ -627,36 +630,36 @@ calcular_acoes_regressivas_inss = function(parametros){
 
 
   # Calculando Numero de eventos para acao regressiva
-  parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_afmaior15])*parametros["PInvalidez"]
-  parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_obitos]) + parametros["Nev_AcaoRegressivaINSS"]
+  # parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_afmaior15])*parametros["PInvalidez"]
+  # parametros["Nev_AcaoRegressivaINSS"] = rowSums(parametros[vetor_eventos_acao_regressiva_inss_obitos]) + parametros["Nev_AcaoRegressivaINSS"]
 
-  # Calculando Acoes Regressivas Acumuladas
-  AnoInicial = min(parametros$Ano)
-  AnoMaximo = max(parametros$Ano)
+  parametros["NB_AcaoRegressivaINSSAcumulado"] = rowSums(parametros[beneficios])
 
   # Ordenando o Df para o Calculo Iterativo
   # parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
 
-  # Calculando o N Acumulado de modo Recursivo
-  for (l in 1:nrow(parametros)) {
-    parametros[l,"Nev_AcaoRegressivaINSSAcumulado"] = if (parametros[l,"Ano"] == AnoInicial ) {
-      parametros[l,"Nev_AcaoRegressivaInicial"] + parametros[l,"Nev_AcaoRegressivaINSS"]
-    } else {
-      parametros[l,"Nev_AcaoRegressivaINSS"] + parametros[l-1,"Nev_AcaoRegressivaINSSAcumulado"]
-    }
-  }
+  # # Calculando o N Acumulado de modo Recursivo
+  # for (l in 1:nrow(parametros)) {
+  #   parametros[l,"Nev_AcaoRegressivaINSSAcumulado"] = if (parametros[l,"Ano"] == AnoInicial ) {
+  #     parametros[l,"Nev_AcaoRegressivaInicial"] + parametros[l,"Nev_AcaoRegressivaINSS"]
+  #   } else {
+  #     parametros[l,"Nev_AcaoRegressivaINSS"] + parametros[l-1,"Nev_AcaoRegressivaINSSAcumulado"]
+  #   }
+  # }
 
 
-  # Calculando Numero de Multas para uma Lei
+  # Calculando Numero de Acoes Regressivas
   parametros["AcoesRegressivasINSS"] = acoes_regressivas_inss(crise = parametros$Crise,
                                                               fator_crise = parametros$FatorCrise,
-                                                              n_acumulado = parametros$Nev_AcaoRegressivaINSSAcumulado,
+                                                              n_acumulado = parametros$NB_AcaoRegressivaINSSAcumulado,
                                                               p_acao_regressiva = parametros$PAcaoRegressiva)
 
+  # Calculando o Custo Medio Ponderado..
 
+  parametros["CustoMedioPonderadoAcaoRegressiva"] = rowSums(parametros[beneficios] * parametros[custos_medios])/rowSums(parametros[beneficios])
 
   parametros["DespesaAcoesRegressivasINSS"] = despesa_acoes_regressivas_inss(acoes_regressivas = parametros["AcoesRegressivasINSS"],
-                                               cmed = parametros["CustoMedioAcaoRegressivaINSS"])
+                                               cmed = parametros["CustoMedioPonderadoAcaoRegressiva"])
   parametros
 
 }
