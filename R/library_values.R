@@ -26,6 +26,8 @@ oshcba_options = list(
                             , "DespesaPresenteismo"
                             , "DespesasInterrupcaoAcidentes"
                             , "DespesasInterdicaoFiscalizacao"
+                            , "GanhoQualidade"
+                            , "GanhoProdutividade"
                             ),
 
   # Nomes de Variaveis
