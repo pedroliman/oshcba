@@ -1,31 +1,41 @@
 ############# EVENTOS E CONSEQUENCIAS #################
 
 calcular_eventos = function(parametros) {
-
-  separador = oshcba_options$separador_dimensoes
-  prefixo_inputs = oshcba_options$pref_prob_ev
-  prefixo_outputs = oshcba_options$pref_n_ev
-  eventos_k = oshcba_options$vetor_eventos_k
-  consequencias_c = oshcba_options$vetor_consequencias_c
-
-  vetor_inputs_eventos = paste(prefixo_inputs, eventos_k, sep = separador)
-  vetor_inputs_consequencias = paste(prefixo_inputs, consequencias_c, sep = separador)
+#
+#   separador = oshcba_options$separador_dimensoes
+#   prefixo_inputs = oshcba_options$pref_prob_ev
+#   prefixo_outputs = oshcba_options$pref_n_ev
+#   eventos_k = oshcba_options$vetor_eventos_k
+#   consequencias_c = oshcba_options$vetor_consequencias_c
+#
+#   vetor_inputs_eventos = paste(prefixo_inputs, eventos_k, sep = separador)
+#   vetor_inputs_consequencias = paste(prefixo_inputs, consequencias_c, sep = separador)
 
   matriz_outputs = obter_matriz_eventos(parametros)
   vetor_outputs = as.vector(matriz_outputs)
 
-  df_valores_input_eventos = parametros[vetor_inputs_eventos]
-  df_valores_input_conseq = parametros[vetor_inputs_consequencias]
+# Código usado anteriormente para calcular eventos com base em 8 Probabilidades.
+#   df_valores_input_eventos = parametros[vetor_inputs_eventos]
+#   df_valores_input_conseq = parametros[vetor_inputs_consequencias]
+#
+#   num_colunas = length(vetor_inputs_eventos)*length(vetor_inputs_consequencias)
+#
+#   multiplicar_por_conseq = function(x) {
+#     x * df_valores_input_conseq
+#   }
+#
+#   df_inputs = as.data.frame(purrr::map(df_valores_input_eventos, multiplicar_por_conseq))
+#
+  vetor_inputs = c("Pev_Afmenor15_Tipico", "Pev_Afmaior15_Tipico", "Pev_Safast_Tipico",
+                   "Pev_Obito_Tipico", "Pev_Afmenor15_Trajeto", "Pev_Afmaior15_Trajeto",
+                   "Pev_Safast_Trajeto", "Pev_Obito_Trajeto", "Pev_Afmenor15_DoenOcup",
+                   "Pev_Afmaior15_DoenOcup", "Pev_Safast_DoenOcup", "Pev_Obito_DoenOcup",
+                   "Pev_Afmenor15_NRelac", "Pev_Afmaior15_NRelac", "Pev_Safast_NRelac",
+                   "Pev_Obito_NRelac")
 
-  num_colunas = length(vetor_inputs_eventos)*length(vetor_inputs_consequencias)
+  # parametros[vetor_outputs] = formula_eventos_e_consequencias(f = parametros$Funcionarios, P_result = df_inputs)
 
-  multiplicar_por_conseq = function(x) {
-    x * df_valores_input_conseq
-  }
-
-  df_inputs = as.data.frame(purrr::map(df_valores_input_eventos, multiplicar_por_conseq))
-
-  parametros[vetor_outputs] = formula_eventos_e_consequencias(f = parametros$Funcionarios, P_result = df_inputs)
+  parametros[vetor_outputs] = formula_eventos_e_consequencias(f = parametros$Funcionarios, P_result = parametros[vetor_inputs])
   parametros
 
 }
