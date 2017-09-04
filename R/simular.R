@@ -47,11 +47,32 @@ calcular_cbr = function(resultados, cenarios) {
   ### Sintetizando Resultados por Cenario e Replicacao
   ## Lembrar:
   resultados_sintetizados = resultados %>% group_by(Cenario, Replicacao) %>%
-    summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
-              Soma_DespesaTurnover = sum(DespesaTurnoverDescontado),
-              Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado),
-              Soma_DespesaMultas = sum(DespesaMultasDescontado),
-              Soma_DespesaAcoesRegressivasINSS = sum(DespesaAcoesRegressivasINSSDescontado))
+    summarise(
+      Soma_CustoTotalDescontado = sum(CustoTotalDescontado),
+      Soma_DespesaTurnoverDescontado = sum(DespesaTurnoverDescontado),
+      Soma_DespesaAbsenteismoDescontado = sum(DespesaAbsenteismoDescontado),
+      Soma_DespesaMultasDescontado = sum(DespesaMultasDescontado),
+      Soma_DespesaAcoesRegressivasINSSDescontado = sum(DespesaAcoesRegressivasINSSDescontado),
+      Soma_DespesaFAPDescontado = sum(DespesaFAPDescontado),
+      Soma_DespesasImagemContratacaoDescontado = sum(DespesasImagemContratacaoDescontado),
+      Soma_DespesasReabilitacaoDescontado = sum(DespesasReabilitacaoDescontado),
+      Soma_DespesasPlanodeSaudeDescontado = sum(DespesasPlanodeSaudeDescontado),
+      Soma_DespesasReclamatoriasDescontado = sum(DespesasReclamatoriasDescontado),
+      Soma_DespesasClimaDescontado = sum(DespesasClimaDescontado),
+      Soma_DespesasMedicasDescontado = sum(DespesasMedicasDescontado),
+      Soma_DespesasRefugoERetrabalhoDescontado = sum(DespesasRefugoERetrabalhoDescontado),
+      Soma_DespesasMPInsumosDescontado = sum(DespesasMPInsumosDescontado),
+      Soma_DespesaPresenteismoDescontado = sum(DespesaPresenteismoDescontado),
+      Soma_DespesasInterrupcaoAcidentesDescontado = sum(DespesasInterrupcaoAcidentesDescontado),
+      Soma_DespesasInterdicaoFiscalizacaoDescontado = sum(DespesasInterdicaoFiscalizacaoDescontado),
+      Soma_GanhoQualidadeDescontado = sum(GanhoQualidadeDescontado),
+      Soma_GanhoProdutividadeDescontado = sum(GanhoProdutividadeDescontado)
+    )
+    # summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
+    #           Soma_DespesaTurnover = sum(DespesaTurnoverDescontado),
+    #           Soma_DespesaAbsenteismo = sum(DespesaAbsenteismoDescontado),
+    #           Soma_DespesaMultas = sum(DespesaMultasDescontado),
+    #           Soma_DespesaAcoesRegressivasINSS = sum(DespesaAcoesRegressivasINSSDescontado))
 
   resultados_sintetizados = inner_join(resultados_sintetizados, cenarios,
                                        by = "Cenario")
@@ -69,22 +90,50 @@ calcular_cbr = function(resultados, cenarios) {
                               by = "Replicacao")
 
   ### Calculando Beneficios Totais, Custos e Razao Custo Beneficio
-  resultados_CBR = resultados_CBR %>% mutate(CustoTotalCBR = custo(Soma_CustoTotal.y,
-                                                                   Soma_CustoTotal.x),
-                                             BeneficioTurnover = beneficio(Soma_DespesaTurnover.y,
-                                                                           Soma_DespesaTurnover.x),
-                                             BeneficioAbsenteismo = beneficio(Soma_DespesaAbsenteismo.y,
-                                                                           Soma_DespesaAbsenteismo.x),
-                                             BeneficioMultas = beneficio(Soma_DespesaMultas.y,
-                                                                              Soma_DespesaMultas.x),
-                                             BeneficioAcoesRegressivasINSS = beneficio(Soma_DespesaAcoesRegressivasINSS.y,
-                                                                                       Soma_DespesaAcoesRegressivasINSS.x)) %>% ## Aqui entrariam outros beneficios
-    mutate(BeneficioTotalCBR = BeneficioTurnover + BeneficioAbsenteismo + BeneficioMultas + BeneficioAcoesRegressivasINSS + 0) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
+  resultados_CBR = resultados_CBR %>% mutate(
+    CustoTotalCBR = custo(Soma_CustoTotalDescontado.y, Soma_CustoTotalDescontado.x),
+    BeneficioTurnover = beneficio(Soma_DespesaTurnoverDescontado.y, Soma_DespesaTurnoverDescontado.x),
+    BeneficioAbsenteismo = beneficio(Soma_DespesaAbsenteismoDescontado.y, Soma_DespesaAbsenteismoDescontado.x),
+    BeneficioMultas = beneficio(Soma_DespesaMultasDescontado.y, Soma_DespesaMultasDescontado.x),
+    BeneficioAcoesRegressivasINSS = beneficio(Soma_DespesaAcoesRegressivasINSSDescontado.y, Soma_DespesaAcoesRegressivasINSSDescontado.x),
+    BeneficioFAP = beneficio(Soma_DespesaFAPDescontado.y, Soma_DespesaFAPDescontado.x),
+    BeneficioImagemContratacao = beneficio(Soma_DespesasImagemContratacaoDescontado.y, Soma_DespesasImagemContratacaoDescontado.x),
+    BeneficioReabilitacao = beneficio(Soma_DespesasReabilitacaoDescontado.y, Soma_DespesasReabilitacaoDescontado.x),
+    BeneficioPlanodeSaude = beneficio(Soma_DespesasPlanodeSaudeDescontado.y, Soma_DespesasPlanodeSaudeDescontado.x),
+    BeneficioReclamatorias = beneficio(Soma_DespesasReclamatoriasDescontado.y, Soma_DespesasReclamatoriasDescontado.x),
+    BeneficioClima = beneficio(Soma_DespesasClimaDescontado.y, Soma_DespesasClimaDescontado.x),
+    BeneficioDespesasMedicas = beneficio(Soma_DespesasMedicasDescontado.y, Soma_DespesasMedicasDescontado.x),
+    BeneficioRefugoERetrabalho = beneficio(Soma_DespesasRefugoERetrabalhoDescontado.y, Soma_DespesasRefugoERetrabalhoDescontado.x),
+    BeneficioMPInsumos = beneficio(Soma_DespesasMPInsumosDescontado.y, Soma_DespesasMPInsumosDescontado.x),
+    BeneficioPresenteismo = beneficio(Soma_DespesaPresenteismoDescontado.y, Soma_DespesaPresenteismoDescontado.x),
+    BeneficioInterrupcaoAcidentes = beneficio(Soma_DespesasInterrupcaoAcidentesDescontado.y, Soma_DespesasInterrupcaoAcidentesDescontado.x),
+    BeneficioInterdicaoFiscalizacao = beneficio(Soma_DespesasInterdicaoFiscalizacaoDescontado.y, Soma_DespesasInterdicaoFiscalizacaoDescontado.x),
+    BeneficioGanhoQualidade = beneficio(Soma_GanhoQualidadeDescontado.y, Soma_GanhoQualidadeDescontado.x),
+    BeneficioGanhoProdutividade = beneficio(Soma_GanhoProdutividadeDescontado.y, Soma_GanhoProdutividadeDescontado.x)
+    ) %>% ## Aqui entrariam outros beneficios
+    mutate(BeneficioTotalCBR = BeneficioTurnover +
+             BeneficioAbsenteismo +
+             BeneficioMultas +
+             BeneficioAcoesRegressivasINSS +
+             BeneficioFAP +
+             BeneficioImagemContratacao +
+             BeneficioReabilitacao +
+             BeneficioPlanodeSaude +
+             BeneficioReclamatorias +
+             BeneficioClima +
+             BeneficioDespesasMedicas +
+             BeneficioRefugoERetrabalho +
+             BeneficioMPInsumos +
+             BeneficioPresenteismo +
+             BeneficioInterrupcaoAcidentes +
+             BeneficioInterdicaoFiscalizacao +
+             BeneficioGanhoQualidade +
+             BeneficioGanhoProdutividade) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
                                                                                               costs = CustoTotalCBR))
 
   ### Mantendo Apenas Variaveis uteis
 
-  resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotal.x, -Soma_CustoTotal.y)
+  resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotalDescontado.x, -Soma_CustoTotalDescontado.y)
   message("07. simular.R/calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
   return(resultados_CBR)
 }
