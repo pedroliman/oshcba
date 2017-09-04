@@ -212,7 +212,7 @@ calcular_reclamatorias = function(parametros) {
   parametros["NReclamatorias"] = parametros["FuncionariosDesligadosAcumulado"] * parametros["PReclamatoria"]
 
   # Calculando Despesas com Reclamatórias
-  parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * parametros["CustoMedioReclamatorias"]
+  parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * -parametros["CustoMedioReclamatorias"]
 
   parametros
 }
@@ -245,7 +245,7 @@ calcular_reajustes_plano = function(parametros) {
   # Calculando as Despesas Iterativamente
   for (l in 1:nrow(parametros)) {
     parametros[l,despesas] = if (parametros[l,"Ano"] == ano_inicial) {
-      parametros[l,despesas_inicial]
+      -parametros[l,despesas_inicial]
     } else {
       parametros[l-1,despesas] * parametros[l,reaj]
     }
@@ -266,7 +266,7 @@ calcular_reabilitacao = function(parametros) {
   parametros["EventosReabilitacao"] = round(somar_eventos(parametros,vetor_acidentes = acidentes, vetor_eventos = eventos) * parametros["PercentualReabilitacao"], 0)
 
   # Calculando Custo de Reabilitação
-  parametros["DespesasReabilitacao"] = parametros["EventosReabilitacao"] * parametros["CustoMedioReabilitacao"]
+  parametros["DespesasReabilitacao"] = parametros["EventosReabilitacao"] * -parametros["CustoMedioReabilitacao"]
 
   parametros
 }
@@ -347,7 +347,7 @@ calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_ev
   parametros[eventos] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
   # Calculando Despesas
-  parametros[despesa] = parametros[eventos] * parametros[customedio]
+  parametros[despesa] = parametros[eventos] * -parametros[customedio]
 
   parametros
 
@@ -476,7 +476,7 @@ calcular_presenteismo = function(parametros) {
   parametros[horas_presenteismo] = parametros[funcionarios] * parametros[perc_presenteismo] * parametros[horas_por_dia]
 
   # Calculando Despesa em Presenteismo
-  parametros[despesa_presenteismo] = parametros[horas_presenteismo] * parametros[custo_mdo]
+  parametros[despesa_presenteismo] = parametros[horas_presenteismo] * -parametros[custo_mdo]
 
   parametros
 
@@ -548,7 +548,7 @@ calcular_engajamento = function(parametros) {
   parametros[deslig] = round(parametros[perc] * parametros[func], 0)
 
   # Calculando Custos com Desligamentos Voluntários
-  parametros[despesas] = parametros[deslig] * parametros[customed]
+  parametros[despesas] = parametros[deslig] * -parametros[customed]
 
   parametros
 }
@@ -691,7 +691,7 @@ calcular_imagem_contracacao = function(parametros) {
 
 
   # Calculando Despesas com Contratacao relacionadas à Imagem
-  parametros["DespesasImagemContratacao"] = (parametros["TempoContratacaoEstimado"] - parametros["TempoContratacaoPadrao"]) * parametros["CustoMedSubstituporTempo"] * parametros["TurnoverGeral"] * parametros["Funcionarios"]
+  parametros["DespesasImagemContratacao"] = -(parametros["TempoContratacaoEstimado"] - parametros["TempoContratacaoPadrao"]) * parametros["CustoMedSubstituporTempo"] * parametros["TurnoverGeral"] * parametros["Funcionarios"]
   parametros
 }
 
@@ -732,14 +732,14 @@ calcular_interrupcao_acidentes = function(parametros) {
   SomaObitos = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
   parametros["DiasTotaisInterrupcaoAcidente"] = parametros["DiasInterrupcaoAcidenteObito"] * SomaObitos + parametros["DiasInterrupcaoAcidenteOutros"] * SomaOutros
-  parametros["DespesasInterrupcaoAcidentes"] = parametros["DiasTotaisInterrupcaoAcidente"] * parametros["LucroCessanteDiario"]
+  parametros["DespesasInterrupcaoAcidentes"] = parametros["DiasTotaisInterrupcaoAcidente"] * -parametros["LucroCessanteDiario"]
   parametros
 }
 
 
 ############ INTERRUPÇÃO OPERACIONAL POR FISCALIZAÇÃO ##################
 calcular_interdicao_fiscalizacao = function(parametros) {
-  parametros["DespesasInterdicaoFiscalizacao"] = parametros["EventoInterdicao"] * parametros["DiasInterdicaoFiscalizacao"] * parametros["LucroCessanteDiario"] * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
+  parametros["DespesasInterdicaoFiscalizacao"] = parametros["EventoInterdicao"] * parametros["DiasInterdicaoFiscalizacao"] * -parametros["LucroCessanteDiario"] * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
   parametros
 }
 
