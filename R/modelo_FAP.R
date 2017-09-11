@@ -127,16 +127,34 @@ calcular_fap = function(parametros, historico) {
 
   # Calculando FAP (aqui precisamos de mais um loop, porque o FAP inicial é)
 
-  parametros["FAP"] = (0.5*parametros["PercentilGravidadeFAP"] + 0.35 * parametros["PercentilFrequenciaFAP"] + 0.15 * parametros["PercentilCustoFAP"])*0.02
+  parametros["FAPSemAjuste"] = (0.5*parametros["PercentilGravidadeFAP"] + 0.35 * parametros["PercentilFrequenciaFAP"] + 0.15 * parametros["PercentilCustoFAP"])*0.02
 
 
-  # Aqui ainda podem haver ajustes no FAP (que não estão na planilha)
-  # Calculando o RAT Ajustado
-  parametros["RATAjustado"] = parametros["FAP"] * parametros["RATTabela"]
+  # # Ajustes do FAP:
+  # # Se FAP < 1 -> IC = 0.5 + 0.5 * IC
+  # parametros["AjustarFAP"] = parametros["FAPSemAjuste"] < 1
+  #
+  # dplyr::mutate(parametros, FAP = ifelse(AjustarFAP == TRUE, 2, 3))
+  #
+  # parametros["FAP"] = ifelse(parametros["FAPSemAjuste"] < 1, parametros["FAPSemAjuste"] * 0.5 + 0.5, parametros["FAPSemAjuste"])
+  #
+  #
+  #
+  #
+  # # Aqui ainda podem haver ajustes no FAP (que não estão na planilha)
+  # # Calculando o RAT Ajustado
+  # parametros["RATAjustado"] = parametros["FAP"] * parametros["RATTabela"]
 
 
   # Calculando Finalmente o Imposto de modo Recursivo
   for (l in 1:nrow(parametros)) {
+
+    # Ajustando o Bônus quando o FAP é menor do que 1
+    parametros[l,"FAP"] = if (parametros[l,"FAPSemAjuste"] < 1) {parametros[l,"FAPSemAjuste"] * 0.5 + 0.5} else {parametros[l,"FAPSemAjuste"]}
+
+    # RAT Ajustado
+    parametros[l,"RATAjustado"] = parametros[l,"FAP"] * parametros[l,"RATTabela"]
+
     parametros["DespesaFAP"] =
       if(parametros[l,"Ano"] == ano_inicial) {
         -historico[2,"RATAjustado"] * parametros[l,"FolhadePagamento"]
