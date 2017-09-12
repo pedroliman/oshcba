@@ -209,7 +209,7 @@ calcular_indices_ampliados = function(parametros) {
 calcular_reclamatorias = function(parametros) {
 
   # Calculando Número de Reclamatórias
-  parametros["NReclamatorias"] = parametros["FuncionariosDesligadosAcumulado"] * parametros["PReclamatoria"]
+  parametros["NReclamatorias"] = parametros["FuncionariosDesligados"] * parametros["PReclamatoria"]
 
   # Calculando Despesas com Reclamatórias
   parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * -parametros["CustoMedioReclamatorias"]
