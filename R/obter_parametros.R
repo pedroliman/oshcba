@@ -26,12 +26,19 @@ obter_variaveis = function(parametros_por_ano) {
   return(parametros_por_ano %>% select(NomeVariavel) %>% distinct())
 }
 
-obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
+obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4, seed) {
+
+  # Setando uma Seed Fixa
+  # if (!is.null(seed <- getOption("myseed"))) {
+  #   set.seed(1000)
+  # }
+  # seed = 1000
+
   amostra = switch(distribuicao,
-                   "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
-                   "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4),
-                   "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2),
-                   "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3)
+                   "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, seed = seed),
+                   "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4, seed = seed),
+                   "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2, seed = seed),
+                   "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3, seed = seed)
                    )
 }
 
@@ -78,7 +85,8 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
                                parametro1 = params$Parametro1,
                                parametro2 = params$Parametro2,
                                parametro3 = params$Parametro3,
-                               parametro4 = params$Parametro4)
+                               parametro4 = params$Parametro4,
+                               seed = t)
 
         VAriavelAmostra = data.frame(Cenario=c,
                                      Ano=t,
