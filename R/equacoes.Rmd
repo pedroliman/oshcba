@@ -139,7 +139,7 @@ As despesas com ações regressivas relacionadas ao INSS serão calculadas consi
 
 $$D_{ações regressivas INSS} =  \sum_{i=1}^{B} nacumulado_i * p_{acaoregress,} * (1+(f_{crise}*crise))  * \frac{\sum_{i=1}^{B} (nacumulado_i *cmed_{i})}{\sum_{i=1}^{B} nacumulado_i} $$
 
-##### Despesas Médicas 
+##### Despesas Médicas
 
 Esta subcategoria compreende as despesas evitadas com medicamento e atendimento médico para tratamento dos acidentes de trabalho após a implementação integral da iniciativa.
 

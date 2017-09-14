@@ -29,6 +29,7 @@ obter_variaveis = function(parametros_por_ano) {
 obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4) {
   amostra = switch(distribuicao,
                    "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2),
+                   "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4),
                    "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2),
                    "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3)
                    )
