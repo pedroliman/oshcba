@@ -86,7 +86,8 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
                                parametro2 = params$Parametro2,
                                parametro3 = params$Parametro3,
                                parametro4 = params$Parametro4,
-                               seed = t)
+                               # A linha abaixo iguala a seed ao ano para os parâmetros com Seed Fixa e mantém a seed variável para todos os outros parâmetros.
+                               seed = if(params$SeedFixa) {t} else {NULL})
 
         VAriavelAmostra = data.frame(Cenario=c,
                                      Ano=t,
