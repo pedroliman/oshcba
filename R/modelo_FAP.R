@@ -125,6 +125,18 @@ calcular_fap = function(parametros, historico) {
   parametros["PercentilCustoFAP"] = parametros["Beta0ICustoFAP"] + parametros["Beta1ICustoFAP"] * parametros["IndiceCustoFAP"]
 
 
+  # Inserindo "Batentes" para os Percentis (Posso usar estes wichs para outras funções também!)
+  percentis = c("PercentilFrequenciaFAP", "PercentilGravidadeFAP", "PercentilCustoFAP")
+  for (p in percentis) {
+
+    # Se o percentil calclado foi menor do que zero, seu valor deve ser 0
+    parametros[which(parametros[p] < 0),p] = 0
+
+    # Da mesma forma, se o percentil calclado foi maior do que 100, seu valor deve ser 100
+    parametros[which(parametros[p] > 100),p] = 100
+  }
+
+
   # Calculando FAP (aqui precisamos de mais um loop, porque o FAP inicial é)
 
   parametros["FAPSemAjuste"] = (0.5*parametros["PercentilGravidadeFAP"] + 0.35 * parametros["PercentilFrequenciaFAP"] + 0.15 * parametros["PercentilCustoFAP"])*0.02
