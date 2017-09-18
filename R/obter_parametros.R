@@ -38,7 +38,8 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, seed = seed),
                    "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4, seed = seed),
                    "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2, seed = seed),
-                   "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3, seed = seed)
+                   "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3, seed = seed),
+                   "poisson" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/1800
                    )
 }
 
