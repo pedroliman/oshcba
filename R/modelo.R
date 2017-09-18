@@ -710,13 +710,15 @@ calcular_imagem_receita = function(parametros) {
 
 ############ PRODUTIVIDADE ##################
 calcular_produtividade = function(parametros) {
-  parametros["GanhoProdutividade"] = parametros["SavingProdutividade"] * parametros["ProducaoProjetada"]
+  # Ganho em Produtividade será informado na Variável GanhoProdutividade.
+  # parametros["GanhoProdutividade"] = parametros["SavingProdutividade"] * parametros["ProducaoProjetada"]
   parametros
 }
 
 ############ QUALIDADE ##################
 calcular_qualidade = function(parametros) {
-  parametros["GanhoQualidade"] = parametros["VarVolumeVendaQualidade"] * parametros["MargemMedUnitaria"] *  parametros["ProducaoProjetada"]
+  # Ganho de Qualidade será Informado na Variável GanhoQualidade
+  # parametros["GanhoQualidade"] = parametros["VarVolumeVendaQualidade"] * parametros["MargemMedUnitaria"] *  parametros["ProducaoProjetada"]
   parametros
 }
 
