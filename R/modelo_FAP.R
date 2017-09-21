@@ -167,7 +167,7 @@ calcular_fap = function(parametros, historico) {
     # RAT Ajustado
     parametros[l,"RATAjustado"] = parametros[l,"FAP"] * parametros[l,"RATTabela"]
 
-    parametros["DespesaFAP"] =
+    parametros[l,"DespesaFAP"] =
       if(parametros[l,"Ano"] == ano_inicial) {
         -historico[2,"RATAjustado"] * parametros[l,"FolhadePagamento"]
       } else {
