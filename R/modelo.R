@@ -283,7 +283,7 @@ calcular_turnovergeral = function(parametros) {
 
   deslvol = c("DesligamentosVoluntarios")
   deslinvol = c("DesligamentosInvoluntarios")
-  deslgini = c("FuncDesligadosInicial")
+  # deslgini = c("FuncDesligadosInicial")
   f = c("Funcionarios")
 
   # Somando Afastamentos maior que 15
@@ -305,8 +305,8 @@ calcular_turnovergeral = function(parametros) {
   # Desligamentos Total
   parametros[fdesl] = AfMaior15 + Obitos + Desligvolunt + Desliginvol
 
-  # Desligamento Acumulado
-  parametros[fdesl_acum] = acumular_valores(parametros, x = fdesl, x_inicial = deslgini, x_acumulado = fdesl_acum)
+  # Desligamento Acumulado - Não será mais necessário - Não calcular
+  # parametros[fdesl_acum] = acumular_valores(parametros, x = fdesl, x_inicial = deslgini, x_acumulado = fdesl_acum)
 
   #Turnover Geral
   parametros[turn_geral] = parametros[fdesl] / parametros[f]
