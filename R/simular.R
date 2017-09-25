@@ -66,7 +66,8 @@ calcular_cbr = function(resultados, cenarios) {
       Soma_DespesasInterrupcaoAcidentesDescontado = sum(DespesasInterrupcaoAcidentesDescontado),
       Soma_DespesasInterdicaoFiscalizacaoDescontado = sum(DespesasInterdicaoFiscalizacaoDescontado),
       Soma_GanhoQualidadeDescontado = sum(GanhoQualidadeDescontado),
-      Soma_GanhoProdutividadeDescontado = sum(GanhoProdutividadeDescontado)
+      Soma_GanhoProdutividadeDescontado = sum(GanhoProdutividadeDescontado),
+      Soma_DespesasSeguroPatrimonialDescontado = sum(DespesasSeguroPatrimonialDescontado)
     )
     # summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
     #           Soma_DespesaTurnover = sum(DespesaTurnoverDescontado),
@@ -109,7 +110,8 @@ calcular_cbr = function(resultados, cenarios) {
     BeneficioInterrupcaoAcidentes = beneficio(Soma_DespesasInterrupcaoAcidentesDescontado.y, Soma_DespesasInterrupcaoAcidentesDescontado.x),
     BeneficioInterdicaoFiscalizacao = beneficio(Soma_DespesasInterdicaoFiscalizacaoDescontado.y, Soma_DespesasInterdicaoFiscalizacaoDescontado.x),
     BeneficioGanhoQualidade = beneficio(Soma_GanhoQualidadeDescontado.y, Soma_GanhoQualidadeDescontado.x),
-    BeneficioGanhoProdutividade = beneficio(Soma_GanhoProdutividadeDescontado.y, Soma_GanhoProdutividadeDescontado.x)
+    BeneficioGanhoProdutividade = beneficio(Soma_GanhoProdutividadeDescontado.y, Soma_GanhoProdutividadeDescontado.x),
+    BeneficioSeguroPatrimonial = beneficio(Soma_DespesasSeguroPatrimonialDescontado.y, Soma_DespesasSeguroPatrimonialDescontado.x)
     ) %>% ## Aqui entrariam outros beneficios
     mutate(BeneficioTotalCBR = BeneficioTurnover +
              BeneficioAbsenteismo +
@@ -128,7 +130,8 @@ calcular_cbr = function(resultados, cenarios) {
              BeneficioInterrupcaoAcidentes +
              BeneficioInterdicaoFiscalizacao +
              BeneficioGanhoQualidade +
-             BeneficioGanhoProdutividade) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
+             BeneficioGanhoProdutividade +
+             BeneficioSeguroPatrimonial) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
                                                                                               costs = CustoTotalCBR))
 
   ### Mantendo Apenas Variaveis uteis
