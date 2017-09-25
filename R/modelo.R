@@ -733,15 +733,17 @@ calcular_interrupcao_acidentes = function(parametros) {
   vetor_eventos = c("Obito")
   SomaObitos = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
-  parametros["DiasTotaisInterrupcaoAcidente"] = parametros["DiasInterrupcaoAcidenteObito"] * SomaObitos + parametros["DiasInterrupcaoAcidenteOutros"] * SomaOutros
-  parametros["DespesasInterrupcaoAcidentes"] = parametros["DiasTotaisInterrupcaoAcidente"] * -parametros["LucroCessanteDiario"]
+  # parametros["DiasTotaisInterrupcaoAcidente"] = parametros["DiasInterrupcaoAcidenteObito"] * SomaObitos + parametros["DiasInterrupcaoAcidenteOutros"] * SomaOutros
+  # Alterando Lucro Cessante: Mudança # 14
+  parametros["DespesasInterrupcaoAcidentes"] = (-parametros["LucroCessanteAcidenteObito"] * SomaObitos) + (-parametros["LucroCessanteAcidenteOutros"] * SomaOutros)
   parametros
 }
 
 
 ############ INTERRUPÇÃO OPERACIONAL POR FISCALIZAÇÃO ##################
 calcular_interdicao_fiscalizacao = function(parametros) {
-  parametros["DespesasInterdicaoFiscalizacao"] = parametros["EventoInterdicao"] * parametros["DiasInterdicaoFiscalizacao"] * -parametros["LucroCessanteDiario"] * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
+  # Alterando Lucro Cessante: Mudança # 14
+  parametros["DespesasInterdicaoFiscalizacao"] = parametros["EventoInterdicao"] * -parametros["LucroCessanteInterdicaoFiscalizacao"] * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
   parametros
 }
 
