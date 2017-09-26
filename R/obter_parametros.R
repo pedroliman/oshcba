@@ -43,7 +43,11 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    #Esta implementação da poisson pressupõe que:
                    #O Lâmbda informado é para a população de funcionários "como um todo".
                    #O número de funcionários mantém-se constante.
-                   "poisson" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/funcionarios_base
+                   #Esta opção só deve ser usada para os parâmetros que começam com Pev"
+                   "poisson_percentual_eventos" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/funcionarios_base,
+
+                   # A poisson Pura não realiza normalização segundo o número de funcionários.
+                   "poisson" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)
                    )
 }
 
