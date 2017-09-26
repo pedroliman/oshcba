@@ -26,7 +26,7 @@ obter_variaveis = function(parametros_por_ano) {
   return(parametros_por_ano %>% select(NomeVariavel) %>% distinct())
 }
 
-obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4, seed) {
+obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro4, seed, funcionarios_base) {
 
   # Setando uma Seed Fixa
   # if (!is.null(seed <- getOption("myseed"))) {
@@ -39,7 +39,11 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4, seed = seed),
                    "uniforme" = mc2d::mcstoc(func = runif,min=parametro1,max=parametro2, seed = seed),
                    "triangular" = mc2d::mcstoc(func = mc2d::rtriang,min=parametro1,mode=parametro2,max=parametro3, seed = seed),
-                   "poisson" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/1800
+
+                   #Esta implementação da poisson pressupõe que:
+                   #O Lâmbda informado é para a população de funcionários "como um todo".
+                   #O número de funcionários mantém-se constante.
+                   "poisson" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/funcionarios_base
                    )
 }
 
@@ -72,7 +76,7 @@ criar_df_params_cvar = function() {
   return(DataFrameVariaveis)
 }
 
-gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,replicacoes) {
+gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,replicacoes,funcionarios_base) {
   i=0
   for (v in variaveis[,1]) {
 
@@ -88,7 +92,8 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
                                parametro3 = params$Parametro3,
                                parametro4 = params$Parametro4,
                                # A linha abaixo iguala a seed ao ano para os parâmetros com Seed Fixa e mantém a seed variável para todos os outros parâmetros.
-                               seed = if(params$SeedFixa) {t} else {NULL})
+                               seed = if(params$SeedFixa) {t} else {NULL},
+                               funcionarios_base = funcionarios_base)
 
         VAriavelAmostra = data.frame(Cenario=c,
                                      Ano=t,
@@ -129,7 +134,10 @@ obter_parametros = function(Inputs) {
   cenarios = obter_cenarios(Inputs)
   parametros_por_ano = obter_parametros_por_ano(Inputs,cenarios,anos)
   variaveis = obter_variaveis(parametros_por_ano)
-  parametros = gerar_amostra_parametros(variaveis,anos,cenarios,parametros_por_ano,replicacoes)
+  funcionarios_base = Inputs$Configs$FuncionariosBase
+
+  # Continuar daqui: Passar o número de funcionários base adiante.
+  parametros = gerar_amostra_parametros(variaveis,anos,cenarios,parametros_por_ano,replicacoes,funcionarios_base)
   # Unindo Parametros aos Dados Projetados
   parametros = inner_join(parametros,Inputs$DadosProjetados,by="Ano")
 
