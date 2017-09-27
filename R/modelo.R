@@ -204,6 +204,35 @@ calcular_indices_ampliados = function(parametros) {
 
 }
 
+############# TAXAS DE ACIDENTES #################
+# Fórmulas retiradas da NBR 14280. Eventos tipicos e doenças ocupacionais são consideradas como acidentes.
+calcular_taxas_acidentes = function(parametros) {
+
+  # Índice de Frequência - foi Arbitrado que os acidentes abaixo influenciarão as taxas de Gravidade e Frequência.
+  vetor_acidentes = c("Tipico", "DoenOcup")
+  vetor_eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
+
+  # Deveríamos separar os óbitos do TempoComputado Médio? A princípio não está separado.
+  eventostaxas = c("EventosTaxasFrequenciaeGravidade")
+  f = c("Funcionarios")
+
+  #Calculando Horas de Exposicao ao Risco
+  parametros["HorasHomemExposicaoRisco"] = parametros["Funcionarios"] * parametros["HorasPorDia"] * parametros["DiasUteis"]
+
+  # Somando Eventos
+  parametros[eventostaxas] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+
+  # Calculando Taxa de Frequência
+  parametros["TaxaFrequencia"] = round((parametros[eventostaxas]*1000000)/parametros["HorasHomemExposicaoRisco"],3)
+
+  # Clculando Taxa de Gravidade
+  parametros["TaxaGravidade"] = round((parametros[eventostaxas]*parametros["TempoComputadoMedio"]*1000000)/parametros["HorasHomemExposicaoRisco"],3)
+
+  parametros
+
+}
+
+
 ############# RECLAMATÓRIAS TRABALHISTAS #################
 
 calcular_reclamatorias = function(parametros) {
@@ -700,7 +729,7 @@ calcular_imagem_contracacao = function(parametros) {
 calcular_imagem_receita = function(parametros) {
 
   parametros["HouveGanhoImagemReceita"] = ifelse(
-    all(c(parametros["IndiceFrequenciaAmpliado"] <= parametros["IFrMaximoImagem"], parametros["IndiceGravidadeAmpliado"] <= parametros["IGrMaximoImagem"])),
+    all(c(parametros["TaxaFrequencia"] <= parametros["TFrMaximaImagem"], parametros["TaxaGravidade"] <= parametros["TGrMaximaImagem"])),
         TRUE,
         FALSE)
   parametros["GanhoImagemReceita"] = parametros["HouveGanhoImagemReceita"] * parametros["GanhoImagemReceitaEsperado"]
