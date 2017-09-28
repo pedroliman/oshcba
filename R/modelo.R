@@ -73,62 +73,90 @@ formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
 
 calcular_beneficios_inss = function(parametros) {
 
-  matriz_eventos = obter_matriz_eventos(parametros)
-
-  # Nb 91
-  variavel = "NB_91"
-  colunas = c("DoenOcup")
-  linhas = c("Afmaior15")
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
-
-  parametros[variavel] = rowSums(parametros[vetor_soma])
 
 
-  # Nb 92
-  variavel = "NB_92"
-  colunas = c("Tipico", "Trajeto", "DoenOcup")
-  linhas = c("Afmaior15")
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  # Nb 91, 94 e 92
+  # Índice de Frequência
+  vetor_acidentes = c("Tipico", "DoenOcup")
+  vetor_eventos = c("Afmaior15", "Obito")
+  eventosbs = c("EventosNBs")
 
-  parametros[variavel] = rowSums(parametros[vetor_soma])
-  parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+  # Somando Eventos
+  parametros[eventosbs] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
-  # Nb 93
-  variavel = "NB_93"
-  colunas = c("Tipico", "Trajeto", "DoenOcup")
-  linhas = c("Obito")
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  # Calculand Numeros de BS:
 
-  parametros[variavel] = rowSums(parametros[vetor_soma])
+  parametros["NB_91"] = round(parametros["FatorB91"] * parametros[eventosbs],0)
 
-  # Nb 94
-  variavel = "NB_94"
-  colunas = c("Tipico", "Trajeto")
-  linhas = c("Afmaior15")
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  parametros["NB_92"] = round(parametros["FatorB92"] * parametros[eventosbs],0)
 
-  parametros[variavel] = rowSums(parametros[vetor_soma])
+  parametros["NB_94"] = round(parametros["FatorB94"] * parametros[eventosbs],0)
 
-  # Nb 31
-  variavel = "NB_31"
-  colunas = c("NRelac")
-  linhas = c("Afmaior15")
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  # Calculando os NBs 93 (em casos de mortes):
 
-  parametros[variavel] = rowSums(parametros[vetor_soma])
+  vetor_acidentes = c("Tipico", "DoenOcup")
+  vetor_eventos = c("Afmaior15", "Obito")
 
-  # Nb 32
-  variavel = "NB_32"
-  colunas = c("NRelac")
-  linhas = c("Afmaior15")
-  vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  parametros["NB_93"] = round(somar_eventos(parametros, vetor_acidentes, vetor_eventos) * parametros["FatorB93"],0)
 
-  parametros[variavel] = rowSums(parametros[vetor_soma])
-  parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+
+  # # Matriz de Eventos conforme primeira documentação do modelo
+  # matriz_eventos = obter_matriz_eventos(parametros)
+  # variavel = "NB_91"
+  # colunas = c("DoenOcup")
+  # linhas = c("Afmaior15")
+  # vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  #
+  # parametros[variavel] = rowSums(parametros[vetor_soma])
+  #
+  #
+  # # Nb 92
+  # variavel = "NB_92"
+  # colunas = c("Tipico", "Trajeto", "DoenOcup")
+  # linhas = c("Afmaior15")
+  # vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  #
+  # parametros[variavel] = rowSums(parametros[vetor_soma])
+  # parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+  #
+  # # Nb 93
+  # variavel = "NB_93"
+  # colunas = c("Tipico", "Trajeto", "DoenOcup")
+  # linhas = c("Obito")
+  # vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  #
+  # parametros[variavel] = rowSums(parametros[vetor_soma])
+  #
+  # # Nb 94
+  # variavel = "NB_94"
+  # colunas = c("Tipico", "Trajeto")
+  # linhas = c("Afmaior15")
+  # vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  #
+  # parametros[variavel] = rowSums(parametros[vetor_soma])
+  #
+  # # Nb 31
+  # variavel = "NB_31"
+  # colunas = c("NRelac")
+  # linhas = c("Afmaior15")
+  # vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  #
+  # parametros[variavel] = rowSums(parametros[vetor_soma])
+  #
+  # # Nb 32
+  # variavel = "NB_32"
+  # colunas = c("NRelac")
+  # linhas = c("Afmaior15")
+  # vetor_soma = as.vector(matriz_eventos[linhas, colunas])
+  #
+  # parametros[variavel] = rowSums(parametros[vetor_soma])
+  # parametros[variavel] = round(parametros[variavel] * parametros["PInvalidez"], digits = 0)
+
+
 
   # Beneficios Acumulados
 
-  beneficios = c("NB_91", "NB_92", "NB_93", "NB_94", "NB_31", "NB_32")
+  beneficios = c("NB_91", "NB_92", "NB_93", "NB_94")
   ano_inicial = min(parametros$Ano)
   sufixo_inicial = "_Inicial"
   sufixo_acumulado = "_Acumulado"
