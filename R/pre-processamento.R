@@ -5,13 +5,42 @@
 
 verificar_inputs = function(inputs) {
 
+  texto_base = "Dados Informados Incorretamente:"
+
+
   message("Iniciando Verificacao de Inputs.")
-  # Verificar Configs
-  # Verificando NA's:
-  if (any(is.na(inputs$Configs))) {
-    stop("Dados Informados Incorretamente: Verificar a Aba de Configuracoes (Configs).")
+
+  if(!length(inputs) == 8) {
+    stop(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
   }
 
+  if (any(is.na(inputs$Configs))) {
+    stop(paste(texto_base, " Verificar a Aba de Configuracoes (Configs), existem dados em branco."))
+  }
+
+  if (any(is.na(inputs$Custos))) {
+    stop(paste(texto_base, " Verificar a Aba de Custos, existem dados em branco."))
+  }
+
+  if (any(is.na(inputs$Cenarios))) {
+    stop(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
+  }
+
+  if (any(is.na(inputs$DadosProjetados))) {
+    stop(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
+  }
+
+  if (any(is.na(inputs$Funcoes_Inputs))) {
+    stop(paste(texto_base, " Verificar a Aba de Funcoes_Inputs, existem dados em branco."))
+  }
+
+  if (any(is.na(inputs$Funcoes_Outputs))) {
+    stop(paste(texto_base, " Verificar a Aba de Funcoes_Outputs, existem dados em branco."))
+  }
+
+  if (any(is.na(inputs$HistoricoFAP))) {
+    stop(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
+  }
 
   message("Terminando Verificação de Inputs.")
 }
