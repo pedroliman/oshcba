@@ -1,4 +1,4 @@
-##### FAP #######
+##### FAP ####### Teste
 
 calcular_fap = function(parametros, historico) {
 
