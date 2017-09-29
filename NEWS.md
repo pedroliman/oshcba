@@ -1,3 +1,7 @@
+# oshcba 1.1.-beta
+
+* Implementação das Funções do Modelo Matemático.
+
 # oshcba 1.0.-beta
 
 * Implementação das Funções do Modelo Matemático.
