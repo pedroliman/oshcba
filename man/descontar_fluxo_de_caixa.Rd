@@ -14,7 +14,9 @@ descontar_fluxo_de_caixa(variaveis_a_descontar, ano_inicial, i, parametros,
 
 \item{i}{Taxa de Desconto.}
 
-\item{parametros}{Dataframe de parametros que contem variaveis a descontar e}
+\item{parametros}{Dataframe de parametros que contem variaveis a descontar.}
+
+\item{sufixo}{Sufixo que as variaveis descontadas receberao.}
 }
 \value{
 fluco de caixa descontado

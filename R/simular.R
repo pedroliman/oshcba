@@ -1,3 +1,10 @@
+
+#' Simular CBA
+#'
+#' @param ArquivoInputs Arquivo de dados usado como Input (deve seguir um padrao especifico).
+#' @param modo Modo de simulacao ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.
+#'
+#' @return um list com os resultados.
 #' @export
 simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "simples") {
   inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler,
@@ -44,7 +51,6 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   return(output)
 }
 
-#'@export
 calcular_cbr = function(resultados, cenarios) {
 
   message("07. simular.R/calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
@@ -199,14 +205,12 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
   return(resultados)
 }
 
-#'@export
 exportar_dados_simulados = function(parametros) {
   arquivo = write.table(parametros, file = "dados_simulados.csv", sep = ";",
                         dec = ",", row.names = FALSE)
   return(arquivo)
 }
 
-#'@export
 simular_e_mostrar_resultados = function() {
   results = simular_cba(modo = "completo")
   str(results$Resultados_Descontados)

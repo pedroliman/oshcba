@@ -1,4 +1,3 @@
-#' @export
 carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
 
   # Criando uma list para os inputs
@@ -20,7 +19,6 @@ carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", aba
 
 }
 
-#' @export
 simular_e_gravar_resultados = function () {
   base_folder = paste(getwd(),"resultados",as.character(Sys.time()), sep = "/")
   resultados = simular_temp_absenteismo(modo = "completo")

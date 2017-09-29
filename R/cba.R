@@ -59,10 +59,10 @@ valor_presente = function(fc,t,i) {
 #' @param variaveis_a_descontar Vetor com nome de variaveis que terao o fluxo de caixa descontado
 #' @param ano_inicial Número do Ano inicial que sera descontado
 #' @param i Taxa de Desconto.
-#' @param parametros Dataframe de parametros que contem variaveis a descontar e
+#' @param parametros Dataframe de parametros que contem variaveis a descontar.
+#' @param sufixo Sufixo que as variaveis descontadas receberao.
 #'
 #' @return fluco de caixa descontado
-#' @export
 descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros, sufixo) {
   #Definindo Variavels Auxiliadoras
   novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
