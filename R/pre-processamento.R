@@ -42,6 +42,12 @@ verificar_inputs = function(inputs) {
     stop(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
   }
 
+  # Verificando algumas variáveis em Dados Projetados que devem ser maiores do que zero:
+  variaveis = c("Ano", "Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO")
+  if(!all(inputs$DadosProjetados[variaveis] > 0)) {
+    stop(paste(texto_base, "Verifique a Aba de Dados Projetados. Existem informacoes zeradas."))
+  }
+
   message("Terminando Verificação de Inputs.")
 }
 
