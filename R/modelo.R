@@ -78,7 +78,7 @@ calcular_beneficios_inss = function(parametros) {
   # Nb 91, 94 e 92
   # Índice de Frequência
   vetor_acidentes = c("Tipico", "DoenOcup")
-  vetor_eventos = c("Afmaior15", "Obito")
+  vetor_eventos = c("Afmaior15")
   eventosbs = c("EventosNBs")
 
   # Somando Eventos
