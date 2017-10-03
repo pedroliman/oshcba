@@ -158,20 +158,38 @@ calcular_beneficios_inss = function(parametros) {
 
   beneficios = c("NB_91", "NB_92", "NB_93", "NB_94")
   ano_inicial = min(parametros$Ano)
+  ano_final = max(parametros$Ano)
   sufixo_inicial = "_Inicial"
   sufixo_acumulado = "_Acumulado"
 
+
   for (b in beneficios) {
-    b_incial = paste(b,sufixo_inicial, sep="")
+    b_inicial = paste(b,sufixo_inicial, sep="")
     b_acumulado = paste(b,sufixo_acumulado, sep="")
-    # Calculando o N Acumulado de modo Recursivo
-    for (l in 1:nrow(parametros)) {
-      parametros[l,b_acumulado] = if (parametros[l,"Ano"] == ano_inicial) {
-        parametros[l,b_incial] + parametros[l,b]
+    # Calculando o N Acumulado de modo Recursivo (por ano)
+
+    for (a in ano_inicial:ano_final) {
+      linhas_ano = which(parametros["Ano"] == a)
+
+      # Calculando o Caso do Ano Inicial
+      if (a == ano_inicial) {
+        parametros[linhas_ano,b_acumulado] = parametros[linhas_ano,b_inicial] + parametros[linhas_ano,b]
+      # Calculando o Outro Caso
       } else {
-        parametros[l,b] + parametros[l-1,b_acumulado]
+        parametros[linhas_ano,b_acumulado] = parametros[linhas_ano,b] + parametros[linhas_ano-1,b_acumulado]
       }
+
     }
+
+
+    # Código Anterior, mais lento do que o Loop acima
+    # for (l in 1:nrow(parametros)) {
+    #   parametros[l,b_acumulado] = if (parametros[l,"Ano"] == ano_inicial) {
+    #     parametros[l,b_incial] + parametros[l,b]
+    #   } else {
+    #     parametros[l,b] + parametros[l-1,b_acumulado]
+    #   }
+    # }
 
   }
 
@@ -299,7 +317,7 @@ calcular_reajustes_plano = function(parametros) {
   ano_inicial = min(parametros$Ano)
 
 
-  # Calculando as Despesas Iterativamente
+  # Calculando as Despesas Iterativamente (aqui pode melhorar)
   for (l in 1:nrow(parametros)) {
     parametros[l,despesas] = if (parametros[l,"Ano"] == ano_inicial) {
       -parametros[l,despesas_inicial]

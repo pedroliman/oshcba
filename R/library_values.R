@@ -48,13 +48,13 @@ oshcba_options = list(
 
   # Vetor de Funcoes a Calcular
   v_funcoes = c(
-    "calcular_absenteismo"
-    ,"calcular_eventos"
+    "calcular_eventos"
+    ,"calcular_beneficios_inss"
     ,"calcular_faltas"
+    ,"calcular_absenteismo"
     ,"calcular_turnover"
     ,"calcular_multas"
     ,"calcular_acoes_regressivas_inss"
-    ,"calcular_beneficios_inss"
     ,"calcular_presenteismo"
     ,"calcular_despesasmedicas"
     ,"calcular_refugo_retrabalho"
