@@ -350,16 +350,37 @@ calcular_reabilitacao = function(parametros) {
 
 calcular_turnovergeral = function(parametros) {
 
-  # Variáveis
+  ## Antes dos Calculos, computar os desligamentos Voluntários usando a regressão.
+
   # Outputs
+  perc = c("PercDesligamentoVoluntarios")
+  deslvol = c("DesligamentosVoluntarios")
   turn_geral = c("TurnoverGeral")
   fdesl = c("FuncionariosDesligados")
   fdesl_acum = c("FuncionariosDesligadosAcumulado")
 
-  deslvol = c("DesligamentosVoluntarios")
+
+  # Inputs
+  beta0 = c("Beta0DesligVoluntarios")
+  betafreq = c("BetaFreqDesligVoluntarios")
+  betagrav = c("BetaGravDesligVoluntarios")
+  betapib = c("BetaPIBDesigVoluntarios")
+  varpib = c("VarPIB")
   deslinvol = c("DesligamentosInvoluntarios")
-  # deslgini = c("FuncDesligadosInicial")
   f = c("Funcionarios")
+
+  If = c("IndiceFrequenciaAmpliado")
+  Ig = c("IndiceGravidadeAmpliado")
+
+
+  # Calculando Perc Deslig Voluntarios
+  parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+
+  # Calculando Desligamento Voluntários
+  parametros[deslvol] = round(parametros[perc] * parametros[f], 0)
+
+
+  # Continuando o Calculo das demais variáveis de Turnover Geral
 
   # Somando Afastamentos maior que 15
   vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
@@ -379,9 +400,6 @@ calcular_turnovergeral = function(parametros) {
 
   # Desligamentos Total
   parametros[fdesl] = AfMaior15 + Obitos + Desligvolunt + Desliginvol
-
-  # Desligamento Acumulado - Não será mais necessário - Não calcular
-  # parametros[fdesl_acum] = acumular_valores(parametros, x = fdesl, x_inicial = deslgini, x_acumulado = fdesl_acum)
 
   #Turnover Geral
   parametros[turn_geral] = parametros[fdesl] / parametros[f]
@@ -600,27 +618,11 @@ calcular_mp_insumos = function(parametros) {
 calcular_engajamento = function(parametros) {
 
   # Outputs
-  perc = c("PercDesligamentoVoluntarios")
-  deslig = c("DesligamentosVoluntarios")
   despesas = c("DespesasClima")
 
   # Inputs
-  beta0 = c("Beta0DesligVoluntarios")
-  betafreq = c("BetaFreqDesligVoluntarios")
-  betagrav = c("BetaGravDesligVoluntarios")
-  betapib = c("BetaPIBDesigVoluntarios")
-  varpib = c("VarPIB")
+  deslig = c("DesligamentosVoluntarios")
   customed = c("CustoMedSubstitu")
-  If = c("IndiceFrequenciaAmpliado")
-  Ig = c("IndiceGravidadeAmpliado")
-  func = c("Funcionarios")
-
-
-  # Calculando Perc Deslig Voluntarios
-  parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
-
-  # Calculando Desligamento Voluntários
-  parametros[deslig] = round(parametros[perc] * parametros[func], 0)
 
   # Calculando Custos com Desligamentos Voluntários
   parametros[despesas] = parametros[deslig] * -parametros[customed]
