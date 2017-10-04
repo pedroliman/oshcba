@@ -10,6 +10,3 @@
 # write.csv2(resultadosdescontados, "./tests/testesmanuais/resultadosdesc.csv")
 #
 # write.csv2(resultadoscbr, "./tests/testesmanuais/resultadoscbr.csv")
-
-
-
