@@ -95,7 +95,7 @@ calcular_beneficios_inss = function(parametros) {
   # Calculando os NBs 93 (em casos de mortes):
 
   vetor_acidentes = c("Tipico", "DoenOcup")
-  vetor_eventos = c("Afmaior15", "Obito")
+  vetor_eventos = c("Obito")
 
   parametros["NB_93"] = round(somar_eventos(parametros, vetor_acidentes, vetor_eventos) * parametros["FatorB93"],0)
 
@@ -304,7 +304,7 @@ calcular_reajustes_plano = function(parametros) {
     parametros[l,despesas] = if (parametros[l,"Ano"] == ano_inicial) {
       -parametros[l,despesas_inicial]
     } else {
-      parametros[l-1,despesas] * parametros[l,reaj]
+      parametros[l-1,despesas] * ( 1+ parametros[l,reaj])
     }
   }
 
