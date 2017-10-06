@@ -19,12 +19,33 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   # Importa
 
   message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
-  resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = inputs$Funcoes_Inputs,
-                                output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes)
 
+
+  # Criar Variáveis Financeiras primeiro, e atribuindo o valor de zero.
+  parametros[oshcba_options$variaveis_a_descontar] = 0
+
+
+  # Calculando Funcoes Base
+  resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = inputs$Funcoes_Inputs,
+                                output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_base)
+
+  # Calculando Funcoes Obrigatórias
   message("04. simular.R/simular: Simulando FAP.")
   resultados = calcular_fap(parametros = resultados, historico = inputs$HistoricoFAP)
 
+  # Calculando outras funções Básicas
+  resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
+                                output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_basicas)
+
+
+  # Calculando Funções selecionadas:
+
+  v_funcoes_calculadas = c(v_funcoes_base, v_funcoes_basicas)
+  v_funcoes_passiveis_calculo = !(v_funcoes %in% v_funcoes_calculadas)
+
+  # Funcoes a calcular informadas pelo usuário:
+
+  browser()
 
   message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
 
