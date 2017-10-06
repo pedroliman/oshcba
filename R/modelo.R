@@ -322,7 +322,7 @@ calcular_reajustes_plano = function(parametros) {
     parametros[l,despesas] = if (parametros[l,"Ano"] == ano_inicial) {
       -parametros[l,despesas_inicial]
     } else {
-      parametros[l-1,despesas] * (1+ parametros[l,reaj])
+      parametros[l-1,despesas] * parametros[l,reaj]
     }
   }
 
