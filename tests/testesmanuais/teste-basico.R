@@ -1,5 +1,5 @@
 
-library(oshcba)
+# library(oshcba)
 
 # resultados = simular_cba(modo = "completo")
 # #
