@@ -95,7 +95,7 @@ calcular_beneficios_inss = function(parametros) {
   # Calculando os NBs 93 (em casos de mortes):
 
   vetor_acidentes = c("Tipico", "DoenOcup")
-  vetor_eventos = c("Obito")
+  vetor_eventos = c("Afmaior15", "Obito")
 
   parametros["NB_93"] = round(somar_eventos(parametros, vetor_acidentes, vetor_eventos) * parametros["FatorB93"],0)
 
