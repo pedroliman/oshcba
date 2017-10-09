@@ -720,11 +720,7 @@ calcular_acoes_regressivas_inss = function(parametros){
   # }
 
 
-  # TODO Calculando Numero de Acoes Regressivas "Agregado" - Após Modificações, elimitar esta variável
-  parametros["AcoesRegressivasINSS"] = acoes_regressivas_inss(crise = parametros$Crise,
-                                                              fator_crise = parametros$FatorCrise,
-                                                              n_acumulado = parametros$NB_AcaoRegressivaINSSAcumulado,
-                                                              p_acao_regressiva = parametros$PAcaoRegressiva)
+
 
 
   vacoes_regressivas = c("AcoesRegressivasINSS_B91", "AcoesRegressivasINSS_B92", "AcoesRegressivasINSS_B93", "AcoesRegressivasINSS_B94")
@@ -740,23 +736,28 @@ calcular_acoes_regressivas_inss = function(parametros){
   # Nova Forma de Calculo - Isolando os BS's.
   parametros["AcoesRegressivasINSS_B91"] = acoes_regressivas_inss(crise = parametros$Crise,
                                                               fator_crise = parametros$FatorCrise,
-                                                              n_acumulado = parametros$NB_91_Acumulado,
+                                                              n_acumulado = parametros$NB_91,
                                                               p_acao_regressiva = parametros$PAcaoRegressiva)
 
   parametros["AcoesRegressivasINSS_B92"] = acoes_regressivas_inss(crise = parametros$Crise,
                                                                   fator_crise = parametros$FatorCrise,
-                                                                  n_acumulado = parametros$NB_92_Acumulado,
+                                                                  n_acumulado = parametros$NB_92,
                                                                   p_acao_regressiva = parametros$PAcaoRegressiva)
 
   parametros["AcoesRegressivasINSS_B93"] = acoes_regressivas_inss(crise = parametros$Crise,
                                                                   fator_crise = parametros$FatorCrise,
-                                                                  n_acumulado = parametros$NB_93_Acumulado,
+                                                                  n_acumulado = parametros$NB_93,
                                                                   p_acao_regressiva = parametros$PAcaoRegressiva)
 
   parametros["AcoesRegressivasINSS_B94"] = acoes_regressivas_inss(crise = parametros$Crise,
                                                                   fator_crise = parametros$FatorCrise,
-                                                                  n_acumulado = parametros$NB_94_Acumulado,
+                                                                  n_acumulado = parametros$NB_94,
                                                                   p_acao_regressiva = parametros$PAcaoRegressiva)
+
+
+  # TODO Calculando Numero de Acoes Regressivas "Agregado" - Após Modificações, elimitar esta variável
+  parametros["AcoesRegressivasINSS"] = parametros["AcoesRegressivasINSS_B91"] + parametros["AcoesRegressivasINSS_B92"] + parametros["AcoesRegressivasINSS_B93"] + parametros["AcoesRegressivasINSS_B94"]
+
 
   # Calculando o Custo Medio Ponderado.. TODO (Não vamos mais usar, depois excluir esta variável)
   parametros["CustoMedioPonderadoAcaoRegressiva"] = rowSums(parametros[vacoes_regressivas] * parametros[custos_medios])/rowSums(parametros[beneficios])
