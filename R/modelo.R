@@ -489,6 +489,11 @@ calcular_absenteismo = function(parametros){
   }
 
   dias_absenteismo = function(Nev_afmen15,DiasMedAfast_Men15,NFaltas) {
+
+    # Formulacao Original:
+    # rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
+    # Argumento para mudanca: Dias de afastamento que não sao faltas geram necessidade de alocação de outro funcionário.
+    # Mudança solicitada por Dieter e Felipe, no dia 06/10/2017.
     rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
   }
 
@@ -715,18 +720,53 @@ calcular_acoes_regressivas_inss = function(parametros){
   # }
 
 
-  # Calculando Numero de Acoes Regressivas
+  # TODO Calculando Numero de Acoes Regressivas "Agregado" - Após Modificações, elimitar esta variável
   parametros["AcoesRegressivasINSS"] = acoes_regressivas_inss(crise = parametros$Crise,
                                                               fator_crise = parametros$FatorCrise,
                                                               n_acumulado = parametros$NB_AcaoRegressivaINSSAcumulado,
                                                               p_acao_regressiva = parametros$PAcaoRegressiva)
 
-  # Calculando o Custo Medio Ponderado..
 
-  parametros["CustoMedioPonderadoAcaoRegressiva"] = rowSums(parametros[beneficios] * parametros[custos_medios])/rowSums(parametros[beneficios])
+  vacoes_regressivas = c("AcoesRegressivasINSS_B91", "AcoesRegressivasINSS_B92", "AcoesRegressivasINSS_B93", "AcoesRegressivasINSS_B94")
+  vbeneficios_acumulados = c("NB_91_Acumulado", "NB_92_Acumulado", "NB_93_Acumulado", "NB_94_Acumulado")
 
-  parametros["DespesaAcoesRegressivasINSS"] = despesa_acoes_regressivas_inss(acoes_regressivas = parametros["AcoesRegressivasINSS"],
-                                               cmed = parametros["CustoMedioPonderadoAcaoRegressiva"])
+  # parametros[vacoes_regressivas] = acoes_regressivas_inss(crise = parametros$Crise,
+  #                                                                 fator_crise = parametros$FatorCrise,
+  #                                                                 n_acumulado = parametros[vbeneficios_acumulados],
+  #                                                                 p_acao_regressiva = parametros$PAcaoRegressiva)
+
+
+
+  # Nova Forma de Calculo - Isolando os BS's.
+  parametros["AcoesRegressivasINSS_B91"] = acoes_regressivas_inss(crise = parametros$Crise,
+                                                              fator_crise = parametros$FatorCrise,
+                                                              n_acumulado = parametros$NB_91_Acumulado,
+                                                              p_acao_regressiva = parametros$PAcaoRegressiva)
+
+  parametros["AcoesRegressivasINSS_B92"] = acoes_regressivas_inss(crise = parametros$Crise,
+                                                                  fator_crise = parametros$FatorCrise,
+                                                                  n_acumulado = parametros$NB_92_Acumulado,
+                                                                  p_acao_regressiva = parametros$PAcaoRegressiva)
+
+  parametros["AcoesRegressivasINSS_B93"] = acoes_regressivas_inss(crise = parametros$Crise,
+                                                                  fator_crise = parametros$FatorCrise,
+                                                                  n_acumulado = parametros$NB_93_Acumulado,
+                                                                  p_acao_regressiva = parametros$PAcaoRegressiva)
+
+  parametros["AcoesRegressivasINSS_B94"] = acoes_regressivas_inss(crise = parametros$Crise,
+                                                                  fator_crise = parametros$FatorCrise,
+                                                                  n_acumulado = parametros$NB_94_Acumulado,
+                                                                  p_acao_regressiva = parametros$PAcaoRegressiva)
+
+  # Calculando o Custo Medio Ponderado.. TODO (Não vamos mais usar, depois excluir esta variável)
+  parametros["CustoMedioPonderadoAcaoRegressiva"] = rowSums(parametros[vacoes_regressivas] * parametros[custos_medios])/rowSums(parametros[beneficios])
+
+
+  parametros["DespesaAcoesRegressivasINSS"] = rowSums(parametros[vacoes_regressivas] * -parametros[custos_medios])
+
+  # Calculo antigo de ações regressivas - TODO - Eliminar Calculo antigo.
+  # parametros["DespesaAcoesRegressivasINSS"] = despesa_acoes_regressivas_inss(acoes_regressivas = parametros["AcoesRegressivasINSS"],
+  #                                              cmed = parametros["CustoMedioPonderadoAcaoRegressiva"])
   parametros
 
 }
