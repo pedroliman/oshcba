@@ -494,7 +494,7 @@ calcular_absenteismo = function(parametros){
     # rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
     # Argumento para mudanca: Dias de afastamento que não sao faltas geram necessidade de alocação de outro funcionário.
     # Mudança solicitada por Dieter e Felipe, no dia 06/10/2017.
-    rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
+    (rowSums(Nev_afmen15)*DiasMedAfast_Men15*2) + NFaltas
   }
 
   input_vetor_afast_men15 = c("Nev_Afmenor15_Tipico", "Nev_Afmenor15_Trajeto", "Nev_Afmenor15_DoenOcup", "Nev_Afmenor15_NRelac")
