@@ -10,7 +10,7 @@ verificar_inputs = function(inputs) {
 
   message("Iniciando Verificacao de Inputs.")
 
-  if(!length(inputs) == 9) {
+  if(!length(inputs) == 10) {
     stop(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
   }
 

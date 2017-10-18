@@ -4,8 +4,8 @@
 oshcba_options = list(
 
   # Variaveis relacionadas aos Inputs
-  abas_a_ler = c("Configs", "Dados_Projetados", "Parametros", "Cenarios", "Custos", "Funcoes_Inputs", "Funcoes_Outputs", "HistoricoFAP", "Modulos"),
-  nomes_inputs = c("Configs","DadosProjetados","Parametros","Cenarios","Custos", "Funcoes_Inputs", "Funcoes_Outputs", "HistoricoFAP", "Modulos"),
+  abas_a_ler = c("Configs", "Dados_Projetados", "Parametros", "Cenarios", "Custos", "Funcoes_Inputs", "Funcoes_Outputs", "HistoricoFAP", "Modulos", "Constantes"),
+  nomes_inputs = c("Configs","DadosProjetados","Parametros","Cenarios","Custos", "Funcoes_Inputs", "Funcoes_Outputs", "HistoricoFAP", "Modulos", "Constantes"),
 
   # Variaveis relacionadas ao desconto do fluxo de caixa
   sufixo_vars_fc = "Descontado",

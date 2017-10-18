@@ -125,6 +125,25 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
 
 }
 
+
+projetar_variaveis_deterministicas = function(dados_projetados, constantes) {
+
+  vetor_constantes = as.vector(constantes$Variavel)
+
+  vetor_valores = as.vector(constantes$Valor)
+
+  for (c in 1:length(vetor_constantes)){
+    dados_projetados[vetor_constantes[c]] = vetor_valores[c]
+  }
+
+  # Retornar Dados Projetados com todas as informacoes
+  dados_projetados
+
+}
+
+
+
+
 #' Obter Parametros
 #'
 #' @param Inputs Inputs Carregados com a funcao carregar_inputs()
@@ -142,8 +161,14 @@ obter_parametros = function(Inputs) {
 
   # Continuar daqui: Passar o número de funcionários base adiante.
   parametros = gerar_amostra_parametros(variaveis,anos,cenarios,parametros_por_ano,replicacoes,funcionarios_base)
+
+
+  # Unir Dados Projetados e Constantes
+  dados_projetados = projetar_variaveis_deterministicas(dados_projetados = Inputs$DadosProjetados, constantes = Inputs$Constantes)
+
+
   # Unindo Parametros aos Dados Projetados
-  parametros = inner_join(parametros,Inputs$DadosProjetados,by="Ano")
+  parametros = inner_join(parametros,dados_projetados,by="Ano")
 
   custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
   parametros = left_join(parametros,custos,by=c("Ano","Cenario"))

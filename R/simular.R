@@ -73,7 +73,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   ## resultados_CBR
 
   output = switch(EXPR = modo, simples = resultados_CBR, completo = list(Inputs = inputs,
-                                                                         Osh_Options = oshcba_options, Parametros = parametros, Resultados = resultados,
+                                                                         Osh_Options = oshcba_options, Constantes = inputs$Constantes, Parametros = parametros, Resultados = resultados,
                                                                          Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
 
   message("08. simular.R/simular: Finalizando Simulacao.")
