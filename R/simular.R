@@ -21,7 +21,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
 
 
-  # Criando Variáveis Financeiras que não existem no modelo com valor igual a zero.
+  # Criando Variáveis Financeiras que não existem nos parametros com valor igual a zero.
   v_financeiras_nao_existem = oshcba_options$variaveis_a_descontar[!(oshcba_options$variaveis_a_descontar %in% names(parametros))]
   parametros[v_financeiras_nao_existem] = 0
 
@@ -41,8 +41,8 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
 
 
   # Calculando Funções selecionadas:
-  v_funcoes_calculadas = c(v_funcoes_base, v_funcoes_basicas)
-  v_funcoes_passiveis_calculo = v_funcoes[!(v_funcoes %in% v_funcoes_calculadas)]
+  v_funcoes_calculadas = c(oshcba_options$v_funcoes_base, oshcba_options$v_funcoes_basicas)
+  v_funcoes_passiveis_calculo = oshcba_options$v_funcoes[!(oshcba_options$v_funcoes %in% v_funcoes_calculadas)]
 
   # Funcoes a calcular informadas pelo usuário:
 
@@ -212,7 +212,7 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
         if (all(v_inputs %in% colnames(resultados))) {
 
           # TODO: E se nem Todos os Outputs estao presentes
-          if (!all(v_outputs %in% colnames(resultados))) {
+          if ((i == 1) | (!all(v_outputs %in% colnames(resultados)))) { # Se estou na primeira iteracao, ou se algum output não foi calculado.
             chamada_da_funcao = paste(f, "(resultados)", sep = "")
             resultados = eval(parse(text = chamada_da_funcao))
             message(paste("04. simular.R/calcular_funcoes: Funcao Calculada: ",

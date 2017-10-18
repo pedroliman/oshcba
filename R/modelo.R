@@ -263,7 +263,7 @@ calcular_taxas_acidentes = function(parametros) {
   f = c("Funcionarios")
 
   #Calculando Horas de Exposicao ao Risco
-  parametros["HorasHomemExposicaoRisco"] = parametros["Funcionarios"] * parametros["HorasPorDia"] * parametros["DiasUteis"]
+  parametros["HorasHomemExposicaoRisco"] = parametros["Funcionarios"] * parametros["HorasPorDia"] * parametros["DiasUteis"] * parametros["FatorAjusteExposicaoAoRisco"]
 
   # Somando Eventos
   parametros[eventostaxas] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
