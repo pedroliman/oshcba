@@ -15,11 +15,42 @@ obter_replicacoes = function (Inputs) {
 
 obter_parametros_por_ano = function (Inputs,cenarios,anos) {
   # Definindo os Parâmetros
+
   parametros_por_ano = merge(cenarios,anos,by=NULL)
   names(parametros_por_ano) = c("Cenario","CenarioBase","Ano")
   # Atribuindo os Nomes de Parâmetros
   parametros_por_ano = inner_join(parametros_por_ano,Inputs$Parametros,by="Cenario")
   # TODO: Aqui eu deveria substituir os parâmetros com delay!
+
+  ano_inicial = min(parametros_por_ano$Ano)
+
+  ano_maximo_a_manter = ano_inicial + parametros_por_ano$AnosDelay
+
+  # O Parâmetro deve ser substituído se Os AnosDelay são maiores do que 0, e se o ano específico é menor do que o ano máximo a manter.
+  parametros_por_ano["SubstituirPeloASIS"] = (parametros_por_ano$AnosDelay > 0) & (parametros_por_ano$Ano <= ano_maximo_a_manter)
+
+  linhas_a_substituir = which(parametros_por_ano$SubstituirPeloASIS)
+
+  parametros_antigos = parametros_por_ano[linhas_a_substituir,]
+
+  # Acho que aqui posso implementar um for:
+  variaveis_a_substituir = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4", "SeedFixa")
+
+  for (l in linhas_a_substituir) {
+    message(l)
+
+    parametro_a_substituir = parametros_por_ano[l,]
+
+    parametro_as_is = subset(parametros_por_ano, CenarioBase == TRUE & Ano == parametro_a_substituir$Ano & NomeVariavel == parametro_a_substituir$NomeVariavel)
+
+    parametros_por_ano[l,variaveis_a_substituir] = parametro_as_is[,variaveis_a_substituir]
+
+  }
+
+  parametros_novos = parametros_por_ano[linhas_a_substituir,]
+
+  parametros_por_ano
+
 }
 
 obter_variaveis = function(parametros_por_ano) {
@@ -89,7 +120,11 @@ gerar_amostra_parametros = function(variaveis,anos,cenarios,parametros_por_ano,r
 
     for (t in anos){
       for (c in cenarios$Cenario) {
+
         params = dplyr::filter(parametros_por_ano, NomeVariavel==v & Cenario==c & Ano==t)
+
+
+
         amostra = obter_amostra(distribuicao = params$Distribuicao,
                                parametro1 = params$Parametro1,
                                parametro2 = params$Parametro2,
