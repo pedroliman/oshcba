@@ -310,6 +310,18 @@ calcular_reajustes_plano = function(parametros) {
   indicefreq = "TaxaFrequencia"
   indicegrav = "TaxaGravidade"
 
+  # Se o Beta de Gravidade é Negativo, o reajuste e despesas são zerados:
+  if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0)) {
+
+    message("Aviso: Um dos coeficientes da Regressão de Plano de saúde é menor do que zero. A despesa com plano de saúde será zerada, e por consequência não será observado benefício.")
+    parametros[reaj] = 0
+    parametros[despesas] = 0
+    return(parametros)
+
+  }
+
+  message("Coeficientes da Regressão são maiores do que zero, calculando categoria.")
+
   # Calculando Reajuste Estimado
   parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
 
