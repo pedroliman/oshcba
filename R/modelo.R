@@ -307,8 +307,8 @@ calcular_reajustes_plano = function(parametros) {
   betafreq = "BetaFreqReajustePlano"
   betagrav = "BetaGravReajustePlano"
 
-  indicefreq = "IndiceFrequenciaAmpliado"
-  indicegrav = "IndiceGravidadeAmpliado"
+  indicefreq = "TaxaFrequencia"
+  indicegrav = "TaxaGravidade"
 
   # Calculando Reajuste Estimado
   parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
@@ -369,8 +369,8 @@ calcular_turnovergeral = function(parametros) {
   deslinvol = c("DesligamentosInvoluntarios")
   f = c("Funcionarios")
 
-  If = c("IndiceFrequenciaAmpliado")
-  Ig = c("IndiceGravidadeAmpliado")
+  If = c("TaxaFrequencia")
+  Ig = c("TaxaGravidade")
 
 
   # Calculando Perc Deslig Voluntarios
@@ -801,8 +801,8 @@ calcular_imagem_contracacao = function(parametros) {
   betagrav = c("BetaGravTempoContratacao")
   betapib = c("BetaPIBTempoContratacao")
   varpib = c("VarPIB")
-  If = c("IndiceFrequenciaAmpliado")
-  Ig = c("IndiceGravidadeAmpliado")
+  If = c("TaxaFrequencia")
+  Ig = c("TaxaGravidade")
 
   # Calculando Tempo de Contratacao Estimado
   parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]

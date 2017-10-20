@@ -59,7 +59,7 @@ oshcba_options = list(
     ,"calcular_despesasmedicas"
     ,"calcular_refugo_retrabalho"
     ,"calcular_mp_insumos"
-    ,"calcular_indices_ampliados"
+    #,"calcular_indices_ampliados" - Não calcular
     ,"calcular_engajamento"
     ,"calcular_turnovergeral"
     ,"calcular_reclamatorias"
@@ -81,9 +81,9 @@ oshcba_options = list(
     "calcular_eventos"
     ,"calcular_beneficios_inss"
     ,"calcular_faltas"
-    ,"calcular_indices_ampliados"
-    ,"calcular_turnovergeral"
     ,"calcular_taxas_acidentes"
+    #,"calcular_indices_ampliados" - Nao calcular mais
+    ,"calcular_turnovergeral"
   ),
 
   # Vetor de Funcoes Básicas (FAP não está aqui porque é uma função "à Parte").
