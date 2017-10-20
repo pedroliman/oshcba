@@ -386,7 +386,17 @@ calcular_turnovergeral = function(parametros) {
 
 
   # Calculando Perc Deslig Voluntarios
-  parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+
+  # Se o Beta de Gravidade é Negativo, o reajuste e despesas são zerados:
+  if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0 | parametros[betapib] < 0)) {
+
+    message("Aviso: Um dos coeficientes da Regressão de Desligamentos Voluntários é menor do que zero. O número de desligamentos voluntários será zerado.")
+    parametros[perc] = 0
+  } else {
+    message("Verificação dos Betas no Percentual de Desligamentos Voluntários é coerente, calculando com regressão.")
+    parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+  }
+
 
   # Calculando Desligamento Voluntários
   parametros[deslvol] = round(parametros[perc] * parametros[f], 0)
