@@ -82,6 +82,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
 
   message(Sys.time()," simular: Finalizando Simulacao.")
   # Mudar para output depois
+
   return(output)
 }
 

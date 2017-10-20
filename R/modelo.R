@@ -320,7 +320,7 @@ calcular_reajustes_plano = function(parametros) {
 
   }
 
-  message("Coeficientes da Regressão são maiores do que zero, calculando categoria.")
+  # message("Coeficientes da Regressão são maiores do que zero, calculando categoria.")
 
   # Calculando Reajuste Estimado
   parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
@@ -393,7 +393,7 @@ calcular_turnovergeral = function(parametros) {
     message("Aviso: Um dos coeficientes da Regressão de Desligamentos Voluntários é menor do que zero. O número de desligamentos voluntários será zerado.")
     parametros[perc] = 0
   } else {
-    message("Verificação dos Betas no Percentual de Desligamentos Voluntários é coerente, calculando com regressão.")
+    # message("Verificação dos Betas no Percentual de Desligamentos Voluntários é coerente, calculando com regressão.")
     parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
   }
 
@@ -826,9 +826,20 @@ calcular_imagem_contracacao = function(parametros) {
   If = c("TaxaFrequencia")
   Ig = c("TaxaGravidade")
 
+
+  # Verificação dos Betas:
+  if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0)) {
+
+    message("Aviso: Um dos coeficientes da Regressão de Tempo de Contratação é menor do que zero. As despesas desta categoria serão zeradas.")
+    parametros["TempoContratacaoEstimado"] = 0
+    parametros["DespesasImagemContratacao"] = 0
+    return(parametros)
+  }
+
+  # message("Verificação dos Betas do Tempo de Contratação é coerente, calculando com regressão.")
+
   # Calculando Tempo de Contratacao Estimado
   parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
-
 
   # Calculando Despesas com Contratacao relacionadas à Imagem
   parametros["DespesasImagemContratacao"] = -(parametros["TempoContratacaoEstimado"] - parametros["TempoContratacaoPadrao"]) * parametros["CustoMedSubstituporTempo"] * parametros["TurnoverGeral"] * parametros["Funcionarios"]

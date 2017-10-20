@@ -20,7 +20,7 @@ test_that("simular_cba( modo = simples) retorna resultados como dataframe com nu
 })
 
 test_that("simular_cba(modo = completo) retorna lista com numero de outputs correto", {
-  expect_equal(length(resultados_completo), 6)
+  expect_equal(length(resultados_completo), 7)
   expect_equal(class(resultados_completo), "list")
 })
 
