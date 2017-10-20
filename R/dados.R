@@ -2,7 +2,7 @@ carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", aba
 
   # Criando uma list para os inputs
   message(
-    paste("01. dados.R/carregar_inputs: Iniciando Carregamento de Inputs (funcao carregar_inputs()",
+    paste(Sys.time()," carregar_inputs: Iniciando Carregamento de Inputs (funcao carregar_inputs()",
           "arquivo_de_inputs = ", arquivo_de_inputs)
     )
   inputs = vector(mode = "list", length = length(nomes_inputs))
@@ -14,7 +14,7 @@ carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", aba
     inputs[[n_aba]] = readxl::read_excel(arquivo_de_inputs,sheet = aba)
   }
 
-  message("01. dados.R/carregar_inputs: Finalizando Carregamento de Inputs.")
+  message(Sys.time()," carregar_inputs: Finalizando Carregamento de Inputs.")
   return(inputs)
 
 }

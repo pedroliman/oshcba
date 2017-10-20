@@ -186,7 +186,7 @@ projetar_variaveis_deterministicas = function(dados_projetados, constantes) {
 #' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
 #' @export
 obter_parametros = function(Inputs) {
-  message("02. obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
+  message(Sys.time()," obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
   replicacoes = obter_replicacoes(Inputs)
   anos = obter_anos(Inputs)
   cenarios = obter_cenarios(Inputs)
@@ -207,7 +207,7 @@ obter_parametros = function(Inputs) {
 
   custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
   parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
-  message("02. obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
+  message(Sys.time()," obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
 
   # Ordenando o Df para o Calculo Iterativo
   parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)

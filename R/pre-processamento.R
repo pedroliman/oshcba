@@ -56,4 +56,19 @@ verificar_inputs = function(inputs) {
   message("Terminando Verificação de Inputs.")
 }
 
-# verificar_inputs(inputs)
+
+verificar_parametros = function(parametros) {
+
+  message("Iniciando Verificacao de Parâmetros.")
+
+  texto_base = "Dados Informados Incorretamente:"
+
+  v_maior_que_zero = c("Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO", "CustoMedSubstitu")
+
+  # Verificando variaveis que deveriam ser maiores do que zero:
+  if(any(parametros[v_maior_que_zero] <= 0)){
+    stop(paste(texto_base, "Existem variaveis básicas zeradas em seus inputs (ex.: Funcionarios, Folha de Pagamento, etc."))
+  }
+
+  message("Terminando Verificação de Parâmetros.")
+}

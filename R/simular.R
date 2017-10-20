@@ -15,10 +15,14 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
 
   parametros = obter_parametros(inputs)
 
+
+  # Verificar Parâmetros antes de continuar
+  verificar_parametros(parametros)
+
   # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes
   # Importa
 
-  message("03. simular.R/simular: Iniciando Calculo dos Resultados do Modelo.")
+  message(Sys.time()," simular: Iniciando Calculo dos Resultados do Modelo.")
 
 
   # Criando Variáveis Financeiras que não existem nos parametros com valor igual a zero.
@@ -31,7 +35,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
                                 output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_base)
 
   # Calculando Funcoes Obrigatórias
-  message("04. simular.R/simular: Simulando FAP.")
+  message(Sys.time()," simular: Simulando FAP.")
   resultados = calcular_fap(parametros = resultados, historico = inputs$HistoricoFAP)
 
 
@@ -56,7 +60,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
                                 output_funcoes = inputs$Funcoes_Outputs, funcoes = v_funcoes_opcionais_a_calcular)
 
-  message("05. simular.R/simular: Finalizando Calculo dos Resultados do Modelo.")
+  message(Sys.time()," simular: Finalizando Calculo dos Resultados do Modelo.")
 
   # Descontando Variaveis Monetarias
   resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
@@ -76,14 +80,14 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
                                                                          Osh_Options = oshcba_options, Constantes = inputs$Constantes, Parametros = parametros, Resultados = resultados,
                                                                          Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
 
-  message("08. simular.R/simular: Finalizando Simulacao.")
+  message(Sys.time()," simular: Finalizando Simulacao.")
   # Mudar para output depois
   return(output)
 }
 
 calcular_cbr = function(resultados, cenarios) {
 
-  message("07. simular.R/calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
+  message(Sys.time()," calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
   ### Sintetizando Resultados por Cenario e Replicacao
   ## Lembrar:
   resultados_sintetizados = resultados %>% group_by(Cenario, Replicacao) %>%
@@ -177,7 +181,7 @@ calcular_cbr = function(resultados, cenarios) {
   ### Mantendo Apenas Variaveis uteis
 
   resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotalDescontado.x, -Soma_CustoTotalDescontado.y)
-  message("07. simular.R/calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
+  message(Sys.time()," calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
   return(resultados_CBR)
 }
 
@@ -205,7 +209,7 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
 
       # Verificando se vetores de inputs e outputs estao corretos
       if (any(c(length(v_inputs) == 0, length(v_outputs) == 0))) {
-        message(message(paste("04. simular.R/calcular_funcoes: Lista de Inputs ou Outputs esta vazia: ",
+        message(message(paste(Sys.time()," calcular_funcoes: Lista de Inputs ou Outputs esta vazia: ",
                               f)))
       } else {
         # So executar a funcao se..  Todos os Inputs estao presentes:
@@ -215,15 +219,15 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
           if ((i == 1) | (!all(v_outputs %in% colnames(resultados)))) { # Se estou na primeira iteracao, ou se algum output não foi calculado.
             chamada_da_funcao = paste(f, "(resultados)", sep = "")
             resultados = eval(parse(text = chamada_da_funcao))
-            message(paste("04. simular.R/calcular_funcoes: Funcao Calculada: ",
+            message(paste(Sys.time()," calcular_funcoes: Funcao Calculada: ",
                           f))
           } else {
-            message(paste("04. simular.R/calcular_funcoes: Todos os Outputs Ja Foram calculados: ",
+            message(paste(Sys.time()," calcular_funcoes: Todos os Outputs Ja Foram calculados: ",
                           f))
           }
 
         } else {
-          message(paste("04. simular.R/calcular_funcoes: Faltam Inputs para calcular: ",
+          stop(paste(Sys.time()," calcular_funcoes: Existem erros em seu arquivo de dados. Realize a simulação com um arquivo válido. Faltam Inputs para calcular esta função: ",
                         f))
         }
       }
