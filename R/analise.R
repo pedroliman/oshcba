@@ -20,3 +20,8 @@ resumo_cba_por_iniciativa = function(resultados_cbr){
       Custo = mean(CustoTotalCBR)
                                                     )
 }
+
+grafico_box_plot_por_iniciativa = function(resultados_cbr) {
+  ggplot(resultados_cbr,aes(resultados_cbr$Cenario.y,resultados_cbr$RazaoBeneficioCusto)) + geom_boxplot() + theme(axis.title.y = element_blank(),axis.title.x=element_blank())
+}
+
