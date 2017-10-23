@@ -663,6 +663,7 @@ calcular_multas = function(parametros){
 
 
   # Implementação Inicial do Módulo de Multas - Modificado para tornar-se similar aos eventos de interdição.
+  # Modificado em 23/10/2017
 
   # # Vai ter que mudar quando tivermos mais do que uma lei
   # despesa_multas = function(n_multas_l, cmed) {
