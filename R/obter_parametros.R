@@ -65,6 +65,20 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
   # }
   # seed = 1000
 
+
+  # Verificando se distribuicao que veio é correta, ou é inconsistente:
+  if(length(distribuicao) == 0){
+    stop("Dados Inconsistentes: Confira se os parâmetros do modelo foram informados de modo consistente na aba Parametros.")
+  }
+
+
+  # Verificando se a distribuição informada existe
+  distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_percentual_eventos", "poisson")
+
+  if(!distribuicao %in% distribuicoes_possiveis){
+    stop(paste("Dados Inconsistentes: A distribuicao", distribuicao, "está incorreta. Confira os parâmetros informados."))
+  }
+
   amostra = switch(distribuicao,
                    "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, seed = seed),
                    "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4, seed = seed),
