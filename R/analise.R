@@ -26,9 +26,10 @@ grafico_box_plot_por_iniciativa = function(resultados_cbr) {
 }
 
 
-resumo_cba_por_iniciativa(resultados_cbr = resultados_cbr) %>%
-  select(Cenario.y, MediaCBR, MediaBeneficio, Custo) %>%
-  rbind(., data.frame(Cenario.y="Total"
-                      ,MediaCBR=sum(.$MediaCBR, na.rm=T)
-                      ,MediaBeneficio=sum(.$MediaBeneficio)
-                      ,Custo=sum(.$Custo)))
+tabela_soma_razao_beneficio_custo = function(resultados_cbr) {
+  resumo_cba_por_iniciativa(resultados_cbr = resultados_cbr) %>%
+    select(Cenario.y, MediaBeneficio, Custo) %>%
+    rbind(., data.frame(Cenario.y="Total"
+                        ,MediaBeneficio=sum(.$MediaBeneficio)
+                        ,Custo=sum(.$Custo))) %>% mutate(RazaoBeneficioCusto = MediaBeneficio / Custo)
+}
