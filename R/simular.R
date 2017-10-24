@@ -112,6 +112,7 @@ calcular_cbr = function(resultados, cenarios) {
       Soma_DespesasInterdicaoFiscalizacaoDescontado = sum(DespesasInterdicaoFiscalizacaoDescontado),
       Soma_GanhoQualidadeDescontado = sum(GanhoQualidadeDescontado),
       Soma_GanhoProdutividadeDescontado = sum(GanhoProdutividadeDescontado),
+      Soma_GanhoImagemReceitaDescontado = sum(GanhoImagemReceitaDescontado),
       Soma_DespesasSeguroPatrimonialDescontado = sum(DespesasSeguroPatrimonialDescontado)
     )
     # summarise(Soma_CustoTotal = sum(CustoTotalDescontado),
@@ -156,6 +157,7 @@ calcular_cbr = function(resultados, cenarios) {
     BeneficioInterdicaoFiscalizacao = beneficio(Soma_DespesasInterdicaoFiscalizacaoDescontado.y, Soma_DespesasInterdicaoFiscalizacaoDescontado.x),
     BeneficioGanhoQualidade = beneficio(Soma_GanhoQualidadeDescontado.y, Soma_GanhoQualidadeDescontado.x),
     BeneficioGanhoProdutividade = beneficio(Soma_GanhoProdutividadeDescontado.y, Soma_GanhoProdutividadeDescontado.x),
+    BeneficioGanhoImagemReceita = beneficio(Soma_GanhoImagemReceitaDescontado.y, Soma_GanhoImagemReceitaDescontado.x),
     BeneficioSeguroPatrimonial = beneficio(Soma_DespesasSeguroPatrimonialDescontado.y, Soma_DespesasSeguroPatrimonialDescontado.x)
     ) %>% ## Aqui entrariam outros beneficios
     mutate(BeneficioTotalCBR = BeneficioTurnover +
@@ -176,6 +178,7 @@ calcular_cbr = function(resultados, cenarios) {
              BeneficioInterdicaoFiscalizacao +
              BeneficioGanhoQualidade +
              BeneficioGanhoProdutividade +
+             BeneficioGanhoImagemReceita +
              BeneficioSeguroPatrimonial) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
                                                                                               costs = CustoTotalCBR))
 

@@ -29,6 +29,7 @@ oshcba_options = list(
                             , "DespesasSeguroPatrimonial"
                             , "GanhoQualidade"
                             , "GanhoProdutividade"
+                            , "GanhoImagemReceita"
                             ),
 
   # Nomes de Variaveis

@@ -866,6 +866,7 @@ calcular_imagem_receita = function(parametros) {
         TRUE,
         FALSE)
   parametros["GanhoImagemReceita"] = parametros["HouveGanhoImagemReceita"] * parametros["GanhoImagemReceitaEsperado"]
+
   parametros
 }
 
