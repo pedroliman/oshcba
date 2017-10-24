@@ -724,7 +724,7 @@ calcular_multas = function(parametros){
 
   multas = c("Multas1", "Multas2", "Multas3", "Multas4", "Multas5")
 
-  parametros["DespesaMultas"] = rowSums(parametros[multas] * parametros[despesas])
+  parametros["DespesaMultas"] = rowSums(parametros[multas] * -parametros[despesas])
 
   parametros
 
