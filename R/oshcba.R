@@ -29,5 +29,5 @@ NULL
 
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Bem vindo ao Simulador. V. 1.2.-beta.")
+  packageStartupMessage("Bem vindo ao Simulador de Custos e Beneficios em Saude e Seguranca do Trabalho.")
 }

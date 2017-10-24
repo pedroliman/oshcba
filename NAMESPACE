@@ -2,9 +2,11 @@
 
 export(calcular_funcoes)
 export(cbr)
+export(grafico_box_plot_por_iniciativa)
 export(obter_cenarios)
 export(obter_oshcba_options)
 export(obter_parametros)
 export(resumo_cba_por_iniciativa)
 export(roi)
 export(simular_cba)
+export(tabela_soma_razao_beneficio_custo)

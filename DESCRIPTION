@@ -1,7 +1,7 @@
 Package: oshcba
 Type: Package
 Title: Biblioteca com Algoritmos para Simulacao Numerica.
-Version: 1.1.0
+Version: 1.5.0
 Author: Pedro Nascimento de Lima
 Maintainer: Pedro N. de Lima <pedrolima.n@gmail.com>
 Description: Algoritmos para Simulacao Numerica.
@@ -18,7 +18,8 @@ Imports:
     purrr
 Depends:
     dplyr,
-    purrr
+    purrr,
+    ggplot2
 Suggests:
     testthat,
     covr
