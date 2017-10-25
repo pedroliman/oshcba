@@ -325,6 +325,15 @@ calcular_reajustes_plano = function(parametros) {
   # Calculando Reajuste Estimado
   parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
 
+
+
+  # Aplicando Batentes. Estas constantes são definidas internamente, com o propósito de cancelar valores extremos.
+  reajuste_minimo = -0.4
+  reajuste_maximo = 0.4
+
+  parametros = aplicar_batentes(dados = parametros, variavel = reaj, valor_minimo = reajuste_minimo, valor_maximo = reajuste_maximo)
+
+
   # Calculando Despesas do Plano de Saúde, de acordo com o ano, para os anos iniciais
   ano_inicial = min(parametros$Ano)
 
@@ -396,6 +405,14 @@ calcular_turnovergeral = function(parametros) {
     # message("Verificação dos Betas no Percentual de Desligamentos Voluntários é coerente, calculando com regressão.")
     parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
   }
+
+
+  # Aplicando Batentes. Estas constantes são definidas internamente, com o propósito de cancelar valores extremos.
+  perc_minimo = 0
+  perc_maximo = 0.5
+
+  parametros = aplicar_batentes(dados = parametros, variavel = perc, valor_minimo = perc_minimo, valor_maximo = perc_maximo)
+
 
 
   # Calculando Desligamento Voluntários
@@ -496,6 +513,45 @@ acumular_valores = function(parametros, x, x_inicial, x_acumulado){
   }
   parametros[x_acumulado]
 
+}
+
+
+############# FUNCOES PARA APLICACAO DE BATENTES #################
+
+aplicar_batente_minimo = function(dados, variavel, valor_minimo) {
+  dados[which(dados[variavel] < valor_minimo),variavel] = valor_minimo
+  dados
+}
+
+aplicar_batente_maximo = function(dados, variavel, valor_maximo) {
+  dados[which(dados[variavel] > valor_maximo),variavel] = valor_maximo
+  dados
+}
+
+aplicar_batentes = function(dados, variavel, valor_minimo, valor_maximo) {
+
+
+  # Contabilizando casos onde o Batente foi usado para comunicar.
+  n_casos_minimo = length(which(dados[variavel] < valor_minimo)) / nrow(dados)
+
+  n_casos_maximo = length(which(dados[variavel] > valor_maximo)) / nrow(dados)
+
+  if(n_casos_minimo > 0){
+    message(paste("Aviso: variavel", variavel, "assumium um valor menor do que", valor_minimo,". O valor mínimo foi considerado em", n_casos_minimo * 100, "% dos casos."))
+  }
+
+  # Comunicando usuario sobre o uso dos batentes:
+  if(n_casos_maximo > 0){
+    message(paste("Aviso: variavel", variavel, "assumium um valor maior do que", valor_maximo,". O valor máximo foi considerado em", n_casos_maximo * 100, "% dos casos."))
+  }
+
+
+  # Aplicando Batentes
+  dados[which(dados[variavel] < valor_minimo),variavel] = valor_minimo
+
+  dados[which(dados[variavel] > valor_maximo),variavel] = valor_maximo
+
+  dados
 }
 
 
@@ -851,6 +907,16 @@ calcular_imagem_contracacao = function(parametros) {
 
   # Calculando Tempo de Contratacao Estimado
   parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
+
+
+  # Aplicando Batentes. Estas constantes são definidas internamente, com o propósito de cancelar valores extremos.
+  tempo_minimo = 0
+
+  # Usando o primeiro tempo de contratacao padrao, assumindo que nao mudará entre replicacoes ou entre anos.
+  # Como o usuario pode informar tempo padrão igual a zero, assumo o maior valor entre a multiplicação, e 2.
+  tempo_maximo = max(parametros[1,"TempoContratacaoPadrao"] * 2, 2)
+
+  parametros = aplicar_batentes(dados = parametros, variavel = "TempoContratacaoEstimado", valor_minimo = tempo_minimo, valor_maximo = tempo_maximo)
 
   # Calculando Despesas com Contratacao relacionadas à Imagem
   parametros["DespesasImagemContratacao"] = -(parametros["TempoContratacaoEstimado"] - parametros["TempoContratacaoPadrao"]) * parametros["CustoMedSubstituporTempo"] * parametros["TurnoverGeral"] * parametros["Funcionarios"]

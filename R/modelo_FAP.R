@@ -201,15 +201,26 @@ calcular_fap = function(parametros, historico) {
   parametros["PercentilCustoFAP"] = parametros["Beta0ICustoFAP"] + parametros["Beta1ICustoFAP"] * parametros["IndiceCustoFAP"]
 
 
+  ## Batentes da regressão
+  batente_inferior = 0
+  batente_superior = 100
+
+
   # Inserindo "Batentes" para os Percentis (Posso usar estes wichs para outras funções também!)
   percentis = c("PercentilFrequenciaFAP", "PercentilGravidadeFAP", "PercentilCustoFAP")
   for (p in percentis) {
 
     # Se o percentil calclado foi menor do que zero, seu valor deve ser 0
-    parametros[which(parametros[p] < 0),p] = 0
+    #parametros[which(parametros[p] < batente_inferior),p] = batente_inferior
+
+    parametros = aplicar_batentes(dados = parametros, variavel = p, valor_minimo = batente_inferior, valor_maximo = batente_superior)
+
+    #parametros = aplicar_batente_minimo(dados = parametros, variavel = p, valor_minimo = batente_inferior)
 
     # Da mesma forma, se o percentil calclado foi maior do que 100, seu valor deve ser 100
-    parametros[which(parametros[p] > 100),p] = 100
+    #parametros[which(parametros[p] > batente_superior),p] = batente_superior
+
+    #parametros = aplicar_batente_maximo(dados = parametros, variavel = p, valor_maximo = batente_superior)
   }
 
 
