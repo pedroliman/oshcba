@@ -6,7 +6,7 @@
 #'
 #' @return um list com os resultados.
 #' @export
-simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "simples") {
+simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "completo") {
 
   # Verificar se os tipos de inputs estão corretos
   modos_possiveis = c("basico", "simplificado", "customizado")

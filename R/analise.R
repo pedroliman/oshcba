@@ -70,3 +70,4 @@ tabela_soma_razao_beneficio_custo = function(resultados_cbr) {
                         ,MediaBeneficio=sum(.$MediaBeneficio)
                         ,Custo=sum(.$Custo))) %>% mutate(RazaoBeneficioCusto = MediaBeneficio / Custo)
 }
+
