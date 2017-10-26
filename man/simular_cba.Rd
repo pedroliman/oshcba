@@ -4,7 +4,8 @@
 \alias{simular_cba}
 \title{Simular CBA}
 \usage{
-simular_cba(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "simples")
+simular_cba(ArquivoInputs = "./tests/testthat/Dados.xlsx",
+  tipo_input = "excel", modo = "customizado", output = "simples")
 }
 \arguments{
 \item{ArquivoInputs}{Arquivo de dados usado como Input (deve seguir um padrao especifico).}

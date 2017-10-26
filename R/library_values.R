@@ -80,12 +80,18 @@ oshcba_options = list(
   # Vetor de Funcoes a Calcular
   v_funcoes_base = c(
     "calcular_eventos"
-    ,"calcular_beneficios_inss"
     ,"calcular_faltas"
     ,"calcular_taxas_acidentes"
     #,"calcular_indices_ampliados" - Nao calcular mais
     ,"calcular_turnovergeral"
   ),
+
+
+  # Vetor de Funcoes Básicas (FAP não está aqui porque é uma função "à Parte").
+  v_funcoes_fap = c(
+    "calcular_beneficios_inss"
+  ),
+
 
   # Vetor de Funcoes Básicas (FAP não está aqui porque é uma função "à Parte").
   v_funcoes_basicas = c(

@@ -6,9 +6,36 @@
 #'
 #' @return um list com os resultados.
 #' @export
-simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "simples") {
-  inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler,
-                           nomes_inputs = oshcba_options$nomes_inputs)
+simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "simples") {
+
+  # Verificar se os tipos de inputs estão corretos
+  modos_possiveis = c("basico", "simplificado", "customizado")
+  outputs_possiveis = c("simples", "completo")
+  tipo_inputs_possiveis = c("excel", "list")
+
+  # Verificando se os
+
+  if(!modo %in% modos_possiveis){
+    stop(paste("O modo informado", modo, "não está dentre os modos permitidos."))
+  }
+
+  if(!output %in% outputs_possiveis){
+    stop(paste("O tipo de output informado", output, "não está dentre os tipos de outputs permitidos."))
+  }
+
+  if(!tipo_input %in% tipo_inputs_possiveis){
+    stop(paste("O tipo de input informado", tipo_input, "não está dentre os tipos de inputs permitidos."))
+  }
+
+
+  # Se o tipo de input é excel, usaremos a funcao carregar inputs, caso contrário, passaremos ele diretamente para a verificação.
+  if(tipo_input == "excel"){
+    inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler,
+                             nomes_inputs = oshcba_options$nomes_inputs)
+  } else {
+    inputs = ArquivoInputs
+  }
+
 
   # Verificar Inputs antes de continuar
   verificar_inputs(inputs)
@@ -34,31 +61,42 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = inputs$Funcoes_Inputs,
                                 output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_base)
 
-  # Calculando Funcoes Obrigatórias
-  message(Sys.time()," simular: Simulando FAP.")
-  resultados = calcular_fap(parametros = resultados, historico = inputs$HistoricoFAP)
-
-
   # Calculando funções Básicas
   resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
                                 output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_basicas)
 
 
-  # Calculando Funções selecionadas:
-  v_funcoes_calculadas = c(oshcba_options$v_funcoes_base, oshcba_options$v_funcoes_basicas)
-  v_funcoes_passiveis_calculo = oshcba_options$v_funcoes[!(oshcba_options$v_funcoes %in% v_funcoes_calculadas)]
 
-  # Funcoes a calcular informadas pelo usuário:
-
-  df.modulos_solicitados = subset(inputs$Modulos, subset = Calcular)
-  v_funcoes_solicitadas_usuario = as.vector(df.modulos_solicitados$Modulo)
-
-  # Obtendo Funcoes opcionais que devem ser calculadas
-  v_funcoes_opcionais_a_calcular = v_funcoes_passiveis_calculo[(v_funcoes_passiveis_calculo %in% v_funcoes_solicitadas_usuario)]
+  # Se é simplificado ou customizado, precisa rodar os benefícios INSS e o FAP.
+  if(modo == "simplificado" | modo == "customizado") {
+    resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
+                                  output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_fap)
 
 
-  resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
-                                output_funcoes = inputs$Funcoes_Outputs, funcoes = v_funcoes_opcionais_a_calcular)
+    message(Sys.time()," simular: Simulando FAP.")
+    resultados = calcular_fap(parametros = resultados, historico = inputs$HistoricoFAP)
+  }
+
+
+  # Se é customizado, calcular funções selecionadas pelo usuário
+  if(modo == "customizado") {
+    # Calculando Funções selecionadas:
+    v_funcoes_calculadas = c(oshcba_options$v_funcoes_base, oshcba_options$v_funcoes_basicas, oshcba_options$v_funcoes_fap)
+    v_funcoes_passiveis_calculo = oshcba_options$v_funcoes[!(oshcba_options$v_funcoes %in% v_funcoes_calculadas)]
+
+    # Funcoes a calcular informadas pelo usuário:
+
+    df.modulos_solicitados = subset(inputs$Modulos, subset = Calcular)
+    v_funcoes_solicitadas_usuario = as.vector(df.modulos_solicitados$Modulo)
+
+    # Obtendo Funcoes opcionais que devem ser calculadas
+    v_funcoes_opcionais_a_calcular = v_funcoes_passiveis_calculo[(v_funcoes_passiveis_calculo %in% v_funcoes_solicitadas_usuario)]
+
+
+    resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
+                                  output_funcoes = inputs$Funcoes_Outputs, funcoes = v_funcoes_opcionais_a_calcular)
+
+  }
 
   message(Sys.time()," simular: Finalizando Calculo dos Resultados do Modelo.")
 
@@ -76,7 +114,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", modo = "si
   ## Definindo Lista Completa de Inputs, Options, ensemble e
   ## resultados_CBR
 
-  output = switch(EXPR = modo, simples = resultados_CBR, completo = list(Inputs = inputs,
+  output = switch(EXPR = output, simples = resultados_CBR, completo = list(Inputs = inputs,
                                                                          Osh_Options = oshcba_options, Constantes = inputs$Constantes, Parametros = parametros, Resultados = resultados,
                                                                          Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
 

@@ -21,6 +21,31 @@ resumo_cba_por_iniciativa = function(resultados_cbr){
                                                     )
 }
 
+
+# resumo_cba_por_categorias = function(resultados_cbr){
+#
+# }
+#
+# variaveis = names(resultados_cbr)
+# variaveis = dplyr::starts_with("Benef")
+#
+# resultados_cbr$Cenario.y = as.factor(resultados_cbr$Cenario.y)
+# resultados_cbr %>%
+#   dplyr::group_by(Cenario.y) %>% dplyr::summarise(
+#     LimiteInferiorCBR = quantile(RazaoBeneficioCusto, probs = 0.025),
+#     MediaCBR = mean(RazaoBeneficioCusto),
+#     LimiteSuperiorCBR = quantile(RazaoBeneficioCusto, probs = 0.975),
+#     LimiteInferiorBeneficio = quantile(BeneficioTotalCBR, probs = 0.025),
+#     MediaBeneficio = mean(BeneficioTotalCBR),
+#     LimiteSuperiorBeneficio = quantile(BeneficioTotalCBR, probs = 0.975),
+#     Custo = mean(CustoTotalCBR)
+#   )
+
+
+
+
+
+
 #' grafico_box_plot_por_iniciativa
 #'
 #' @param resultados_cbr  dataframe com resultados formatados no modelo "CBR".
