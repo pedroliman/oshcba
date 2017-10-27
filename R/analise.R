@@ -48,6 +48,65 @@ resumo_cba_por_categorias = function(resultados_cbr){
  }
 
 
+#' grafico_dbg_cbr_waterfall
+#'
+#' @param resumo list com resumo de variáveis retornado pela funcao resumo_cba_por_categorias(resultados_cbr)
+#' @param iniciativa nome da iniciativa para realizar o gráfico.
+#'
+#' @return gráfico waterfall com o CBR
+#' @export
+grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
+  dados_relativos = resumo$RazaoBeneficioCustoPorCategoria
+  dados_relativos$RazaoBeneficioCusto = rowSums(dados_relativos[,3:length(dados_relativos)-1])
+
+
+  dados_relativos_iniciativa = dados_relativos %>% dplyr::filter(Cenario.y == iniciativa)
+
+  Final = dados_relativos_iniciativa %>% dplyr::ungroup() %>% dplyr::select(-Cenario.y)
+
+  Final$RazaoBeneficioCusto = -Final$RazaoBeneficioCusto
+
+  Final=t(Final)
+
+  Final = data.frame(Final)
+
+  N_GRAF= length(Final[1,])
+
+  #inicia desenv gravf cascata
+  for (k in 1:N_GRAF) {
+
+
+    Final_2=Final
+
+    Final_2$tipo<- c(4,4,2,3,2,5,3,3,3,5,3,4,4,4,3,3,4,4,5,3,1)
+
+    Final_2 <- Final_2[order(-Final_2$tipo),]
+
+
+    Final_2=subset(Final_2, Final_2[,k]!=0)
+
+    #n?o sei se ? ne
+    Final_2$id <- seq_along(Final_2[,k])
+    #Final_2$type <- ifelse(Final_2[,k] > 0, "in", "total")
+
+
+
+    Final_2$end <- cumsum(Final_2[,k])
+    Final_2$end <- c(head(Final_2$end, -1), 0)
+    Final_2$start <- c(0, head(Final_2$end, -1))
+    Final_2$dimensoes <- rownames(Final_2)
+
+
+    Final_2$dimensoes <- factor(Final_2$dimensoes, levels = Final_2$dimensoes)
+
+
+    p<-ggplot(Final_2, aes(dimensoes, fill = tipo)) + geom_rect(aes(x = dimensoes,xmin = id - 0.45,
+                                                                    xmax = id + 0.45, ymin = end,ymax = start))+
+      theme(axis.text.x = element_text(angle=90))+ theme(legend.position="none")
+    p
+  }
+}
+
 #' grafico_box_plot_por_iniciativa
 #'
 #' @param resultados_cbr  dataframe com resultados formatados no modelo "CBR".
