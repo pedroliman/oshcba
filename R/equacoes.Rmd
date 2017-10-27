@@ -28,7 +28,7 @@ $${RBC} = \frac{\sum_{i=1}^{I} B_{i}} {\sum_{j=1}^{J} C_{j}}$$
 ### Fluxo de Caixa em Valor Presente 
 Os fluxos de caixa devem ser ajustados a valor presente utilizando-se uma taxa de atratividade $\theta$ definida pelo usuário do modelo. Tal taxa será utilizada para trazer os valores de fluxo de caixa a valor presente. Os fluxos de caixa a serem descontados incluem os custos e benefícios das iniciativas.
 
-$$FC_i(t) = \frac{fc_i}{(1DIETER+\theta)^t}$$
+$$FC_i(t) = \frac{fc_i}{(1+\theta)^t}$$
 
 ### Cálculo dos Benefícios da Iniciativa 
 Em todos os casos, o benefício será calculado a partir da diferença em valores monetários de uma variável financeira sem a iniciativa em SST e com a iniciativa em SST. Exemplificando, o benefício gerado pela redução de absenteísmo $B_{abs}$ será calculado a partir da seguinte equação.
@@ -45,22 +45,13 @@ $$B_{i,p} = \frac{B_{i}}{\sum_{i=1}^{I} B_{i}}$$
 ### Cálculo dos Eventos 
 Em todos os casos, o número de eventos será calculado a partir da multiplicação do número de funcionários da empresa $f$, do o percentual de funcionários $Pev_c$ que sofrerá o evento $c$, e do da percentual destes acidentes que são do tipo $k$, $Pev_{k}$. Os eventos $c$ pertecem ao conjunto $C =\{afastamento<15, afastamento>15, óbito, sem afastamento\}$ e os tipos de acidente $k$ pertencem ao conjunto $K= \{típico, trajeto, doença não ocupacional\}$. 
 
-$$Nev_{c,k}= f * Pev_{k} * Pev_{c} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
+$$Nev_{c,k}= f * Pev_{c,k} \ \forall \ c \  \in \ C,  \ k \  \in \ K$$
 
 #### Cálculo de Faltas 
 O número de faltas será calculado a partir da multiplicação do número de funcionários da empresa $f$ e a taxa de falta $T_{falta}$, conforme equação abaixo: 
 
 $$N_{falta} = f * T_{falta}$$ 
 
-#### Índices de Gravidade e Frequência Ampliados 
-
-Os índices de frequência e gravidade ampliados serão usados como variáveis independentes nas regressões relacionadas à reajuste do plano de saúde, tempo de contratação e desligamento voluntário.
-O índice de frequência considera todos os eventos, sobre o número de funcionários.
-
-$$I_{fa} = \frac{\sum_{k=1}^{K} {\sum_{c=1}^{C} {n_{acidentes \ k,c, t-1}}}}{f} * 1000$$
-
-O índice de gravidade ponderará os eventos, considerando os mesmos pesos atribuídos no cálculo do FAP.
-$$I_{ga} = \frac{0,3 * Nev_{af_{>15},k} + 0,5 * Nev_{obito, k} + 0,1 * (Nev_{af<15,k} + Nev_{semAfast,k} + N_{falta} + Nev_{af>15,k})}{f}* 1.000$$
 
 #### Turnover Geral 
 
@@ -71,14 +62,13 @@ $$f_{desligacumulado} = f_{desligados_inicial} + \sum_{t=1}^{t} f_t * Turn_{gera
 
 ### Ligação entre Eventos e Variáveis Previdenciárias 
 
-O quadro a seguir apresenta a ligação entre os eventos e os benefícios calculados.
-![Quadro de Eventos e B's calculados](../figures/quadro_beneficios.png)
+
 
 #### B91 - Auxílio Doença Acidentário 
 
 Após o cálculo dos eventos serão calculados os benefícios gerados a partir dos mesmos.
 
-$$N_{b91} = Nev_{ocupacional, af>15}$$
+$$N_{B91} = {(Nev_{ocupacional, af>15}+Nev_{tipico, af>15})*Fator_{B91}}$$
 
 
 #### B92 - Aposentadoria por Invalidez Acidentária 
@@ -87,16 +77,16 @@ $$N_{b91} = Nev_{ocupacional, af>15}$$
 O número de benefícios concedidos $N_{b92}$ será igual ao número de afastamentos menor do que quinze dias $Nev_{af_{<15},k}$.
 
 
-$$N_{b92} = \sum_{k=1}^{K92}{Nev_{af_{>15},k}}  * P_{inval} , onde \ K92 = \{típico \ , trajeto \  ou \ doença \ ocupacional\} $$
+$$N_{B92} = {(Nev_{ocupacional, af>15}+Nev_{tipico, af>15})*Fator_{B92}}$$
 A probabilidade de invalidez P_{inval} será igual para cada tipo de acidente $k$.
 
 #### B93 - Pensão por Morte Acidentária 
 
-$$N_{b93} = \sum_{k=1}^{K93}Nev_{obito, k}, onde \ K93 = \{típico \ , trajeto \  ou \ doença \ ocupacional\}$$
+$$N_{B93} = {(Nev_{ocupacional, obito}+Nev_{tipico, obito})*Fator_{B93}}$$
 
 #### B94 - Auxílio Acidente 
 
-$$N_{b94} = (Nev_{af>15},_{traj} + Nev_{af>15},_{tipico})$$
+$$NB_{B94} = {(Nev_{ocupacional, af>15}+Nev_{tipico, af>15})*Fator_{B94}}$$
 Deve-se notar que, para fins de FAP, os eventos não devem considerar os acidentes de trajetos. Caso o número de benefícios separado por espécie seja apenas relevante para o FAP, os acidentes de trajetos devem ser removidos das fórmulas acima. Caso contrário, devem ser criadas variáveis em separado para fins de FAP e para outros fins.
 
 #### B31 - Auxílio Doença Previdenciário 
