@@ -103,8 +103,10 @@ grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
     p<-ggplot(Final_2, aes(dimensoes, fill = tipo)) + geom_rect(aes(x = dimensoes,xmin = id - 0.45,
                                                                     xmax = id + 0.45, ymin = end,ymax = start))+
       theme(axis.text.x = element_text(angle=90))+ theme(legend.position="none")
-    p
+
+
   }
+  p
 }
 
 #' grafico_box_plot_por_iniciativa
