@@ -51,6 +51,13 @@ verificar_inputs = function(inputs) {
     stop("Revise suas estimativas do impacto das Iniciativas. As iniciativas em conjunto reduzem um percentual de acidentes maior do que 100%.")
   }
 
+
+  # Verificar se os parâmetros informados são coerentes com as distribuições de probabilidades
+
+  if(verificar_coerencia_parametros_aleatorios(inputs)){
+    stop("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
+  }
+
   # Verificando algumas variáveis em Dados Projetados que devem ser maiores do que zero:
   # Cancelando Esta verificação, ela deve ser feita somente depois que os parâmetros foram estimados.
   # variaveis = c("Ano", "Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO")
@@ -132,3 +139,117 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 
   resultado_verificacao
 }
+
+
+verificar_coerencia_parametros_aleatorios = function(inputs) {
+
+  # A princípio não há inconsistência.
+  ha_inconsistencia = FALSE
+
+  # Identificando Inputs
+  parametros_inputs = inputs$Parametros
+
+  # Verificando se todas as distribuicoes informadas estão dentre as distribuicoes possiveis
+  distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_percentual_eventos", "poisson")
+  n_parametros_exigidos = c(2,4,2,3,1,1)
+
+
+  # Verificando se existe alguma distribuicao que nao está dentre as disponiveis
+  if(!any(parametros_inputs$Distribuicao %in% distribuicoes_possiveis)){
+    ha_inconsistencia = TRUE
+    message("Aviso: Foram Informadas distribuicoes de probabilidade na aba parametros não suportadas pela calculadora.")
+  }
+
+  # Verificações para cada tipo de distribuicao
+
+  for (d in seq_along(distribuicoes_possiveis)){
+
+    distribuicao = distribuicoes_possiveis[d]
+    n_parametros = n_parametros_exigidos[d]
+
+    distribuicao = distribuicoes_possiveis[d]
+    n_parametros = n_parametros_exigidos[d]
+
+    parametros_numericos = dplyr::filter(parametros_inputs, Distribuicao == distribuicao) %>% dplyr::select(Parametro1, Parametro2, Parametro3, Parametro4)
+
+    # Verificando se algum valor que deveria ser informado é NA
+    if(any(is.na(parametros_numericos[,1:n_parametros]))) {
+      ha_inconsistencia = TRUE
+      message(paste("Aviso: Foram encontrados celulas em branco na planilha de Parametros. Verificar distribuicao ", distribuicao))
+    }
+
+
+
+    # Realizando Verificacoes individuais por distribuicao
+
+    # Verificando distribuicao normal truncada.
+    if (distribuicao == "normaltruncada"){
+
+      media = parametros_numericos$Parametro1
+      desvio = parametros_numericos$Parametro2
+      minimo = parametros_numericos$Parametro3
+      maximo = parametros_numericos$Parametro4
+
+      # Ordem das variaveis minimo < media < maximo
+
+      minimo_e_menor = all(minimo < media)
+
+      maximo_e_maior = all(media < maximo)
+
+      # O máximo tem que ser maior que o mínimo e a média
+      if (!all(minimo_e_menor, maximo_e_maior)){
+        ha_inconsistencia = TRUE
+        message(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Media < Máximo). Verificar distribuicao ", distribuicao))
+      }
+
+    }
+
+
+    # Verificando distribuicao uniforme
+    if (distribuicao == "uniforme"){
+
+      minimo = parametros_numericos$Parametro1
+      maximo = parametros_numericos$Parametro2
+
+      # Ordem das variaveis maximo > minimo
+
+      maximo_e_maior = all(maximo > minimo)
+
+      # O máximo tem que ser maior que o mínimo e a média
+      if (!maximo_e_maior){
+        ha_inconsistencia = TRUE
+        message(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Máximo). Verificar distribuicao ", distribuicao))
+      }
+
+    }
+
+
+    # Verificando distribuicao Triangular
+    if (distribuicao == "triangular"){
+
+      moda = parametros_numericos$Parametro2
+      minimo = parametros_numericos$Parametro1
+      maximo = parametros_numericos$Parametro3
+
+      # Ordem das variaveis minimo < media < maximo
+
+      minimo_e_menor = all(minimo < moda)
+
+      maximo_e_maior = all(moda < maximo)
+
+      # O máximo tem que ser maior que o mínimo e a média
+      if (!all(minimo_e_menor, maximo_e_maior)){
+        ha_inconsistencia = TRUE
+        message(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Moda < Máximo). Verificar distribuicao ", distribuicao))
+      }
+
+    }
+
+  }
+
+  # Se não houve inconsistencia, retornar esta informacao
+  ha_inconsistencia
+
+}
+
+
