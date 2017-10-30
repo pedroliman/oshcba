@@ -1,4 +1,3 @@
-
 #' Simular CBA
 #'
 #' @param ArquivoInputs Arquivo de dados usado como Input (deve seguir um padrao especifico).
@@ -7,6 +6,10 @@
 #' @return um list com os resultados.
 #' @export
 simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "completo") {
+
+  # Carregar dados internos da biblioteca - Inputs e Outputs de Funcoes
+  data("funcoes_inputs_outputs")
+
 
   # Verificar se os tipos de inputs estão corretos
   modos_possiveis = c("basico", "simplificado", "customizado")
@@ -58,19 +61,19 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
 
 
   # Calculando Funcoes Base
-  resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = inputs$Funcoes_Inputs,
-                                output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_base)
+  resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
+                                output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_base)
 
   # Calculando funções Básicas
-  resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
-                                output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_basicas)
+  resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
+                                output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_basicas)
 
 
 
   # Se é simplificado ou customizado, precisa rodar os benefícios INSS e o FAP.
   if(modo == "simplificado" | modo == "customizado") {
-    resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
-                                  output_funcoes = inputs$Funcoes_Outputs, funcoes = oshcba_options$v_funcoes_fap)
+    resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
+                                  output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_fap)
 
 
     message(Sys.time()," simular: Simulando FAP.")
@@ -93,8 +96,8 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
     v_funcoes_opcionais_a_calcular = v_funcoes_passiveis_calculo[(v_funcoes_passiveis_calculo %in% v_funcoes_solicitadas_usuario)]
 
 
-    resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = inputs$Funcoes_Inputs,
-                                  output_funcoes = inputs$Funcoes_Outputs, funcoes = v_funcoes_opcionais_a_calcular)
+    resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
+                                  output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = v_funcoes_opcionais_a_calcular)
 
   }
 

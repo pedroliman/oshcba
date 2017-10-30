@@ -10,7 +10,7 @@ verificar_inputs = function(inputs) {
 
   message("Iniciando Verificacao de Inputs.")
 
-  if(!length(inputs) == 10) {
+  if(!length(inputs) == 8) {
     stop(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
   }
 
@@ -28,14 +28,6 @@ verificar_inputs = function(inputs) {
 
   if (any(is.na(inputs$DadosProjetados))) {
     stop(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
-  }
-
-  if (any(is.na(inputs$Funcoes_Inputs))) {
-    stop(paste(texto_base, " Verificar a Aba de Funcoes_Inputs, existem dados em branco."))
-  }
-
-  if (any(is.na(inputs$Funcoes_Outputs))) {
-    stop(paste(texto_base, " Verificar a Aba de Funcoes_Outputs, existem dados em branco."))
   }
 
   if (any(is.na(inputs$HistoricoFAP))) {
