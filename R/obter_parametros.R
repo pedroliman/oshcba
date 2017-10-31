@@ -37,7 +37,6 @@ obter_parametros_por_ano = function (Inputs,cenarios,anos) {
   variaveis_a_substituir = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4", "SeedFixa")
 
   for (l in linhas_a_substituir) {
-    message(l)
 
     parametro_a_substituir = parametros_por_ano[l,]
 
@@ -200,7 +199,7 @@ projetar_variaveis_deterministicas = function(dados_projetados, constantes) {
 #' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
 #' @export
 obter_parametros = function(Inputs) {
-  message(Sys.time()," obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
+  oshcba.adicionar_log("obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
   replicacoes = obter_replicacoes(Inputs)
   anos = obter_anos(Inputs)
   cenarios = obter_cenarios(Inputs)
@@ -221,11 +220,10 @@ obter_parametros = function(Inputs) {
 
   custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
   parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
-  message(Sys.time()," obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
+  oshcba.adicionar_log("obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
 
   # Ordenando o Df para o Calculo Iterativo
   parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
 
   return(parametros)
 }
-

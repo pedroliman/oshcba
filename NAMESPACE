@@ -2,11 +2,13 @@
 
 export(calcular_funcoes)
 export(cbr)
+export(escrever_arquivo_inputs_outputs)
 export(grafico_box_plot_por_iniciativa)
 export(grafico_dbg_cbr_waterfall)
 export(obter_cenarios)
 export(obter_oshcba_options)
 export(obter_parametros)
+export(oshcba.obter_log)
 export(resumo_cba_por_categorias)
 export(resumo_cba_por_iniciativa)
 export(roi)
