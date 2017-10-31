@@ -313,14 +313,14 @@ calcular_reajustes_plano = function(parametros) {
   # Se o Beta de Gravidade é Negativo, o reajuste e despesas são zerados:
   if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0)) {
 
-    futile.logger::flog.info("Aviso: Um dos coeficientes da Regressão de Plano de saúde é menor do que zero. A despesa com plano de saúde será zerada, e por consequência não será observado benefício.")
+    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regressão de Plano de saúde é menor do que zero. A despesa com plano de saúde será zerada, e por consequência não será observado benefício.")
     parametros[reaj] = 0
     parametros[despesas] = 0
     return(parametros)
 
   }
 
-  # futile.logger::flog.info("Coeficientes da Regressão são maiores do que zero, calculando categoria.")
+  # oshcba.adicionar_log("Coeficientes da Regressão são maiores do que zero, calculando categoria.")
 
   # Calculando Reajuste Estimado
   parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
@@ -399,10 +399,10 @@ calcular_turnovergeral = function(parametros) {
   # Se o Beta de Gravidade é Negativo, o reajuste e despesas são zerados:
   if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0 | parametros[betapib] < 0)) {
 
-    futile.logger::flog.info("Aviso: Um dos coeficientes da Regressão de Desligamentos Voluntários é menor do que zero. O número de desligamentos voluntários será zerado.")
+    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regressão de Desligamentos Voluntários é menor do que zero. O número de desligamentos voluntários será zerado.")
     parametros[perc] = 0
   } else {
-    # futile.logger::flog.info("Verificação dos Betas no Percentual de Desligamentos Voluntários é coerente, calculando com regressão.")
+    # oshcba.adicionar_log("Verificação dos Betas no Percentual de Desligamentos Voluntários é coerente, calculando com regressão.")
     parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
   }
 
@@ -537,12 +537,12 @@ aplicar_batentes = function(dados, variavel, valor_minimo, valor_maximo) {
   n_casos_maximo = length(which(dados[variavel] > valor_maximo)) / nrow(dados)
 
   if(n_casos_minimo > 0){
-    futile.logger::flog.info(paste("Aviso: variavel", variavel, "assumium um valor menor do que", valor_minimo,". O valor mínimo foi considerado em", n_casos_minimo * 100, "% dos casos."))
+    oshcba.adicionar_log(paste("Aviso: variavel", variavel, "assumium um valor menor do que", valor_minimo,". O valor mínimo foi considerado em", n_casos_minimo * 100, "% dos casos."))
   }
 
   # Comunicando usuario sobre o uso dos batentes:
   if(n_casos_maximo > 0){
-    futile.logger::flog.info(paste("Aviso: variavel", variavel, "assumium um valor maior do que", valor_maximo,". O valor máximo foi considerado em", n_casos_maximo * 100, "% dos casos."))
+    oshcba.adicionar_log(paste("Aviso: variavel", variavel, "assumium um valor maior do que", valor_maximo,". O valor máximo foi considerado em", n_casos_maximo * 100, "% dos casos."))
   }
 
 
@@ -897,13 +897,13 @@ calcular_imagem_contracacao = function(parametros) {
   # Verificação dos Betas:
   if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0)) {
 
-    futile.logger::flog.info("Aviso: Um dos coeficientes da Regressão de Tempo de Contratação é menor do que zero. As despesas desta categoria serão zeradas.")
+    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regressão de Tempo de Contratação é menor do que zero. As despesas desta categoria serão zeradas.")
     parametros["TempoContratacaoEstimado"] = 0
     parametros["DespesasImagemContratacao"] = 0
     return(parametros)
   }
 
-  # futile.logger::flog.info("Verificação dos Betas do Tempo de Contratação é coerente, calculando com regressão.")
+  # oshcba.adicionar_log("Verificação dos Betas do Tempo de Contratação é coerente, calculando com regressão.")
 
   # Calculando Tempo de Contratacao Estimado
   parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]

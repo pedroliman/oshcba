@@ -1,8 +1,8 @@
 carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
 
   # Criando uma list para os inputs
-  futile.logger::flog.info(
-    paste(" carregar_inputs: Iniciando Carregamento de Inputs (funcao carregar_inputs()",
+  oshcba.adicionar_log(
+    paste("carregar_inputs: Iniciando Carregamento de Inputs (funcao carregar_inputs()",
           "arquivo_de_inputs = ", arquivo_de_inputs)
     )
   inputs = vector(mode = "list", length = length(nomes_inputs))
@@ -14,7 +14,7 @@ carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", aba
     inputs[[n_aba]] = readxl::read_excel(arquivo_de_inputs,sheet = aba)
   }
 
-  futile.logger::flog.info(" carregar_inputs: Finalizando Carregamento de Inputs.")
+  oshcba.adicionar_log("carregar_inputs: Finalizando Carregamento de Inputs.")
   return(inputs)
 
 }

@@ -15,13 +15,11 @@ Imports:
     lhs,
     shiny,
     dplyr,
-    purrr,
-    futile.logger
+    purrr
 Depends:
     dplyr,
     purrr,
-    ggplot2,
-    futile.logger
+    ggplot2
 Suggests:
     testthat,
     covr
