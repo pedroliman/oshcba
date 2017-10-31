@@ -1,3 +1,35 @@
+
+
+
+#' simular_externo
+#' Esta funcao "encapsula" a funcao de simulacao e a executa incluindo logs
+#'
+#' @param ArquivoInputs inputs de simulacao a usar
+#' @param tipo_input tipo de input
+#' @param modo modo de simulacao
+#' @param output tipo de output desejado
+#'
+#' @return list com resultados
+#' @export
+simular_externo = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "completo") {
+
+  # Log:
+  ## capture all the output to a file.
+  futile.logger::flog.info("Iniciando Calculo, teste")
+
+  # Iniciando Appender no inicio
+  futile.logger::flog.appender(futile.logger::appender.tee(file = "log_calculadora.log"))
+
+  output = simular_cba(ArquivoInputs = ArquivoInputs, tipo_input = tipo_input, modo = modo, output = output)
+
+  futile.logger::flog.info("Terimando calculo, teste")
+
+  output
+
+}
+
+
+
 #' Simular CBA
 #'
 #' @param ArquivoInputs Arquivo de dados usado como Input (deve seguir um padrao especifico).
