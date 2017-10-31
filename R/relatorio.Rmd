@@ -1,0 +1,156 @@
+---
+title: "Relatorio Calculadora SST | FPS"
+author: "SESI"
+date: "31 de outubro de 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(oshcba)
+resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
+```
+
+## Resultados Gerais - Resumo Por Iniciativa
+
+{Texto Aqui}
+
+```{r echo=FALSE}
+
+resumo_iniciativas = resumo_cba_por_iniciativa(resultados$Resultados_CBR)
+
+knitr::kable(resumo_iniciativas)
+
+```
+
+
+## Benefícios por Categoria
+
+{Texto Aqui}
+
+### Reduções Fiscais
+
+{Texto Aqui}
+
+```{r echo=FALSE}
+
+resumo_categorias = resumo_cba_por_categorias(resultados$Resultados_CBR)
+beneficios_categorias = resumo_categorias$BeneficoMedioPorCategoria
+cbr_categorias = resumo_categorias$RazaoBeneficioCustoPorCategoria
+
+colunas_reducoes_fiscais = c("BeneficioMultas", "BeneficioFAP")
+
+colunas = c(c("Cenario.y"), colunas_reducoes_fiscais)
+
+knitr::kable(beneficios_categorias[colunas])
+
+```
+
+
+### Despesas Evitáveis
+
+{Texto Aqui}
+
+```{r echo=FALSE}
+
+colunas_despesas_evitaveis = c("BeneficioAcoesRegressivasINSS",
+                               "BeneficioReabilitacao", 
+                               "BeneficioPlanodeSaude", 
+                               "BeneficioReclamatorias", 
+                               "BeneficioDespesasMedicas", 
+                               "BeneficioInterrupcaoAcidentes",
+                               "BeneficioInterdicaoFiscalizacao",
+                               "BeneficioSeguroPatrimonial")
+
+colunas = c(c("Cenario.y"), colunas_despesas_evitaveis)
+
+knitr::kable(beneficios_categorias[colunas])
+
+```
+
+
+### Melhor Uso dos Recursos
+
+{Texto Aqui}
+
+```{r echo=FALSE}
+
+colunas_despesas_evitaveis = c("BeneficioTurnover",
+                               "BeneficioAbsenteismo", 
+                               "BeneficioPresenteismo", 
+                               "BeneficioGanhoProdutividade", 
+                               "BeneficioGanhoQualidade", 
+                               "BeneficioRefugoERetrabalho",
+                               "BeneficioMPInsumos")
+
+colunas = c(c("Cenario.y"), colunas_despesas_evitaveis)
+
+knitr::kable(beneficios_categorias[colunas])
+
+```
+
+
+
+### Benefícios Intangíveis
+
+{Texto Aqui}
+
+```{r echo=FALSE}
+
+colunas_beneficios_intangiveis = c("BeneficioImagemContratacao",
+                               "BeneficioGanhoImagemReceita", 
+                               "BeneficioClima")
+
+colunas = c(c("Cenario.y"), colunas_beneficios_intangiveis)
+
+knitr::kable(beneficios_categorias[colunas])
+
+```
+
+
+
+
+## Gráfico por Iniciativa
+
+{Texto Aqui}
+
+```{r echo=FALSE}
+
+# iniciativas = unique(as.vector(resumo$BeneficoMedioPorCategoria$Cenario.y))
+# 
+# for(iniciativa in iniciativas){
+#   grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = iniciativa)  
+# }
+
+grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa1")
+
+grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa2")
+
+grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa3")
+
+
+
+
+```
+
+
+
+```{r echo=FALSE}
+grafico_box_plot_por_iniciativa(resultados$Resultados_CBR)
+```
+
+
+## Logs
+
+{Texto Aqui}
+
+
+```{r echo=FALSE}
+knitr::kable(oshcba.obter_log())
+```
+
+## Gráfico por Iniciativa
+
+{Texto Aqui}

@@ -39,6 +39,12 @@ oshcba.parar_execucao = function(string, vetor_log = oshcba.log_calculadora) {
 }
 
 # Gera o Log global como um dataframe.
+#' obter_log
+#'
+#' @param vetor_log vetor de logs da bibliotecao
+#'
+#' @return data.frame com os logs gerados
+#' @export
 oshcba.obter_log = function(vetor_log = oshcba.log_calculadora) {
   df.log = data.frame(Logs = vetor_log)
   df.log
