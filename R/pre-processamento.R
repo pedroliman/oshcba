@@ -8,7 +8,7 @@ verificar_inputs = function(inputs) {
   texto_base = "Dados Informados Incorretamente:"
 
 
-  message("Iniciando Verificacao de Inputs.")
+  futile.logger::flog.info("Iniciando Verificacao de Inputs.")
 
   if(!length(inputs) == 8) {
     stop(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
@@ -57,13 +57,13 @@ verificar_inputs = function(inputs) {
   #   stop(paste(texto_base, "Verifique a Aba de Dados Projetados. Existem informacoes zeradas."))
   # }
 
-  message("Terminando Verificação de Inputs.")
+  futile.logger::flog.info("Terminando Verificação de Inputs.")
 }
 
 
 verificar_parametros = function(parametros) {
 
-  message("Iniciando Verificacao de Parâmetros.")
+  futile.logger::flog.info("Iniciando Verificacao de Parâmetros.")
 
   texto_base = "Dados Informados Incorretamente:"
 
@@ -74,7 +74,7 @@ verificar_parametros = function(parametros) {
     stop(paste(texto_base, "Existem variaveis básicas zeradas em seus inputs (ex.: Funcionarios, Folha de Pagamento, etc."))
   }
 
-  message("Terminando Verificação de Parâmetros.")
+  futile.logger::flog.info("Terminando Verificação de Parâmetros.")
 }
 
 
@@ -126,7 +126,7 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
   resultado_verificacao = list(Variaveis_verificadas = variaveis_verificadas, InconsistenciaIdentificada = ha_inconsistencia)
 
   if(resultado_verificacao$InconsistenciaIdentificada) {
-    message("Aviso: Foram Identificadas inconsistencias na entrada de dados (A soma da reducao de probabilidade de eventos é maior do que a probabilidade informada no cenário AS IS. Verifique a consistencia da entrada de dados.")
+    futile.logger::flog.info("Aviso: Foram Identificadas inconsistencias na entrada de dados (A soma da reducao de probabilidade de eventos é maior do que a probabilidade informada no cenário AS IS. Verifique a consistencia da entrada de dados.")
   }
 
   resultado_verificacao
@@ -149,7 +149,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
   # Verificando se existe alguma distribuicao que nao está dentre as disponiveis
   if(!any(parametros_inputs$Distribuicao %in% distribuicoes_possiveis)){
     ha_inconsistencia = TRUE
-    message("Aviso: Foram Informadas distribuicoes de probabilidade na aba parametros não suportadas pela calculadora.")
+    futile.logger::flog.info("Aviso: Foram Informadas distribuicoes de probabilidade na aba parametros não suportadas pela calculadora.")
   }
 
   # Verificações para cada tipo de distribuicao
@@ -167,7 +167,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
     # Verificando se algum valor que deveria ser informado é NA
     if(any(is.na(parametros_numericos[,1:n_parametros]))) {
       ha_inconsistencia = TRUE
-      message(paste("Aviso: Foram encontrados celulas em branco na planilha de Parametros. Verificar distribuicao ", distribuicao))
+      futile.logger::flog.info(paste("Aviso: Foram encontrados celulas em branco na planilha de Parametros. Verificar distribuicao ", distribuicao))
     }
 
 
@@ -191,7 +191,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
       # O máximo tem que ser maior que o mínimo e a média
       if (!all(minimo_e_menor, maximo_e_maior)){
         ha_inconsistencia = TRUE
-        message(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Media < Máximo). Verificar distribuicao ", distribuicao))
+        futile.logger::flog.info(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Media < Máximo). Verificar distribuicao ", distribuicao))
       }
 
     }
@@ -210,7 +210,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
       # O máximo tem que ser maior que o mínimo e a média
       if (!maximo_e_maior){
         ha_inconsistencia = TRUE
-        message(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Máximo). Verificar distribuicao ", distribuicao))
+        futile.logger::flog.info(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Máximo). Verificar distribuicao ", distribuicao))
       }
 
     }
@@ -232,7 +232,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
       # O máximo tem que ser maior que o mínimo e a média
       if (!all(minimo_e_menor, maximo_e_maior)){
         ha_inconsistencia = TRUE
-        message(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Moda < Máximo). Verificar distribuicao ", distribuicao))
+        futile.logger::flog.info(paste("Aviso: Encontrada inconsistencia nos parâmetros. Obedecer a ordem de variaveis (Mínimo < Moda < Máximo). Verificar distribuicao ", distribuicao))
       }
 
     }

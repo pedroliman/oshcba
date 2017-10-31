@@ -1,2 +1,0 @@
-INFO [2017-10-30 22:24:48] Iniciando Calculo, teste
-INFO [2017-10-30 22:24:56] Terimando calculo, teste

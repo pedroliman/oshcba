@@ -67,7 +67,7 @@ descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametr
   #Definindo Variavels Auxiliadoras
   novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
 
-  message(paste(Sys.time()," descontar_fluxo_de_caixa: Iniciando Calculo do Valor Presente Liquido das variaveis."))
+  futile.logger::flog.info("descontar_fluxo_de_caixa: Iniciando Calculo do Valor Presente Liquido das variaveis.")
 
   # Descontando Variaveis
   for (v in variaveis_a_descontar) {

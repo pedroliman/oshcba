@@ -15,14 +15,15 @@ simular_externo = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_i
 
   # Log:
   ## capture all the output to a file.
-  futile.logger::flog.info("Iniciando Calculo, teste")
+  futile.logger::flog.info("\n\n\n#####################################")
+  futile.logger::flog.info("#### CALCULADORA SESI / GMAP | UNISINOS - Calculadora de Beneficios e Custos em Iniciativas de SST e FPS. ###")
+  futile.logger::flog.info(paste("#### Versao:",packageDescription("oshcba")$Version, "###"))
+  futile.logger::flog.info("#####################################")
 
   # Iniciando Appender no inicio
   futile.logger::flog.appender(futile.logger::appender.tee(file = "log_calculadora.log"))
 
   output = simular_cba(ArquivoInputs = ArquivoInputs, tipo_input = tipo_input, modo = modo, output = output)
-
-  futile.logger::flog.info("Terimando calculo, teste")
 
   output
 
@@ -84,7 +85,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
   # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes
   # Importa
 
-  message(Sys.time()," simular: Iniciando Calculo dos Resultados do Modelo.")
+  futile.logger::flog.info(" simular: Iniciando Calculo dos Resultados do Modelo.")
 
 
   # Criando Variáveis Financeiras que não existem nos parametros com valor igual a zero.
@@ -108,7 +109,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
                                   output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_fap)
 
 
-    message(Sys.time()," simular: Simulando FAP.")
+    futile.logger::flog.info(" simular: Simulando FAP.")
     resultados = calcular_fap(parametros = resultados, historico = inputs$HistoricoFAP)
   }
 
@@ -133,7 +134,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
 
   }
 
-  message(Sys.time()," simular: Finalizando Calculo dos Resultados do Modelo.")
+  futile.logger::flog.info(" simular: Finalizando Calculo dos Resultados do Modelo.")
 
   # Descontando Variaveis Monetarias
   resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
@@ -153,7 +154,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
                                                                          Osh_Options = oshcba_options, Constantes = inputs$Constantes, Parametros = parametros, Resultados = resultados,
                                                                          Resultados_Descontados = resultados_descontados, Resultados_CBR = resultados_CBR))
 
-  message(Sys.time()," simular: Finalizando Simulacao.")
+  futile.logger::flog.info(" simular: Finalizando Simulacao.")
   # Mudar para output depois
 
   return(output)
@@ -161,7 +162,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
 
 calcular_cbr = function(resultados, cenarios) {
 
-  message(Sys.time()," calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
+  futile.logger::flog.info(" calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
   ### Sintetizando Resultados por Cenario e Replicacao
   ## Lembrar:
   resultados_sintetizados = resultados %>% group_by(Cenario, Replicacao) %>%
@@ -258,7 +259,7 @@ calcular_cbr = function(resultados, cenarios) {
   ### Mantendo Apenas Variaveis uteis
 
   resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotalDescontado.x, -Soma_CustoTotalDescontado.y)
-  message(Sys.time()," calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
+  futile.logger::flog.info(" calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
   return(resultados_CBR)
 }
 
@@ -286,8 +287,8 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
 
       # Verificando se vetores de inputs e outputs estao corretos
       if (any(c(length(v_inputs) == 0, length(v_outputs) == 0))) {
-        message(message(paste(Sys.time()," calcular_funcoes: Lista de Inputs ou Outputs esta vazia: ",
-                              f)))
+        futile.logger::flog.info(paste(" calcular_funcoes: Lista de Inputs ou Outputs esta vazia: ",
+                              f))
       } else {
         # So executar a funcao se..  Todos os Inputs estao presentes:
         if (all(v_inputs %in% colnames(resultados))) {
@@ -296,10 +297,10 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
           if ((i == 1) | (!all(v_outputs %in% colnames(resultados)))) { # Se estou na primeira iteracao, ou se algum output não foi calculado.
             chamada_da_funcao = paste(f, "(resultados)", sep = "")
             resultados = eval(parse(text = chamada_da_funcao))
-            message(paste(Sys.time()," calcular_funcoes: Funcao Calculada: ",
+            futile.logger::flog.info(paste(" calcular_funcoes: Funcao Calculada: ",
                           f))
           } else {
-            message(paste(Sys.time()," calcular_funcoes: Todos os Outputs Ja Foram calculados: ",
+            futile.logger::flog.info(paste(" calcular_funcoes: Todos os Outputs Ja Foram calculados: ",
                           f))
           }
 
