@@ -1,42 +1,10 @@
-
-
-
-#' #' simular_externo
-#' #' Esta funcao "encapsula" a funcao de simulacao e a executa incluindo logs
-#' #'
-#' #' @param ArquivoInputs inputs de simulacao a usar
-#' #' @param tipo_input tipo de input
-#' #' @param modo modo de simulacao
-#' #' @param output tipo de output desejado
-#' #'
-#' #' @return list com resultados
-#' #' @export
-#' simular_externo = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "completo") {
-#'
-#'   # Log - Removendo Arquivo Existente de Log: Isto fará com que apenas a última rodada esteja disponível
-#'   file.remove("log_calculadora.log")
-#'
-#'   ## capture all the output to a file.
-#'   futile.logger::flog.info("\n\n\n#####################################")
-#'   futile.logger::flog.info("#### CALCULADORA SESI / GMAP | UNISINOS - Calculadora de Beneficios e Custos em Iniciativas de SST e FPS. ###")
-#'   futile.logger::flog.info(paste("#### Versao:",packageDescription("oshcba")$Version, "###"))
-#'   futile.logger::flog.info("#####################################")
-#'
-#'   # Iniciando Appender no inicio
-#'   futile.logger::flog.appender(futile.logger::appender.tee(file = "log_calculadora.log"))
-#'
-#'   output = simular_cba(ArquivoInputs = ArquivoInputs, tipo_input = tipo_input, modo = modo, output = output)
-#'
-#'   output
-#'
-#' }
-
-
 #' Simular CBA
 #'
 #' @param ArquivoInputs Arquivo de dados usado como Input (deve seguir um padrao especifico).
-#' @param modo Modo de simulacao ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.
-#'
+#' @param modo Modo de simulacao "basico", "simplificado" ou "customizado".
+#' @param rep Numero de replicacoes (padrão 1000)
+#' @param tipo_input "excel" ou "list". A opcao list pode ser usada para chamar a funcao pelo R.
+#' @param output Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.
 #' @return um list com os resultados.
 #' @export
 simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo") {
