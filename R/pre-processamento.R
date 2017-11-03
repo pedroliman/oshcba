@@ -50,6 +50,12 @@ verificar_inputs = function(inputs) {
     oshcba.parar_execucao("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
   }
 
+  if(verificar_nomes_dataframes(inputs)){
+    oshcba.parar_execucao("O nome das colunas da planilha de entrada não é consistente com o padrão estabelecido. Use a planilha padrão.")
+  }
+
+
+
   # Verificando algumas variáveis em Dados Projetados que devem ser maiores do que zero:
   # Cancelando Esta verificação, ela deve ser feita somente depois que os parâmetros foram estimados.
   # variaveis = c("Ano", "Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO")
@@ -245,3 +251,47 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
 }
 
 
+verificar_nomes_dataframes = function(inputs) {
+
+  # A princípio não há inconsistência.
+  ha_inconsistencia = FALSE
+
+  #NOmes de Colunas a exigir
+
+  v_configs = c("AnoInicial", "TaxaDeDesconto", "FuncionariosBase")
+  v_dados_projetados = c("Ano")
+  v_parametros = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4", "AnosDelay", "Cenario", "SeedFixa")
+  v_cenarios = c("Cenario", "Simular", "CenarioASIS")
+  v_custos = c("Cenario", "Categoria", "Ano", "CustoTotal")
+  v_historico_fap = c("Ano", "NB_91", "NB_92", "NB_93", "NB_94", "Funcionarios", "FolhadePagamento", "TurnoverGeral", "CustoMedio_NB_91", "CustoMedio_NB_92", "CustoMedio_NB_93", "CustoMedio_NB_94", "CustoTotalBeneficiosFAP", "RATAjustado")
+  v_modulos = c("Modulo", "Calcular", "Obrigatorio", "Categoria")
+  v_constantes = c("Variavel", "Valor")
+
+  variaveis = list(
+    Configs = v_configs,
+    DadosProjetados = v_dados_projetados,
+    Parametros = v_parametros,
+    Cenarios = v_cenarios,
+    Custos = v_custos,
+    HistoricoFAP = v_historico_fap,
+    Modulos = v_modulos,
+    Constantes = v_constantes
+  )
+
+  abas_a_verificar = oshcba_options$nomes_inputs
+
+  for (aba in abas_a_verificar){
+    variaveis_exigidas = variaveis[[aba]]
+
+    variaveis_existentes = names(as.data.frame(inputs[[aba]]))
+
+    if(!all(variaveis_exigidas %in% variaveis_existentes)){
+      ha_inconsistencia = TRUE
+      oshcba.adicionar_log(paste("Aviso: Faltam colunas nesta tabela:", aba))
+    }
+  }
+
+  # Se não houve inconsistencia, retornar esta informacao
+  ha_inconsistencia
+
+}

@@ -5,7 +5,7 @@
 \title{oshcba.parar_execucao}
 \usage{
 oshcba.parar_execucao(string, vetor_log = oshcba.log_calculadora,
-  salvar_logs_csv = FALSE)
+  salvar_logs_csv = TRUE)
 }
 \arguments{
 \item{string}{character com o texto a adicionar ao vetor de logs}

@@ -33,7 +33,7 @@ oshcba.adicionar_log = function(string, vetor_log = oshcba.log_calculadora) {
 #' @param string character com o texto a adicionar ao vetor de logs
 #' @param vetor_log o vetor de log existente
 #'
-oshcba.parar_execucao = function(string, vetor_log = oshcba.log_calculadora, salvar_logs_csv = FALSE) {
+oshcba.parar_execucao = function(string, vetor_log = oshcba.log_calculadora, salvar_logs_csv = TRUE) {
   # Adicionar Data e Hora para o Log:
   string = paste(Sys.time(),string, sep = " - ")
 
