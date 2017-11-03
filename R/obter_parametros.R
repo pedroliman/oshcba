@@ -7,9 +7,9 @@ obter_anos = function(Inputs) {
   return(Inputs$DadosProjetados$Ano)
 }
 
-obter_replicacoes = function (Inputs) {
-  replicacoes = 1:Inputs$Configs$Replicacoes
-  mc2d::ndvar(Inputs$Configs$Replicacoes)
+obter_replicacoes = function (rep) {
+  replicacoes = 1:rep
+  mc2d::ndvar(rep)
   return(replicacoes)
 }
 
@@ -67,7 +67,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
 
   # Verificando se distribuicao que veio é correta, ou é inconsistente:
   if(length(distribuicao) == 0){
-    stop("Dados Inconsistentes: Confira se os parâmetros do modelo foram informados de modo consistente na aba Parametros.")
+    oshcba.parar_execucao("Dados Inconsistentes: Confira se os parâmetros do modelo foram informados de modo consistente na aba Parametros.")
   }
 
 
@@ -75,7 +75,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
   distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_percentual_eventos", "poisson")
 
   if(!distribuicao %in% distribuicoes_possiveis){
-    stop(paste("Dados Inconsistentes: A distribuicao", distribuicao, "está incorreta. Confira os parâmetros informados."))
+    oshcba.parar_execucao(paste("Dados Inconsistentes: A distribuicao", distribuicao, "está incorreta. Confira os parâmetros informados."))
   }
 
   amostra = switch(distribuicao,
@@ -198,9 +198,9 @@ projetar_variaveis_deterministicas = function(dados_projetados, constantes) {
 #'
 #' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
 #' @export
-obter_parametros = function(Inputs) {
+obter_parametros = function(Inputs, rep = 1000) {
   oshcba.adicionar_log("obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
-  replicacoes = obter_replicacoes(Inputs)
+  replicacoes = obter_replicacoes(rep)
   anos = obter_anos(Inputs)
   cenarios = obter_cenarios(Inputs)
   parametros_por_ano = obter_parametros_por_ano(Inputs,cenarios,anos)

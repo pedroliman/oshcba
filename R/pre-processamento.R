@@ -11,50 +11,50 @@ verificar_inputs = function(inputs) {
   oshcba.adicionar_log("Iniciando Verificacao de Inputs.")
 
   if(!length(inputs) == 8) {
-    stop(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
+    oshcba.parar_execucao(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
   }
 
   if (any(is.na(inputs$Configs))) {
-    stop(paste(texto_base, " Verificar a Aba de Configuracoes (Configs), existem dados em branco."))
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Configuracoes (Configs), existem dados em branco."))
   }
 
   if (any(is.na(inputs$Custos))) {
-    stop(paste(texto_base, " Verificar a Aba de Custos, existem dados em branco."))
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Custos, existem dados em branco."))
   }
 
   if (any(is.na(inputs$Cenarios))) {
-    stop(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
   }
 
   if (any(is.na(inputs$DadosProjetados))) {
-    stop(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
   }
 
   if (any(is.na(inputs$HistoricoFAP))) {
-    stop(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
   }
 
   if (any(is.na(inputs$Constantes))) {
-    stop(paste(texto_base, " Verificar a Aba de Constantes, existem dados em branco."))
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Constantes, existem dados em branco."))
   }
 
   # Verificar se existem estimações "infladas"
   if(verificar_inconsistencia_reducao_probabilidades(inputs)$InconsistenciaIdentificada){
-    stop("Revise suas estimativas do impacto das Iniciativas. As iniciativas em conjunto reduzem um percentual de acidentes maior do que 100%.")
+    oshcba.parar_execucao("Revise suas estimativas do impacto das Iniciativas. As iniciativas em conjunto reduzem um percentual de acidentes maior do que 100%.")
   }
 
 
   # Verificar se os parâmetros informados são coerentes com as distribuições de probabilidades
 
   if(verificar_coerencia_parametros_aleatorios(inputs)){
-    stop("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
+    oshcba.parar_execucao("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
   }
 
   # Verificando algumas variáveis em Dados Projetados que devem ser maiores do que zero:
   # Cancelando Esta verificação, ela deve ser feita somente depois que os parâmetros foram estimados.
   # variaveis = c("Ano", "Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO")
   # if(!all(inputs$DadosProjetados[variaveis] > 0)) {
-  #   stop(paste(texto_base, "Verifique a Aba de Dados Projetados. Existem informacoes zeradas."))
+  #   oshcba.parar_execucao(paste(texto_base, "Verifique a Aba de Dados Projetados. Existem informacoes zeradas."))
   # }
 
   oshcba.adicionar_log("Terminando Verificação de Inputs.")
@@ -71,7 +71,7 @@ verificar_parametros = function(parametros) {
 
   # Verificando variaveis que deveriam ser maiores do que zero:
   if(any(parametros[v_maior_que_zero] <= 0)){
-    stop(paste(texto_base, "Existem variaveis básicas zeradas em seus inputs (ex.: Funcionarios, Folha de Pagamento, etc."))
+    oshcba.parar_execucao(paste(texto_base, "Existem variaveis básicas zeradas em seus inputs (ex.: Funcionarios, Folha de Pagamento, etc."))
   }
 
   oshcba.adicionar_log("Terminando Verificação de Parâmetros.")

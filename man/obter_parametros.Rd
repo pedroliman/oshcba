@@ -4,7 +4,7 @@
 \alias{obter_parametros}
 \title{Obter Parametros}
 \usage{
-obter_parametros(Inputs)
+obter_parametros(Inputs, rep = 1000)
 }
 \arguments{
 \item{Inputs}{Inputs Carregados com a funcao carregar_inputs()}

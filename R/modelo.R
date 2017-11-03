@@ -991,7 +991,7 @@ conferir_params = function(parametros, inputs) {
   mensagem = "Confira seu arquivo de dados. Voce nao informou todos os parametros."
   # Conferir se os parmetros contem as variaveis necessarias
   if (!all(inputs %in% colnames(parametros))) {
-    stop(mensagem, call. = TRUE)
+    oshcba.parar_execucao(mensagem, call. = TRUE)
   }
 
 }

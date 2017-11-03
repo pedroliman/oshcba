@@ -39,7 +39,7 @@
 #'
 #' @return um list com os resultados.
 #' @export
-simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input = "excel", modo="customizado", output= "completo") {
+simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo") {
 
   # Iniciar Log
   oshcba.iniciar_log()
@@ -56,15 +56,15 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
   # Verificando se os
 
   if(!modo %in% modos_possiveis){
-    stop(paste("O modo informado", modo, "não está dentre os modos permitidos."))
+    oshcba.parar_execucao(paste("O modo informado", modo, "não está dentre os modos permitidos."))
   }
 
   if(!output %in% outputs_possiveis){
-    stop(paste("O tipo de output informado", output, "não está dentre os tipos de outputs permitidos."))
+    oshcba.parar_execucao(paste("O tipo de output informado", output, "não está dentre os tipos de outputs permitidos."))
   }
 
   if(!tipo_input %in% tipo_inputs_possiveis){
-    stop(paste("O tipo de input informado", tipo_input, "não está dentre os tipos de inputs permitidos."))
+    oshcba.parar_execucao(paste("O tipo de input informado", tipo_input, "não está dentre os tipos de inputs permitidos."))
   }
 
 
@@ -80,7 +80,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", tipo_input
   # Verificar Inputs antes de continuar
   verificar_inputs(inputs)
 
-  parametros = obter_parametros(inputs)
+  parametros = obter_parametros(inputs, rep)
 
 
   # Verificar Parâmetros antes de continuar
@@ -315,7 +315,7 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
           }
 
         } else {
-          stop(paste(Sys.time(),"calcular_funcoes: Existem erros em seu arquivo de dados. Realize a simulação com um arquivo válido. Faltam Inputs para calcular esta função: ",
+          oshcba.parar_execucao(paste("calcular_funcoes: Existem erros em seu arquivo de dados. Realize a simulação com um arquivo válido. Faltam Inputs para calcular esta função: ",
                         f))
         }
       }
