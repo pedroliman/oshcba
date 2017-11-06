@@ -328,8 +328,8 @@ calcular_reajustes_plano = function(parametros) {
 
 
   # Aplicando Batentes. Estas constantes são definidas internamente, com o propósito de cancelar valores extremos.
-  reajuste_minimo = -0.4
-  reajuste_maximo = 0.4
+  reajuste_minimo = -0.1
+  reajuste_maximo = 1
 
   parametros = aplicar_batentes(dados = parametros, variavel = reaj, valor_minimo = reajuste_minimo, valor_maximo = reajuste_maximo)
 

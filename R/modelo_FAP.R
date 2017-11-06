@@ -289,8 +289,6 @@ calcular_fap = function(parametros, historico) {
   # }
 
 
-
-
  parametros
 
 }
