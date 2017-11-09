@@ -28,10 +28,17 @@ Destaca-se que a análise foi realizada em um horizonte temporal de três anos. 
 ## Valores Obtidos por Benefício Avaliado
 Nesta seção serão apresentados os valores obtidos para o conjunto de benefícios avaliados. Esta apresentação será feita na seguinte ordem de categorias: i) Reduções Fiscais; ii) Despesas Evitáveis; iii) Melhor uso dos recursos; e, iv) Intangível. A sequência de ordenamento da apresentação de resultados parte das categorias cujo os resultados são objetivos em termos de cálculo para elementos indiretos, finalizando em uma categoria intangível na qual as questões subjetivas são incorporadas ao cálculo.
 
+| **Categoria** | **Cálculo do Benefício** | **Objetividade** | **Tangibilidade** |
+|------------|------------------------------------------------------------|-------------|---------------|
+| Reduções Fiscais | Pode ser calculado a priori tendo por referência valores da legislação. | Objetivo e Direto | Tangível |
+| Despesas Evitáveis | Pode ser calculado a partir de estimativas da redução de riscos a que organização exposta ou ações que mitiguem os impactos do risco. Pode depender de fatores externos a empresa e as ações de SST e FPS. Os elementos indiretos são estimados pela calculadora a partir da observação dos dados existentes ou de estimativas do analista. | Objetivo e Indireto | Tangível |
+| Melhor uso dos Recursos | É calculado a partir da composição de elementos objetivo/diretos (turnover e absenteísmo, por exemplo) e objetivos/indiretos (produtividade e qualidade, por exemplo) que são consequência das ações de redução de riscos aos eventos. São colaterais em relação ao objetivo central das ações de SST e FPS. Os elementos indiretos precisam ser calculados externa e indiretamente a calculadora. | Objetivo e Direto/Indireto | Tangível |
+| Intangível | O cálculo dessa categoria é realizado externamente a calculadora a partir de questões subjetivas que podem afetar o negócio da empresa. Alguns elementos são estimados, mas são baseados em aspectos intangíveis previamente definidos. São benefícios que podem beneficiar a organização como um todo sem uma medida precisamente observável. | Subjetiva e Indireta | Intangível |
+
 
 ## Resultados Gerais - Resumo Por Iniciativa
 
-A seguir é apresentado o resultado geral do Benefício, por Iniciativa.
+A seguir é apresentado o resultado geral desta análise por iniciativa.
 
 ```{r echo=FALSE}
 
