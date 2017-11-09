@@ -14,7 +14,7 @@ calcular_eventos = function(parametros) {
   matriz_outputs = obter_matriz_eventos(parametros)
   vetor_outputs = as.vector(matriz_outputs)
 
-# C√≥digo usado anteriormente para calcular eventos com base em 8 Probabilidades.
+# CÛdigo usado anteriormente para calcular eventos com base em 8 Probabilidades.
 #   df_valores_input_eventos = parametros[vetor_inputs_eventos]
 #   df_valores_input_conseq = parametros[vetor_inputs_consequencias]
 #
@@ -76,7 +76,7 @@ calcular_beneficios_inss = function(parametros) {
 
 
   # Nb 91, 94 e 92
-  # √çndice de Frequ√™ncia
+  # Õndice de FrequÍncia
   vetor_acidentes = c("Tipico", "DoenOcup")
   vetor_eventos = c("Afmaior15")
   eventosbs = c("EventosNBs")
@@ -100,7 +100,7 @@ calcular_beneficios_inss = function(parametros) {
   parametros["NB_93"] = round(somar_eventos(parametros, vetor_acidentes, vetor_eventos) * parametros["FatorB93"],0)
 
 
-  # # Matriz de Eventos conforme primeira documenta√ß√£o do modelo
+  # # Matriz de Eventos conforme primeira documentaÁ„o do modelo
   # matriz_eventos = obter_matriz_eventos(parametros)
   # variavel = "NB_91"
   # colunas = c("DoenOcup")
@@ -182,7 +182,7 @@ calcular_beneficios_inss = function(parametros) {
     }
 
 
-    # C√≥digo Anterior, mais lento do que o Loop acima
+    # CÛdigo Anterior, mais lento do que o Loop acima
     # for (l in 1:nrow(parametros)) {
     #   parametros[l,b_acumulado] = if (parametros[l,"Ano"] == ano_inicial) {
     #     parametros[l,b_incial] + parametros[l,b]
@@ -197,10 +197,10 @@ calcular_beneficios_inss = function(parametros) {
 
 }
 
-############# √çNDICES AMPLIADOS #################
+############# ÕNDICES AMPLIADOS #################
 calcular_indices_ampliados = function(parametros) {
 
-  # √çndice de Frequ√™ncia
+  # Õndice de FrequÍncia
   vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
   vetor_eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
   indicefrequencia = c("IndiceFrequenciaAmpliado")
@@ -210,11 +210,11 @@ calcular_indices_ampliados = function(parametros) {
   # Somando Eventos
   parametros[eventosfrequencia] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
-  # Calculando √çndice de Frequ√™ncia
+  # Calculando Õndice de FrequÍncia
   parametros[indicefrequencia] =  (parametros[eventosfrequencia] / parametros[f]) * 1000
 
 
-  # √çndice de Gravidade
+  # Õndice de Gravidade
   indicegravidade = "IndiceGravidadeAmpliado"
 
   # Afastamento maior que 15 dias (peso 0.3)
@@ -243,7 +243,7 @@ calcular_indices_ampliados = function(parametros) {
   # Faltas
   Faltas = parametros[c("NFaltas")]
 
-  # Calculando o √çndice de Gravidade Ampliado
+  # Calculando o Õndice de Gravidade Ampliado
   parametros[indicegravidade] =  ((0.3 * Nev_maior15 + 0.5 * Obitos + 0.1 * Nev_menor15 + 0.09 * Nev_SAfast + 0.01 * Faltas) / parametros[f]) * 1000
 
   parametros
@@ -251,14 +251,14 @@ calcular_indices_ampliados = function(parametros) {
 }
 
 ############# TAXAS DE ACIDENTES #################
-# F√≥rmulas retiradas da NBR 14280. Eventos tipicos e doen√ßas ocupacionais s√£o consideradas como acidentes.
+# FÛrmulas retiradas da NBR 14280. Eventos tipicos e doenÁas ocupacionais s„o consideradas como acidentes.
 calcular_taxas_acidentes = function(parametros) {
 
-  # √çndice de Frequ√™ncia - foi Arbitrado que os acidentes abaixo influenciar√£o as taxas de Gravidade e Frequ√™ncia.
+  # Õndice de FrequÍncia - foi Arbitrado que os acidentes abaixo influenciar„o as taxas de Gravidade e FrequÍncia.
   vetor_acidentes = c("Tipico", "DoenOcup")
   vetor_eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
 
-  # Dever√≠amos separar os √≥bitos do TempoComputado M√©dio? A princ√≠pio n√£o est√° separado.
+  # DeverÌamos separar os Ûbitos do TempoComputado MÈdio? A princÌpio n„o est· separado.
   eventostaxas = c("EventosTaxasFrequenciaeGravidade")
   f = c("Funcionarios")
 
@@ -268,7 +268,7 @@ calcular_taxas_acidentes = function(parametros) {
   # Somando Eventos
   parametros[eventostaxas] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
-  # Calculando Taxa de Frequ√™ncia
+  # Calculando Taxa de FrequÍncia
   parametros["TaxaFrequencia"] = round((parametros[eventostaxas]*1000000)/parametros["HorasHomemExposicaoRisco"],3)
 
   # Clculando Taxa de Gravidade
@@ -279,20 +279,20 @@ calcular_taxas_acidentes = function(parametros) {
 }
 
 
-############# RECLAMAT√ìRIAS TRABALHISTAS #################
+############# RECLAMAT”RIAS TRABALHISTAS #################
 
 calcular_reclamatorias = function(parametros) {
 
-  # Calculando N√∫mero de Reclamat√≥rias
+  # Calculando N˙mero de ReclamatÛrias
   parametros["NReclamatorias"] = parametros["FuncionariosDesligados"] * parametros["PReclamatoria"]
 
-  # Calculando Despesas com Reclamat√≥rias
+  # Calculando Despesas com ReclamatÛrias
   parametros["DespesasReclamatorias"] = parametros["NReclamatorias"] * -parametros["CustoMedioReclamatorias"]
 
   parametros
 }
 
-############# REAJUSTES DO PLANO DE SA√öDE #################
+############# REAJUSTES DO PLANO DE SA⁄DE #################
 
 calcular_reajustes_plano = function(parametros) {
 
@@ -310,31 +310,31 @@ calcular_reajustes_plano = function(parametros) {
   indicefreq = "TaxaFrequencia"
   indicegrav = "TaxaGravidade"
 
-  # Se o Beta de Gravidade √© Negativo, o reajuste e despesas s√£o zerados:
+  # Se o Beta de Gravidade È Negativo, o reajuste e despesas s„o zerados:
   if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0)) {
 
-    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regress√£o de Plano de sa√∫de √© menor do que zero. A despesa com plano de sa√∫de ser√° zerada, e por consequ√™ncia n√£o ser√° observado benef√≠cio.")
+    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regress„o de Plano de sa˙de È menor do que zero. A despesa com plano de sa˙de ser· zerada, e por consequÍncia n„o ser· observado benefÌcio.")
     parametros[reaj] = 0
     parametros[despesas] = 0
     return(parametros)
 
   }
 
-  # oshcba.adicionar_log("Coeficientes da Regress√£o s√£o maiores do que zero, calculando categoria.")
+  # oshcba.adicionar_log("Coeficientes da Regress„o s„o maiores do que zero, calculando categoria.")
 
   # Calculando Reajuste Estimado
   parametros[reaj] = parametros[beta0] + parametros[betafreq] * parametros[indicefreq] + parametros[betagrav] * parametros[indicegrav]
 
 
 
-  # Aplicando Batentes. Estas constantes s√£o definidas internamente, com o prop√≥sito de cancelar valores extremos.
+  # Aplicando Batentes. Estas constantes s„o definidas internamente, com o propÛsito de cancelar valores extremos.
   reajuste_minimo = -0.1
   reajuste_maximo = 1
 
   parametros = aplicar_batentes(dados = parametros, variavel = reaj, valor_minimo = reajuste_minimo, valor_maximo = reajuste_maximo)
 
 
-  # Calculando Despesas do Plano de Sa√∫de, de acordo com o ano, para os anos iniciais
+  # Calculando Despesas do Plano de Sa˙de, de acordo com o ano, para os anos iniciais
   ano_inicial = min(parametros$Ano)
 
 
@@ -350,7 +350,7 @@ calcular_reajustes_plano = function(parametros) {
   parametros
 }
 
-############# REABILITA√á√ÉO #################
+############# REABILITA«√O #################
 
 calcular_reabilitacao = function(parametros) {
 
@@ -361,7 +361,7 @@ calcular_reabilitacao = function(parametros) {
   # Calculando Reabilitados
   parametros["EventosReabilitacao"] = round(somar_eventos(parametros,vetor_acidentes = acidentes, vetor_eventos = eventos) * parametros["PercentualReabilitacao"], 0)
 
-  # Calculando Custo de Reabilita√ß√£o
+  # Calculando Custo de ReabilitaÁ„o
   parametros["DespesasReabilitacao"] = parametros["EventosReabilitacao"] * -parametros["CustoMedioReabilitacao"]
 
   parametros
@@ -371,7 +371,7 @@ calcular_reabilitacao = function(parametros) {
 
 calcular_turnovergeral = function(parametros) {
 
-  ## Antes dos Calculos, computar os desligamentos Volunt√°rios usando a regress√£o.
+  ## Antes dos Calculos, computar os desligamentos Volunt·rios usando a regress„o.
 
   # Outputs
   perc = c("PercDesligamentoVoluntarios")
@@ -396,30 +396,30 @@ calcular_turnovergeral = function(parametros) {
 
   # Calculando Perc Deslig Voluntarios
 
-  # Se o Beta de Gravidade √© Negativo, o reajuste e despesas s√£o zerados:
+  # Se o Beta de Gravidade È Negativo, o reajuste e despesas s„o zerados:
   if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0 | parametros[betapib] < 0)) {
 
-    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regress√£o de Desligamentos Volunt√°rios √© menor do que zero. O n√∫mero de desligamentos volunt√°rios ser√° zerado.")
+    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regress„o de Desligamentos Volunt·rios È menor do que zero. O n˙mero de desligamentos volunt·rios ser· zerado.")
     parametros[perc] = 0
   } else {
-    # oshcba.adicionar_log("Verifica√ß√£o dos Betas no Percentual de Desligamentos Volunt√°rios √© coerente, calculando com regress√£o.")
+    # oshcba.adicionar_log("VerificaÁ„o dos Betas no Percentual de Desligamentos Volunt·rios È coerente, calculando com regress„o.")
     parametros[perc] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
   }
 
 
-  # Aplicando Batentes. Estas constantes s√£o definidas internamente, com o prop√≥sito de cancelar valores extremos.
+  # Aplicando Batentes. Estas constantes s„o definidas internamente, com o propÛsito de cancelar valores extremos.
   perc_minimo = 0
-  perc_maximo = 0.5
+  perc_maximo = 0.25
 
   parametros = aplicar_batentes(dados = parametros, variavel = perc, valor_minimo = perc_minimo, valor_maximo = perc_maximo)
 
 
 
-  # Calculando Desligamento Volunt√°rios
+  # Calculando Desligamento Volunt·rios
   parametros[deslvol] = round(parametros[perc] * parametros[f], 0)
 
 
-  # Continuando o Calculo das demais vari√°veis de Turnover Geral
+  # Continuando o Calculo das demais vari·veis de Turnover Geral
 
   # Somando Afastamentos maior que 15
   vetor_acidentes = c("Tipico", "Trajeto", "DoenOcup", "NRelac")
@@ -447,10 +447,10 @@ calcular_turnovergeral = function(parametros) {
 
 }
 
-############# DESPESAS M√âDICAS #################
+############# DESPESAS M…DICAS #################
 calcular_despesasmedicas = function(parametros) {
 
-  # Eventos Despesas M√©dicas
+  # Eventos Despesas MÈdicas
 
   # Variaveis de Input e Outputs
   nome_evento_agregado = "EventosDespesasMedicas"
@@ -462,7 +462,7 @@ calcular_despesasmedicas = function(parametros) {
   vetor_eventos = c("Afmaior15", "Afmenor15", "Safast")
 
 
-  # Usando Funcao para calcular eventos com custo m√©dio
+  # Usando Funcao para calcular eventos com custo mÈdio
   calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
 
 }
@@ -485,10 +485,10 @@ calcular_eventos_com_customedio = function(parametros, vetor_acidentes, vetor_ev
 
 }
 
-############# FUN√á√ïES GENERALIZADAS #################
+############# FUN«’ES GENERALIZADAS #################
 somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
 
-  # Eventos Despesas M√©dicas
+  # Eventos Despesas MÈdicas
   matriz_eventos = obter_matriz_eventos(parametros)
 
   # Eventos a somar
@@ -496,7 +496,7 @@ somar_eventos = function(parametros, vetor_acidentes, vetor_eventos) {
   linhas = vetor_eventos
   vetor_soma = as.vector(matriz_eventos[linhas, colunas])
 
-  # Retornando o Row Sums (que √© uma coluna de eventos)
+  # Retornando o Row Sums (que È uma coluna de eventos)
   rowSums(parametros[vetor_soma])
 }
 
@@ -537,12 +537,12 @@ aplicar_batentes = function(dados, variavel, valor_minimo, valor_maximo) {
   n_casos_maximo = length(which(dados[variavel] > valor_maximo)) / nrow(dados)
 
   if(n_casos_minimo > 0){
-    oshcba.adicionar_log(paste("Aviso: variavel", variavel, "assumium um valor menor do que", valor_minimo,". O valor m√≠nimo foi considerado em", n_casos_minimo * 100, "% dos casos."))
+    oshcba.adicionar_log(paste("Aviso: variavel", variavel, "assumium um valor menor do que", valor_minimo,". O valor mÌnimo foi considerado em", n_casos_minimo * 100, "% dos casos."))
   }
 
   # Comunicando usuario sobre o uso dos batentes:
   if(n_casos_maximo > 0){
-    oshcba.adicionar_log(paste("Aviso: variavel", variavel, "assumium um valor maior do que", valor_maximo,". O valor m√°ximo foi considerado em", n_casos_maximo * 100, "% dos casos."))
+    oshcba.adicionar_log(paste("Aviso: variavel", variavel, "assumium um valor maior do que", valor_maximo,". O valor m·ximo foi considerado em", n_casos_maximo * 100, "% dos casos."))
   }
 
 
@@ -606,9 +606,9 @@ calcular_absenteismo = function(parametros){
 
     # Formulacao Original:
     # rowSums(Nev_afmen15)*DiasMedAfast_Men15 + NFaltas
-    # Argumento para mudanca: Dias de afastamento que n√£o sao faltas geram necessidade de aloca√ß√£o de outro funcion√°rio.
-    # Mudan√ßa solicitada por Dieter e Felipe, no dia 06/10/2017.
-    (rowSums(Nev_afmen15)*DiasMedAfast_Men15*2) + NFaltas
+    # Argumento para mudanca: Dias de afastamento que n„o sao faltas geram necessidade de alocaÁ„o de outro funcion·rio.
+    # MudanÁa solicitada por Dieter e Felipe, no dia 06/10/2017.
+    (rowSums(Nev_afmen15)*DiasMedAfast_Men15 * 1.5) + NFaltas
   }
 
   input_vetor_afast_men15 = c("Nev_Afmenor15_Tipico", "Nev_Afmenor15_Trajeto", "Nev_Afmenor15_DoenOcup", "Nev_Afmenor15_NRelac")
@@ -637,10 +637,10 @@ calcular_absenteismo = function(parametros){
 
 }
 
-############ PRESENTE√çSMO ##################
+############ PRESENTEÕSMO ##################
 calcular_presenteismo = function(parametros) {
 
-  # Nomes de Vari√°veis
+  # Nomes de Vari·veis
   perc_presenteismo = "PercPresenteismo"
   horas_presenteismo = "HorasPresenteismo"
   funcionarios = "Funcionarios"
@@ -648,7 +648,7 @@ calcular_presenteismo = function(parametros) {
   custo_mdo = "CustoMDO"
   despesa_presenteismo = "DespesaPresenteismo"
 
-  # Calculando HOras de Presente√≠smo
+  # Calculando HOras de PresenteÌsmo
   parametros[horas_presenteismo] = parametros[funcionarios] * parametros[perc_presenteismo] * parametros[horas_por_dia]
 
   # Calculando Despesa em Presenteismo
@@ -672,12 +672,12 @@ calcular_refugo_retrabalho = function(parametros) {
   vetor_acidentes = c("Tipico", "DoenOcup")
   vetor_eventos = c("Afmaior15", "Afmenor15", "Safast", "Obito")
 
-  # Usando Funcao para calcular eventos com custo m√©dio
+  # Usando Funcao para calcular eventos com custo mÈdio
   calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
 
 }
 
-############# MP, Insumos, Equipamento, Opera√ß√£o #################
+############# MP, Insumos, Equipamento, OperaÁ„o #################
 calcular_mp_insumos = function(parametros) {
 
   # Eventos
@@ -691,7 +691,7 @@ calcular_mp_insumos = function(parametros) {
   vetor_acidentes = c("Tipico", "DoenOcup")
   vetor_eventos = c("Afmaior15", "Afmenor15", "Safast", "Obito")
 
-  # Usando Funcao para calcular eventos com custo m√©dio
+  # Usando Funcao para calcular eventos com custo mÈdio
   calcular_eventos_com_customedio(parametros, vetor_acidentes, vetor_eventos, nome_evento_agregado, custo_medio, nome_despesa)
 
 }
@@ -707,7 +707,7 @@ calcular_engajamento = function(parametros) {
   deslig = c("DesligamentosVoluntarios")
   customed = c("CustoMedSubstitu")
 
-  # Calculando Custos com Desligamentos Volunt√°rios
+  # Calculando Custos com Desligamentos Volunt·rios
   parametros[despesas] = parametros[deslig] * -parametros[customed]
 
   parametros
@@ -718,7 +718,7 @@ calcular_engajamento = function(parametros) {
 calcular_multas = function(parametros){
 
 
-  # Implementa√ß√£o Inicial do M√≥dulo de Multas - Modificado para tornar-se similar aos eventos de interdi√ß√£o.
+  # ImplementaÁ„o Inicial do MÛdulo de Multas - Modificado para tornar-se similar aos eventos de interdiÁ„o.
   # Modificado em 23/10/2017
 
   # # Vai ter que mudar quando tivermos mais do que uma lei
@@ -750,11 +750,11 @@ calcular_multas = function(parametros){
   # eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
   #
   #
-  # # Calculando o N√∫mero de Multas com a Regress√£o
+  # # Calculando o N˙mero de Multas com a Regress„o
   # parametros[numero_multas_a_priori] = parametros[beta0] + parametros[beta1] * somar_eventos(parametros,vetor_acidentes = acidentes, vetor_eventos = eventos)
   #
   #
-  # # Ajustando para que o Numero de multas n√£o seja menor que zero
+  # # Ajustando para que o Numero de multas n„o seja menor que zero
   # parametros[numero_multas_a_priori] = parametros[numero_multas_a_priori] * as.data.frame(parametros[numero_multas_a_priori] > 0)
   #
   #
@@ -771,7 +771,7 @@ calcular_multas = function(parametros){
   # # Arredondado
   # parametros[numero_multas] = round(parametros[numero_multas],0)
   #
-  # # Ajustando vari√°veis negativas e Arredondando
+  # # Ajustando vari·veis negativas e Arredondando
   # parametros["DespesaMultas"] = rowSums(despesa_multas(n_multas_l = parametros[numero_multas],
   #                                              cmed = parametros[custo_medio_multa]))
 
@@ -864,24 +864,24 @@ calcular_acoes_regressivas_inss = function(parametros){
                                                                   p_acao_regressiva = parametros$PAcaoRegressiva)
 
 
-  # TODO Calculando Numero de Acoes Regressivas "Agregado" - Ap√≥s Modifica√ß√µes, elimitar esta vari√°vel
+  # TODO Calculando Numero de Acoes Regressivas "Agregado" - ApÛs ModificaÁıes, elimitar esta vari·vel
   parametros["AcoesRegressivasINSS"] = parametros["AcoesRegressivasINSS_B91"] + parametros["AcoesRegressivasINSS_B92"] + parametros["AcoesRegressivasINSS_B93"] + parametros["AcoesRegressivasINSS_B94"]
 
 
-  # Calculando o Custo Medio Ponderado.. TODO (N√£o vamos mais usar, depois excluir esta vari√°vel)
+  # Calculando o Custo Medio Ponderado.. TODO (N„o vamos mais usar, depois excluir esta vari·vel)
   #parametros["CustoMedioPonderadoAcaoRegressiva"] = rowSums(parametros[vacoes_regressivas] * parametros[custos_medios])/rowSums(parametros[beneficios])
 
 
   parametros["DespesaAcoesRegressivasINSS"] = rowSums(parametros[vacoes_regressivas] * -parametros[custos_medios])
 
-  # Calculo antigo de a√ß√µes regressivas - TODO - Eliminar Calculo antigo.
+  # Calculo antigo de aÁıes regressivas - TODO - Eliminar Calculo antigo.
   # parametros["DespesaAcoesRegressivasINSS"] = despesa_acoes_regressivas_inss(acoes_regressivas = parametros["AcoesRegressivasINSS"],
   #                                              cmed = parametros["CustoMedioPonderadoAcaoRegressiva"])
   parametros
 
 }
 
-############ IMAGEM - TEMPO DE CONTRATA√á√ÉO ##################
+############ IMAGEM - TEMPO DE CONTRATA«√O ##################
 calcular_imagem_contracacao = function(parametros) {
 
   # Inputs
@@ -894,31 +894,31 @@ calcular_imagem_contracacao = function(parametros) {
   Ig = c("TaxaGravidade")
 
 
-  # Verifica√ß√£o dos Betas:
+  # VerificaÁ„o dos Betas:
   if(any(parametros[betafreq] < 0 | parametros[betagrav] < 0)) {
 
-    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regress√£o de Tempo de Contrata√ß√£o √© menor do que zero. As despesas desta categoria ser√£o zeradas.")
+    oshcba.adicionar_log("Aviso: Um dos coeficientes da Regress„o de Tempo de ContrataÁ„o È menor do que zero. As despesas desta categoria ser„o zeradas.")
     parametros["TempoContratacaoEstimado"] = 0
     parametros["DespesasImagemContratacao"] = 0
     return(parametros)
   }
 
-  # oshcba.adicionar_log("Verifica√ß√£o dos Betas do Tempo de Contrata√ß√£o √© coerente, calculando com regress√£o.")
+  # oshcba.adicionar_log("VerificaÁ„o dos Betas do Tempo de ContrataÁ„o È coerente, calculando com regress„o.")
 
   # Calculando Tempo de Contratacao Estimado
   parametros["TempoContratacaoEstimado"] = parametros[beta0] + parametros[betafreq] * parametros[If] + parametros[betagrav] * parametros[Ig] + parametros[betapib] * parametros[varpib]
 
 
-  # Aplicando Batentes. Estas constantes s√£o definidas internamente, com o prop√≥sito de cancelar valores extremos.
+  # Aplicando Batentes. Estas constantes s„o definidas internamente, com o propÛsito de cancelar valores extremos.
   tempo_minimo = 0
 
-  # Usando o primeiro tempo de contratacao padrao, assumindo que nao mudar√° entre replicacoes ou entre anos.
-  # Como o usuario pode informar tempo padr√£o igual a zero, assumo o maior valor entre a multiplica√ß√£o, e 2.
+  # Usando o primeiro tempo de contratacao padrao, assumindo que nao mudar· entre replicacoes ou entre anos.
+  # Como o usuario pode informar tempo padr„o igual a zero, assumo o maior valor entre a multiplicaÁ„o, e 2.
   tempo_maximo = max(parametros[1,"TempoContratacaoPadrao"] * 2, 2)
 
   parametros = aplicar_batentes(dados = parametros, variavel = "TempoContratacaoEstimado", valor_minimo = tempo_minimo, valor_maximo = tempo_maximo)
 
-  # Calculando Despesas com Contratacao relacionadas √† Imagem
+  # Calculando Despesas com Contratacao relacionadas ‡ Imagem
   parametros["DespesasImagemContratacao"] = -(parametros["TempoContratacaoEstimado"] - parametros["TempoContratacaoPadrao"]) * parametros["CustoMedSubstituporTempo"] * parametros["TurnoverGeral"] * parametros["Funcionarios"]
   parametros
 }
@@ -939,27 +939,27 @@ calcular_imagem_receita = function(parametros) {
 
 ############ PRODUTIVIDADE ##################
 calcular_produtividade = function(parametros) {
-  # Ganho em Produtividade ser√° informado na Vari√°vel GanhoProdutividade.
+  # Ganho em Produtividade ser· informado na Vari·vel GanhoProdutividade.
   # parametros["GanhoProdutividade"] = parametros["SavingProdutividade"] * parametros["ProducaoProjetada"]
   parametros
 }
 
 ############ QUALIDADE ##################
 calcular_qualidade = function(parametros) {
-  # Ganho de Qualidade ser√° Informado na Vari√°vel GanhoQualidade
+  # Ganho de Qualidade ser· Informado na Vari·vel GanhoQualidade
   # parametros["GanhoQualidade"] = parametros["VarVolumeVendaQualidade"] * parametros["MargemMedUnitaria"] *  parametros["ProducaoProjetada"]
   parametros
 }
 
 ############ SEGURO PATRIMONIAL ##################
 calcular_seguro_patrimonial = function(parametros) {
-  # Ganho do Seguro Patrimonial √© Arbitrado Diretamente
+  # Ganho do Seguro Patrimonial È Arbitrado Diretamente
   parametros["DespesasSeguroPatrimonial"] = -1 * parametros["DespesasSeguroPatrimonial"]
   parametros
 }
 
 
-############ INTERRUP√á√ÉO OPERACIONAL POR ACIDENTE ##################
+############ INTERRUP«√O OPERACIONAL POR ACIDENTE ##################
 calcular_interrupcao_acidentes = function(parametros) {
 
   vetor_acidentes = c("Tipico")
@@ -970,15 +970,15 @@ calcular_interrupcao_acidentes = function(parametros) {
   SomaObitos = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
 
   # parametros["DiasTotaisInterrupcaoAcidente"] = parametros["DiasInterrupcaoAcidenteObito"] * SomaObitos + parametros["DiasInterrupcaoAcidenteOutros"] * SomaOutros
-  # Alterando Lucro Cessante: Mudan√ßa # 14
+  # Alterando Lucro Cessante: MudanÁa # 14
   parametros["DespesasInterrupcaoAcidentes"] = (-parametros["LucroCessanteAcidenteObito"] * SomaObitos) + (-parametros["LucroCessanteAcidenteOutros"] * SomaOutros)
   parametros
 }
 
 
-############ INTERRUP√á√ÉO OPERACIONAL POR FISCALIZA√á√ÉO ##################
+############ INTERRUP«√O OPERACIONAL POR FISCALIZA«√O ##################
 calcular_interdicao_fiscalizacao = function(parametros) {
-  # Alterando Lucro Cessante: Mudan√ßa # 14
+  # Alterando Lucro Cessante: MudanÁa # 14
   parametros["DespesasInterdicaoFiscalizacao"] = parametros["EventoInterdicao"] * -parametros["LucroCessanteInterdicaoFiscalizacao"] * (1 + (parametros["Crise"] * parametros["FatorCrise"]))
   parametros
 }
