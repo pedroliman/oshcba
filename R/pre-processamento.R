@@ -12,6 +12,7 @@ verificar_inputs = function(inputs) {
 
   if(!length(inputs) == 8) {
     oshcba.parar_execucao(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
+  } else {
   }
 
   if (any(is.na(inputs$Configs))) {
@@ -33,6 +34,9 @@ verificar_inputs = function(inputs) {
   if (any(is.na(inputs$HistoricoFAP))) {
     oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
   }
+  
+  # Historico FAP precisa ter 2 linhas e somente 2 linhas
+  browser()
 
   if (any(is.na(inputs$Constantes))) {
     oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Constantes, existem dados em branco."))
