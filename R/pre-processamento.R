@@ -36,7 +36,9 @@ verificar_inputs = function(inputs) {
   }
   
   # Historico FAP precisa ter 2 linhas e somente 2 linhas
-  browser()
+  if(!(nrow(inputs$HistoricoFAP) == 2)){
+    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Historico_FAP, devem existir extamente 2 linhas nesta tabela."))
+  }
 
   if (any(is.na(inputs$Constantes))) {
     oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Constantes, existem dados em branco."))
@@ -49,7 +51,6 @@ verificar_inputs = function(inputs) {
 
 
   # Verificar se os parâmetros informados são coerentes com as distribuições de probabilidades
-
   if(verificar_coerencia_parametros_aleatorios(inputs)){
     oshcba.parar_execucao("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
   }
@@ -57,7 +58,6 @@ verificar_inputs = function(inputs) {
   if(verificar_nomes_dataframes(inputs)){
     oshcba.parar_execucao("O nome das colunas da planilha de entrada não é consistente com o padrão estabelecido. Use a planilha padrão.")
   }
-
 
 
   # Verificando algumas variáveis em Dados Projetados que devem ser maiores do que zero:
