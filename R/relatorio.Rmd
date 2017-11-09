@@ -1,10 +1,9 @@
 ---
-title: "Relatorio Calculadora SST | FPS"
+title: "Relatório Calculadora SST | FPS"
 author: "SESI"
-date: "31 de outubro de 2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -13,26 +12,41 @@ library(oshcba)
 resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
 ```
 
+## Coleta de Dados Históricos
+Os dados foram coletados (55 variáveis com histórico e 3 arbitradas), utilizando o template do Excel destinado para tal atividade. A relação das variáveis coletadas/arbitradas estão disponíveis no anexo A.  Os dados que não estavam disponíveis (falta de histórico ou controle ainda não realizado na empresa), foram arbitrados com o apoio do grupo, baseado na experiência dos participantes da BRS.  
+Após a visita na empresa, um conjunto de ajustes foram realizados na calculadora e, também, no template Excel utilizada para a coleta de dados. Estes ajustes propiciaram o refinamento da calculadora para adequar funcionalidades e assegurar uma aplicação robusta deste protótipo.
+
+
+## Iniciativas Avaliadas
+Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo da calculadora. As iniciativas apresentadas pela empresa BRS contemplam:
+Iniciativa 1 – Avaliação Ergonômica 
+Iniciativa 2 – Desenvolvimento de lideranças
+Para cada iniciativa foram coletados dados referentes aos custos de sua implantação e manutenção, bem como foram estimadas as melhorias que poderão ser obtidas a partir da sua implementação. Estas estimativas foram feitas baseadas na probabilidade de redução dos eventos (afastamentos, óbito), redução de faltas, economias (savings) em produtividade, entre outros. 
+Destaca-se que a análise foi realizada em um horizonte temporal de três anos. Este horizonte de tempo foi definido junto aos responsáveis da empresa que acompanharam o piloto.
+
+
+## Valores Obtidos por Benefício Avaliado
+Nesta seção serão apresentados os valores obtidos para o conjunto de benefícios avaliados. Esta apresentação será feita na seguinte ordem de categorias: i) Reduções Fiscais; ii) Despesas Evitáveis; iii) Melhor uso dos recursos; e, iv) Intangível. A sequência de ordenamento da apresentação de resultados parte das categorias cujo os resultados são objetivos em termos de cálculo para elementos indiretos, finalizando em uma categoria intangível na qual as questões subjetivas são incorporadas ao cálculo.
+
+
 ## Resultados Gerais - Resumo Por Iniciativa
 
-{Texto Aqui}
+A seguir é apresentado o resultado geral do Benefício, por Iniciativa.
 
 ```{r echo=FALSE}
 
 resumo_iniciativas = resumo_cba_por_iniciativa(resultados$Resultados_CBR)
 
-knitr::kable(resumo_iniciativas)
+knitr::kable(t(resumo_iniciativas))
 
 ```
 
 
-## Benefícios por Categoria
-
-{Texto Aqui}
-
 ### Reduções Fiscais
 
-{Texto Aqui}
+- **Exposição à Multas:** Esta subcategoria compreende a economia de recursos monetários que empresa pode obter ao reduzir os riscos de não atendimento à legislação (NRs) após a implementação integral do projeto/iniciativa.
+- **FAP:** Esta subcategoria compreende a economia de recursos monetários que empresa obtém no RAT Ajustado ao reduzir a quantidade e severidade dos acidentes de trabalho (FAP) após a implementação integral do projeto/iniciativa.
+
 
 ```{r echo=FALSE}
 
@@ -44,14 +58,21 @@ colunas_reducoes_fiscais = c("BeneficioMultas", "BeneficioFAP")
 
 colunas = c(c("Cenario.y"), colunas_reducoes_fiscais)
 
-knitr::kable(beneficios_categorias[colunas])
+knitr::kable(t(beneficios_categorias[colunas]))
 
 ```
 
 
 ### Despesas Evitáveis
+- **Despesas com Reclamatórias Trabalhistas:** Esta subcategoria compreende as despesas evitadas com possíveis reclamatórias trabalhistas (objeto da ação relacionadas às doenças ocupacionais e acidentes do trabalho) após a implementação integral do projeto/iniciativa.
+- **Ações Regressivas INSS:** Esta subcategoria compreende as despesas evitadas com ações regressivas do INSS após a implementação integral do projeto/iniciativa.
+- **Despesas Médicas:** Esta subcategoria compreende as despesas evitadas com medicamentos e atendimento médico para tratamento dos acidentes de trabalho após a implementação integral do projeto/iniciativa.
+- **Reajustes Plano de Saúde:** Esta subcategoria compreende as despesas evitadas com planos de saúde via alteração da taxa de sinistralidade após a implementação integral do projeto/iniciativa.
+- **Interrupção Operacional (Acidente/Morte):** Esta subcategoria compreende as despesas evitadas por interrupção, total ou parcial, das operações da empresa devido acidentes de trabalho, óbitos ou interdições após a implementação integral do projeto/iniciativa.
+- **Interdições por Fiscalização:** Esta subcategoria compreende as despesas evitadas por interdição, total ou parcial, das operações da empresa devido a fiscalizações após a implementação integral do projeto/iniciativa.
+- **Reabilitação do Trabalhador:** Esta subcategoria compreende as despesas evitadas com a reabilitação do trabalhador que esteve afastado por doenças ocupacionais ou acidentes após a implementação integral do projeto/iniciativa.
+- **Seguro Patrimonial:** Esta subcategoria compreende os savings que a empresa pode ter no que tange à diminuição das despesas com planos de seguro contra dano material.
 
-{Texto Aqui}
 
 ```{r echo=FALSE}
 
@@ -66,14 +87,27 @@ colunas_despesas_evitaveis = c("BeneficioAcoesRegressivasINSS",
 
 colunas = c(c("Cenario.y"), colunas_despesas_evitaveis)
 
-knitr::kable(beneficios_categorias[colunas])
+tabela_imprimir = t(as.matrix((beneficios_categorias[colunas])))
+
+# colnames(tabela_imprimir)[,1] = "Beneficio"
+
+# colnames(tabela_imprimir$Cenario.y) = "Beneficio"
+
+knitr::kable(tabela_imprimir)
 
 ```
 
 
 ### Melhor Uso dos Recursos
 
-{Texto Aqui}
+- **Turnover:** Esta subcategoria compreende a economia gerada pela redução da taxa de rotatividade da mão-de-obra após a implementação do projeto/iniciativa em SST e FPS. As variáveis contempladas referem à redução das despesas de recursos humanos e demais áreas de apoio (estrutura, capacitação novos trabalhadores, mobilização e integração de novos trabalhadores, outros).
+- **Absenteísmo:** Esta subcategoria compreende a economia gerada pela redução da taxa de absenteísmo da mão-de-obra após a implementação do projeto/iniciativa em SST e FPS. As variáveis contempladas referem à redução das despesas com tempo de realocação de trabalhadores, horas extras necessárias para suprir as carências de mão-de-obra nas operações, entre outras.
+- **Presenteísmo:** Esta subcategoria compreende a economia pela redução da taxa de presenteísmo da mão-de-obra após a implementação do projeto/iniciativa em SST e FPS. É uma dimensão intermediária que impacta na produtividade da empresa.
+- **Produtividade:** Esta subcategoria compreende os ganhos obtidos pela elevação da produtividade da mão-de-obra devido ao ambiente seguro e saudável. A produtividade pode ser medida em FTE (Full-Time Equivalent) ou volume de produção horária.
+- **Qualidade:** Esta subcategoria compreende os ganhos obtidos com elevação da qualidade dos produtos e serviços devido a melhora do ambiente seguro e saudável. O ganho de qualidade do produto pode resultar em ganho de Market-share e/ou aumento do preço de venda.
+- **Refugo/Retrabalho:** Esta subcategoria compreende a economia gerada pela redução do volume de refugos/retrabalhos gerados nas operações após a implementação do projeto/iniciativa em SST e FPS.
+- **MP, insumos, equipamentos da operação:** Esta subcategoria compreende a economia gerada pela redução do volume manutenção corretiva (mão-de-obra e materiais) e substituição de máquinas e ferramentas após a implementação da iniciativa em SST e FPS.
+
 
 ```{r echo=FALSE}
 
@@ -87,7 +121,7 @@ colunas_despesas_evitaveis = c("BeneficioTurnover",
 
 colunas = c(c("Cenario.y"), colunas_despesas_evitaveis)
 
-knitr::kable(beneficios_categorias[colunas])
+knitr::kable(t(beneficios_categorias[colunas]))
 
 ```
 
@@ -95,7 +129,9 @@ knitr::kable(beneficios_categorias[colunas])
 
 ### Benefícios Intangíveis
 
-{Texto Aqui}
+- **Imagem da Empresa:** Esta subcategoria compreende os ganhos que a empresa pode obter com elevação da sua imagem devido à boas práticas de segurança e de evidenciação de aspectos que evidenciem a busca pelo aumento da qualidade de vida dos seus trabalhadores (e.g. facilidade no processo de atração e retenção de talentos) após a implementação integral do projeto/iniciativa. 
+- **Engajamento e Clima organizacional:** Esta subcategoria compreende os ganhos devido ao engajamento dos trabalhadores e elevação do clima organizacional devido ao ambiente saudável e seguro. É uma dimensão intermediária que impacta na produtividade da empresa.
+
 
 ```{r echo=FALSE}
 
@@ -105,16 +141,17 @@ colunas_beneficios_intangiveis = c("BeneficioImagemContratacao",
 
 colunas = c(c("Cenario.y"), colunas_beneficios_intangiveis)
 
-knitr::kable(beneficios_categorias[colunas])
+knitr::kable(t(beneficios_categorias[colunas]))
 
 ```
 
 
 
 
-## Gráfico por Iniciativa
+## Gráficos por Iniciativa
 
-{Texto Aqui}
+Os gráficos que serão expostos a seguir apresentam como cada dimensão contribui para a geração da razão benefício-custo total. A partir destes, é possível visualizar a importância relativa de cada umas das categorias na Razão Benefício-Custo apresentado para cada iniciativa.
+
 
 ```{r echo=FALSE}
 
@@ -142,15 +179,80 @@ grafico_box_plot_por_iniciativa(resultados$Resultados_CBR)
 ```
 
 
-## Logs
+## Apêndice - Registros para a Reprodutibilidade dos Calculos
 
-{Texto Aqui}
+### Logs
+
+A seguir são apresentados os logs de execução gerados pela calculadora.
 
 
 ```{r echo=FALSE}
 knitr::kable(oshcba.obter_log())
 ```
 
-## Gráfico por Iniciativa
 
-{Texto Aqui}
+### Probabilidades Informadas
+
+- **Configurações**
+
+```{r echo=FALSE}
+knitr::kable(resultados$Inputs$Configs)
+```
+
+- **Dados Projetados**
+
+```{r echo=FALSE}
+knitr::kable(resultados$Inputs$DadosProjetados)
+```
+
+- **Constantes**
+
+```{r echo=FALSE}
+knitr::kable(resultados$Inputs$Constantes)
+```
+
+- **Parâmetros**
+
+```{r echo=FALSE}
+
+variaveis = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4")
+
+knitr::kable(resultados$Inputs$Parametros[variaveis])
+```
+
+- **Cenários**
+
+```{r echo=FALSE}
+knitr::kable(resultados$Inputs$Cenarios)
+```
+
+- **Custos**
+
+```{r echo=FALSE}
+knitr::kable(resultados$Inputs$Custos)
+```
+
+- **Módulos Selecionados**
+
+```{r echo=FALSE}
+knitr::kable(resultados$Inputs$Modulos)
+```
+
+- **Histórico FAP**
+
+```{r echo=FALSE}
+knitr::kable(t(resultados$Inputs$HistoricoFAP))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
