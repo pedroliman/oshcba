@@ -1,0 +1,39 @@
+---
+title: "Relatório Síntese dos Dados Importados"
+output: pdf_document
+#classoption: landscape
+fontsize: 10pt
+geometry: margin=1cm
+---
+
+## Consistência dos dados do INSS importados:
+
+```{r, echo=FALSE}
+dados_inss
+```
+
+## Consistência dos dados importados do módulo simplificado:
+
+```{r, echo=FALSE}
+kable(check_variaveis1, row.names = FALSE)
+```
+
+\newpage 
+## Cálculo das probabilidade dos eventos - apoio para parametrizaçãoo das iniciativas
+### Eventos Observados:
+### Número de Eventos
+```{r, echo=FALSE, size="tiny"}
+kable(eventos_pdf, digits = 2)
+```
+
+### Probabilidade dos Eventos (# eventos / nro funcionários):
+```{r, echo=FALSE, size="tiny"}
+kable(eventos_pdf_prob, digits = 2) #%>%
+  #kable_styling(font_size = 5)
+```
+
+
+### Eventos Arbitrados:
+```{r, echo=FALSE}
+eventos_pdf_arb
+```

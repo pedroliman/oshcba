@@ -4,6 +4,7 @@
 # Criando uma variável global para os logs como um data.fram
 #' oshcba.iniciar_log
 #' Esta funcao inicia o vetor de logs da calculadora.
+#' @export
 oshcba.iniciar_log = function(){
   oshcba.log_calculadora <<- vector(mode = "character")
   oshcba.adicionar_log("### CALCULADORA SESI / GMAP | UNISINOS - LOGS DE EXECUÇÃO ###")
@@ -14,6 +15,7 @@ oshcba.iniciar_log = function(){
 #'
 #' @param string character com o texto a adicionar ao vetor de logs
 #' @param vetor_log o vetor de log existente
+#' @export
 oshcba.adicionar_log = function(string, vetor_log = oshcba.log_calculadora) {
 
   # Adicionar Data e Hora para o Log:
@@ -32,7 +34,7 @@ oshcba.adicionar_log = function(string, vetor_log = oshcba.log_calculadora) {
 #' Esta funcao pode ser usada para parar a execução da biblioteca salvando um arquivo com os logs na pasta atual.
 #' @param string character com o texto a adicionar ao vetor de logs
 #' @param vetor_log o vetor de log existente
-#'
+#' @export
 oshcba.parar_execucao = function(string, vetor_log = oshcba.log_calculadora, salvar_logs_csv = TRUE) {
   # Adicionar Data e Hora para o Log:
   string = paste(Sys.time(),string, sep = " - ")

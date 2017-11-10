@@ -1,3 +1,11 @@
+#' carregar_inputs
+#'
+#' @param arquivo_de_inputs arquivo excel de inputs
+#' @param abas_a_ler vetor com abas a ler
+#' @param nomes_inputs vetor com nomes dos inputs
+#'
+#' @return data.frame com os dados lidos.
+#' @export
 carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
 
   # Criando uma list para os inputs
