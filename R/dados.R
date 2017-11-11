@@ -59,6 +59,24 @@ escrever_arquivo_inputs_outputs = function (arquivo_de_inputs="./tests/testthat/
 }
 
 
+#' escrever_template_dados
+#'
+#' @param arquivo_template_dados caminho para o arquivo que serve como template para os dados de entrada da calculadora
+#'
+#' @export
+#'
+escrever_template_dados = function(arquivo_template_dados = "./tests/testthat/Dados.xlsx") {
+  oshcba.inputs_template = carregar_inputs(arquivo_de_inputs = arquivo_template_dados)
+  # Escrevendo o arquivo de dados conforme recomendações do Hadley:
+  # http://r-pkgs.had.co.nz/data.html
+  devtools::use_data(oshcba.inputs_template,  internal = FALSE, overwrite = TRUE, compress = "bzip2")
+  
+}
+
+
+
+
+
 simular_e_gravar_resultados = function () {
   base_folder = paste(getwd(),"resultados",as.character(Sys.time()), sep = "/")
   resultados = simular_temp_absenteismo(modo = "completo")
