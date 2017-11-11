@@ -1,3 +1,4 @@
+# library(oshcba)
 
 # È necessário inciar o log para usar funcoes internas
 oshcba.log_calculadora = oshcba.iniciar_log()
@@ -49,8 +50,7 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
   }
   
   # Tratar Constantes: Remover Constantes com Valor igual a NA (para que o modelo rode depois.)
-  # Remover variaveis que retornaram NAs.
-  na.exclude(Constantes)
+  Constantes
   
 }
 
@@ -58,7 +58,7 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
 # Obtencao de Constantes
 
 # Definindo parametros para a leitura de dados
-arquivo_template = "./tests/testthat/Dados_Template_Fonte_Dados.xlsx"
+arquivo_template = "./tests/testthat/Dados.xlsx"
 abas_a_ler = c("Constantes")
 nomes_inputs = c("Constantes")
 # Definindo Funcao de Input
@@ -68,4 +68,19 @@ listASIS = list(
 )
 list_dados_tratados = listASIS
 
+
+# Inputs Iniciais - Vamos criar o objeto de inputs a partir do excel e depois substituir dados pelos reais:
+
+inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
+
 constantes = obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)
+
+# Substituindo dados pelos dados tratados pelo script do FELIPE.
+inputs["Constantes"] = NA
+inputs$Constantes = constantes
+
+# Rodando Calculadora com opcao "list":
+
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list")
+
+
