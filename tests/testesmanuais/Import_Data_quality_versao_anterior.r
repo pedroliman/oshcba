@@ -6,23 +6,21 @@
 ##
 ################################################################################
 
-# rm(list=ls())    # clean up R envirnoment
-# library(r2excel)
-# library(readxl)
-# library(dplyr)
-# library(tidyr)
-# library(lubridate)
-# library("matrixStats")
-# library(knitr)
-# library(kableExtra) 
-# #library(graphicx)
-# library(pander)
-# library(pastecs)
-
-simular_cba()
+rm(list=ls())    # clean up R envirnoment
+library(r2excel)
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(matrixStats)
+library(knitr)
+library(kableExtra) 
+#library(graphicx)
+library(pander)
+library(pastecs)
 
 #### Folders & Files
-PATH_DATAFILES = "./tests/testthat/"
+PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais/"
 setwd(PATH_DATAFILES)
 
 ###############################################################
@@ -109,7 +107,7 @@ dataset_ASIS_Simple_Outros = data.frame(read_excel(path = "CBA_SESI_Planilha_Dad
                                           col_names = TRUE))
 
 row.names(dataset_ASIS_Simple_Outros) <- c("CustoMDO",
-                                                "CustoMedSubstitu",
+                                                "CustoMedSubstituporTempo",
                                                 "DesligamentosInvoluntarios",
                                                 "Aux_NroTotalDesligamentos",
                                                 "Aux_TotalDiasAfast_Men15",
@@ -457,7 +455,7 @@ if(DB_ASIS_param_Modulos$BeneficioClima == TRUE){ # Carregar somente se o usuár
                                                          range = "Custom_Intangível!E14:Q15",
                                                          col_names = TRUE))
   
-  row.names(dataset_ASIS_Clima) <- c("CustoMedSubstitu")
+  row.names(dataset_ASIS_Clima) <- c("CustoMedSubstituporTempo")
   
   Var_Necessaria = rep("TRUE", 1)
   dataset_ASIS_Clima = cbind(dataset_ASIS_Clima, Var_Necessaria)
@@ -578,6 +576,12 @@ eventos_pdf_prob = cbind(
                     DB_ASIS_Simple_Outros_Observado_eventos[,5]/DB_ASIS_Simple_Outros_Observado_nrofunc[,5],
                     DB_ASIS_Simple_Outros_Observado_eventos[,6]/DB_ASIS_Simple_Outros_Observado_nrofunc[,6])
 
+eventos_pdf_Mean = rowMeans(eventos_pdf)
+eventos_pdf = cbind(eventos_pdf, eventos_pdf_Mean)
+
+eventos_pdf_prob_Mean = rowMeans(eventos_pdf_prob)
+eventos_pdf_prob = cbind(eventos_pdf_prob, eventos_pdf_prob_Mean)
+
 row.names(eventos_pdf) <- c("Afast. > 15d - Doença Ocup.",
                             "Afast. > 15d - Doença Não Rel. Trabalho",
                             "Afast. > 15d - Acidente Típico",
@@ -620,7 +624,8 @@ colnames(eventos_pdf) <- c(year(Sys.Date())-6,
                             year(Sys.Date())-4,
                             year(Sys.Date())-3,
                             year(Sys.Date())-2,
-                            year(Sys.Date())-1)
+                            year(Sys.Date())-1,
+                            "Média")
 
 colnames(eventos_pdf_prob) <- c(
                            year(Sys.Date())-6,
@@ -628,7 +633,9 @@ colnames(eventos_pdf_prob) <- c(
                            year(Sys.Date())-4,
                            year(Sys.Date())-3,
                            year(Sys.Date())-2,
-                           year(Sys.Date())-1)
+                           year(Sys.Date())-1,
+                           "Média")
+
 
 eventos_pdf_arb = rbind(
   if(!is.na(DB_ASIS_Simple_Outros_Arbitrado_eventos[1,1])){paste("O numero total anual de Afast. Maior 15 dias por Doença Ocupacional arbitrado foi de: ", DB_ASIS_Simple_Outros_Arbitrado_eventos[1,1], ". O valor máximo e minímo foram: (",DB_ASIS_Simple_Outros_Arbitrado_eventos[1,2], ",", DB_ASIS_Simple_Outros_Arbitrado_eventos[1,3],")")} else {"Evento não arbitrado"},
@@ -649,12 +656,11 @@ row.names(eventos_pdf_arb) <- c("Afast. > 15d - Doença Ocup.:",
 # ### ------------------------------------------------------
 # ### Imprimir o PDF com o Log de erros e calculo das probabilidades
 # ### ------------------------------------------------------
-dados_inss
-check_variaveis1
-eventos_pdf
-eventos_pdf_arb
-
-rmarkdown::render("report_tratamento.rmd", encoding = getOption("encoding"))
+# dados_inss
+# check_variaveis1
+# eventos_pdf
+# eventos_pdf_arb
+rmarkdown::render("D:/dev/oshcba/tests/testesmanuais/report.Rmd", encoding = getOption("encoding"))
 
 ### ------------------------------------------------------
 ### Variáveis Calculadas
@@ -744,8 +750,8 @@ TaxaFaltas = DB_Calc$Aux_NroTotalDias_Faltas / DB_Calc$Funcionarios
 PInvalidez = DB_Calc$NB_92 / Nro_AfMaior15
 FatorB91 = DB_Calc$NB_91 / Nro_AfMaior15_Doenca_Acidente
 FatorB92 = DB_Calc$NB_92 / Nro_AfMaior15_Doenca_Acidente
-FatorB93 = DB_Calc$NB_93 / DB_Calc$Nev_Obito_Tipico
-FatorB94 = DB_Calc$NB_94 / Nro_AfMaior15_Doenca_Acidente
+FatorB93 = as.numeric(DB_Calc$NB_93 / DB_Calc$Nev_Obito_Tipico)
+FatorB94 = as.numeric(DB_Calc$NB_94 / Nro_AfMaior15_Doenca_Acidente)
 TempoComputadoMedio = DB_Calc$TaxaGravidade / DB_Calc$TaxaFrequencia
 FatorAjusteExposicaoAoRisco = DB_Calc$HorasHomemExposicaoRisco / DB_Calc$Aux_TotalHorasTrabalhadas
 
@@ -787,7 +793,7 @@ Aux_DiasMediosInterup_Obitos = DB_Calc$DiasInterrupcaoAcidenteObito / DB_Calc$Ne
 Aux_DiasMediosInterup_Acidentes = DB_Calc$DiasInterrupcaoAcidenteOutros / Nro_AEventos_Acidente
 LucroCessanteAcidenteObito = DB_Calc$Aux_LucroCessanteTotal_Obitos / DB_Calc$DiasInterrupcaoAcidenteObito
 LucroCessanteAcidenteOutros = DB_Calc$Aux_LucroCessanteTotal_OutrosAcid / DB_Calc$DiasInterrupcaoAcidenteOutros
-#############PercentualReabilitacao = DB_Calc$Aux_NroTotalReabilitados / Estoque de NB94 e 92 (acumulado) <<<<<<<<<<<<<VER PEDRO>>>>>>>>>>>>>>>>
+PercentualReabilitacao = DB_Calc$Aux_NroTotalReabilitados / Nro_AEventos_Doenca_Acidente
 
 var_Custom_DespesasEvitáveis= cbind(FuncionariosDesligados,
                                     PAcaoRegressiva,
@@ -813,10 +819,10 @@ var_Custom_Custom_MelhorUsoRecursos= cbind(CustoMedioMPInsumos,
 DB_Calc = cbind(DB_Calc, var_Custom_Custom_MelhorUsoRecursos)
 
 # Regressao Desligamentos voluntários
-regressao_DesligamentosVoluntarios = lm(DesligamentosVoluntarios ~ VarPIB + TaxaFrequencia + TaxaGravidade, DB_Calc)
+regressao_DesligamentosVoluntarios = lm(DesligamentosVoluntarios ~ VarPIB + TaxaGravidade, DB_Calc)
 Beta0DesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[1]
 BetaPIBDesigVoluntarios = regressao_DesligamentosVoluntarios$coefficients[2]
-BetaFreqDesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[3]
+#BetaFreqDesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[3]
 BetaGravDesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[4]
 
 # Regressao Percentilcusto FAP
@@ -835,15 +841,15 @@ Beta0IGravidadeFAP = regressao_PercentilgravidadeFAP$coefficients[1]
 Beta1IGravidadeFAP = regressao_PercentilgravidadeFAP$coefficients[2]
 
 # Regressao ReajustePlanoP
-regressao_ReajustePlano = lm(ReajustePlanoEstimado ~ TaxaFrequencia + TaxaGravidade, DB_Calc)
+regressao_ReajustePlano = lm(ReajustePlanoEstimado ~ TaxaGravidade, DB_Calc)
 Beta0ReajustePlano = regressao_ReajustePlano$coefficients[1]
-BetaFreqReajustePlano = regressao_ReajustePlano$coefficients[2]
+#BetaFreqReajustePlano = regressao_ReajustePlano$coefficients[2]
 BetaGravReajustePlano = regressao_ReajustePlano$coefficients[3]
 
 # Regressao Tempo Contratação
-regressao_ImagemTempoCont = lm(TempoContratacaoPadrao ~ TaxaFrequencia + TaxaGravidade + VarPIB, DB_Calc)
+regressao_ImagemTempoCont = lm(TempoContratacaoPadrao ~ TaxaGravidade + VarPIB, DB_Calc)
 Beta0TempoContratacao = regressao_ImagemTempoCont$coefficients[1]
-BetaFreqTempoContratacao = regressao_ImagemTempoCont$coefficients[2]
+#BetaFreqTempoContratacao = regressao_ImagemTempoCont$coefficients[2]
 BetaGravTempoContratacao = regressao_ImagemTempoCont$coefficients[3]
 BetaPIBTempoContratacao = regressao_ImagemTempoCont$coefficients[4]
 
@@ -892,10 +898,6 @@ anos_bd <- c(year(Sys.Date())-10,
 a=stat.desc(DB_Calc$CustoMDO)
 row.names(DB_Calc_stats) <- c(anos_bd, names(a))
 
-
-
-View(DB_Calc_stats)
-
 ### ------------------------------------------------------
 ### Salvar Planilha para Usuário
 ### ------------------------------------------------------ 
@@ -910,24 +912,135 @@ sheet4 <- createSheet(wb, sheetName = "Var Arbitradas")
 xlsx.addTable(wb, sheet, check_variaveis1, startCol = 1, row.names = FALSE, fontSize = 9)
 xlsx.addTable(wb, sheet2, cbind(eventos_pdf, eventos_pdf_prob), startCol = 1, row.names = TRUE, fontSize = 9)
 xlsx.addTable(wb, sheet3, DB_Calc_stats, startCol = 1, row.names = TRUE, fontSize = 9)
-xlsx.addTable(wb, sheet4, DB_ASIS_Simple_Outros_Arbitrado_t, startCol = 1, row.names = TRUE, fontSize = 9)
+xlsx.addTable(wb, sheet4, DB_ASIS_Completo_Arbitrado, startCol = 1, row.names = TRUE, fontSize = 9)
 # save the workbook to an Excel file
 saveWorkbook(wb, filename)
 
-output_ASIS = list(
-  CalculadasObservadas = DB_Calc_stats,
-  Arbitradas = DB_ASIS_Completo_Arbitrado
-)
+###############################################################
+### Parte 2: Modelagem INICIATIVAS
+###############################################################
+### Ler Planilha de INIC - PARAMETRIZACAO
+### ------------------------------------------------------
+dataset_INIC_AnosAvaliacao = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx", 
+                                                   range = "Parametrização!C7",
+                                                   col_names = FALSE))
 
-output_Iniciativa1 = list(
-  CalculadasObservadas = DB_Calc_stats,
-  Arbitradas = DB_ASIS_Completo_Arbitrado
-)
+colnames(dataset_INIC_AnosAvaliacao) <- c("AnosRetorno")
 
-output_Iniciativa2 = list(
-  CalculadasObservadas = DB_Calc_stats,
-  Arbitradas = DB_ASIS_Completo_Arbitrado
-)
-...
 
-View(DB_Calc_stats)
+dataset_INIC_Selecao = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx", 
+                                             range = "Parametrização!B11:E21",
+                                             col_names = TRUE))
+
+colnames(dataset_INIC_Selecao) <- c("Iniciativa",
+                                    "NomeIniciativa",
+                                    "Selecionada",
+                                    "AnosDelay")
+
+### Ler Planilha de INIC - PROJECOES
+### ------------------------------------------------------
+dataset_INIC_Projetado = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx", 
+                                             range = "Infos_Comuns!E6:N9",
+                                             col_names = TRUE))
+
+colnames(dataset_INIC_Selecao) <- c("Crise",
+                                    "FatorCrise",
+                                    "VarPIB")
+                                
+### Ler Planilha de INIC - INICIATIVA
+### ------------------------------------------------------
+
+# for(m in 1:10){
+#   
+#   if(dataset_INIC_Selecao[n, 3] == TRUE){
+    
+    ### Custos
+    dataset_Inic1_Custos = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx", 
+                                                 range = "Iniciativa 1!D8:M10",
+                                                 col_names = TRUE))
+    
+    row.names(dataset_Inic1_Custos) <- c("CustoInicial",
+                                         "CustoManutencao")
+    
+    ### Prob. Futuras Eventos baseado dados Observado
+    dataset_Inic1_PrEventos_Obs = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx",
+                                                        range = "Iniciativa 1!K18:k34",
+                                                        col_names = FALSE))
+    
+    colnames(dataset_Inic1_PrEventos_Obs) <- c("Media_Obs")
+    row.names(dataset_Inic1_PrEventos_Obs) <- c("Pev_Afmaior15_DoenOcup",
+                                                "Pev_Afmaior15_NRelac",
+                                                "Pev_Afmaior15_Tipico",
+                                                "Pev_Afmaior15_Trajeto",
+                                                "Pev_Afmenor15_DoenOcup",
+                                                "Pev_Afmenor15_NRelac",
+                                                "Pev_Afmenor15_Tipico",
+                                                "Pev_Afmenor15_Trajeto",
+                                                "Pev_Obito_DoenOcup",
+                                                "Pev_Obito_NRelac",
+                                                "Pev_Obito_Tipico",
+                                                "Pev_Obito_Trajeto",
+                                                "Pev_Safast_DoenOcup",
+                                                "Pev_Safast_NRelac",
+                                                "Pev_Safast_Tipico",
+                                                "Pev_Safast_Trajeto",
+                                                "TaxaFaltas")
+    
+    ### Prob. Futuras Eventos baseado dados arbitrados
+    dataset_Inic1_PrEventos_Arb = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx",
+                                                        range = "Iniciativa 1!O18:Q34",
+                                                        col_names = FALSE))
+    
+    colnames(dataset_Inic1_PrEventos_Arb) <- c("Usual, Maximo, Minimo")
+    row.names(dataset_Inic1_PrEventos_Arb) <- c("Pev_Afmaior15_DoenOcup",
+                                                "Pev_Afmaior15_NRelac",
+                                                "Pev_Afmaior15_Tipico",
+                                                "Pev_Afmaior15_Trajeto",
+                                                "Pev_Afmenor15_DoenOcup",
+                                                "Pev_Afmenor15_NRelac",
+                                                "Pev_Afmenor15_Tipico",
+                                                "Pev_Afmenor15_Trajeto",
+                                                "Pev_Obito_DoenOcup",
+                                                "Pev_Obito_NRelac",
+                                                "Pev_Obito_Tipico",
+                                                "Pev_Obito_Trajeto",
+                                                "Pev_Safast_DoenOcup",
+                                                "Pev_Safast_NRelac",
+                                                "Pev_Safast_Tipico",
+                                                "Pev_Safast_Trajeto",
+                                                "TaxaFaltas")
+    
+    ### Prob. Futuras Eventos Raros
+    dataset_Inic1_PrEventosRaros = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx",
+                                                         range = "Iniciativa 1!I41:I46",
+                                                         col_names = FALSE))
+    
+    colnames(dataset_Inic1_PrEventosRaros) <- c("Taxa")
+    row.names(dataset_Inic1_PrEventosRaros) <- c("EventoInterdicao",
+                                                 "Multa1",
+                                                 "Multa2",
+                                                 "Multa3",
+                                                 "Multa4",
+                                                 "Multa5")
+    
+    ### Outros Ganhos
+    dataset_Inic1_Ganhos = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada_Iniciativas - v0.3.xlsx",
+                                                 range = "Iniciativa 1!I52:K58",
+                                                 col_names = FALSE))
+    
+    colnames(dataset_Inic1_Ganhos) <- c("Usual, Maximo, Minimo")
+    row.names(dataset_Inic1_Ganhos) <- c("GanhoImagemReceitaEsperado",
+                                         "TFrMaximaImagem",
+                                         "TGrMaximaImagem",
+                                         "GanhoProdutividade",
+                                         "GanhoQualidade",
+                                         "PercPresenteismo",
+                                         "DespesasSeguroPatrimonial")
+
+
+#   }
+# } # End FOR Iniciativas
+
+
+
+
