@@ -33,9 +33,9 @@
 "32";"Multas3";"poisson";0;NA;NA;NA;0;"ASIS";TRUE;TRUE
 "33";"Multas4";"poisson";0;NA;NA;NA;0;"ASIS";TRUE;TRUE
 "34";"Multas5";"poisson";0;NA;NA;NA;0;"ASIS";TRUE;TRUE
-"35";"GanhoImagemReceitaEsperado";"triangular";0;0;0;NA;0;"ASIS";TRUE;FALSE
-"36";"GanhoQualidade";"triangular";0;0;0;NA;0;"ASIS";TRUE;FALSE
-"37";"GanhoProdutividade";"triangular";0;0;0;NA;0;"ASIS";TRUE;FALSE
+"35";"GanhoImagemReceitaEsperado";"triangular";1e-07;1e-06;1e-05;NA;0;"ASIS";TRUE;FALSE
+"36";"GanhoQualidade";"triangular";1e-07;1e-06;1e-05;NA;0;"ASIS";TRUE;FALSE
+"37";"GanhoProdutividade";"triangular";1e-07;1e-06;1e-05;NA;0;"ASIS";TRUE;FALSE
 "38";"PAcaoRegressiva";"normaltruncada";0;0,005;0;1;0;"Iniciativa1";TRUE;FALSE
 "39";"EventoInterdicao";"poisson";0,05;NA;NA;NA;0;"Iniciativa1";TRUE;TRUE
 "40";"Pev_Afmenor15_Tipico";"normaltruncada";0,096;0,0350916069390562;0;1;0;"Iniciativa1";TRUE;TRUE
