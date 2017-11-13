@@ -3,6 +3,12 @@
 #
 # inputs = resultados$Inputs
 
+#' verificar_inputs
+#'
+#' @param inputs 
+#'
+#' @export
+#'
 verificar_inputs = function(inputs) {
 
   texto_base = "Dados Informados Incorretamente:"
@@ -99,7 +105,7 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 
   cenario_as_is= subset(inputs$Cenarios, CenarioASIS)$Cenario
 
-  parametros_eventos["ASIS"] = parametros_eventos["Cenario"] == cenario_as_is
+  parametros_eventos[,"ASIS"] = parametros_eventos[,"Cenario"] == cenario_as_is
 
   iniciativas_a_avaliar = subset(inputs$Cenarios, Simular == TRUE & CenarioASIS == FALSE)$Cenario
 
@@ -113,11 +119,11 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 
     indice_v = which(variaveis_a_verificar == v)
 
-    parametros_a_avaliar = dplyr::filter(parametros_eventos, NomeVariavel == v) %>% dplyr::select(NomeVariavel, Parametro1, ASIS)
+    parametros_a_avaliar = dplyr::filter(parametros_eventos, NomeVariavel == v) # %>% dplyr::select(NomeVariavel, Parametro1, ASIS)
 
     parametro_as_is = subset(parametros_a_avaliar, ASIS)$Parametro1
 
-    parametros_a_avaliar["Diferenca"] = parametro_as_is - parametros_a_avaliar$Parametro1
+    parametros_a_avaliar[,"Diferenca"] = parametro_as_is - parametros_a_avaliar$Parametro1
 
     reducao_somada = sum(parametros_a_avaliar$Diferenca)
 
@@ -143,6 +149,14 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 }
 
 
+#' verificar_coerencia_parametros_aleatorios
+#'
+#' @param inputs list de inputs lidos pelo modelo.
+#'
+#' @return
+#' @export
+#'
+#' @examples
 verificar_coerencia_parametros_aleatorios = function(inputs) {
 
   # A princípio não há inconsistência.

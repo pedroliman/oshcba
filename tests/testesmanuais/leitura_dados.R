@@ -62,7 +62,7 @@ iniciativas_a_simular = c("Iniciativa1", "Iniciativa2")
 parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
 
 # Substituindo dados pelos dados tratados pelo script do FELIPE.
-inputs$Constantes = constantes
+inputs$Constantes =  constantes
 
 inputs$Parametros = parametros
 
@@ -71,6 +71,8 @@ write.csv2(constantes, "constantes.csv")
 write.csv2(parametros, "parametros.csv")
 
 # Rodando Calculadora com opcao "list":
+
+verificar_inputs(inputs)
 
 resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list")
 
