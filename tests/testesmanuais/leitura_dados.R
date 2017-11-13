@@ -58,6 +58,10 @@ constantes = oshcba::obter_constantes(arquivo_template, abas_a_ler, nomes_inputs
 cenario_as_is = c("ASIS")
 iniciativas_a_simular = c("Iniciativa1", "Iniciativa2")
 
+# Corrigindo variaveis manualmente - Constantes
+constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
+
+
 
 parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
 
