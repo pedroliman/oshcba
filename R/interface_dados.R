@@ -47,19 +47,19 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
       # Neste caso, usar o dado observado
       #print(paste(variavel, "DadosObservados"))
       linha_ultimo_ano = 10
-      Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano,variavel]
+      Constantes["mean", "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano,variavel]
       
       if(is.na(Constantes[linha_constantes, "Valor"])){
         #Tentar usar o ano anterior:
         
-        Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano-1,variavel]
+        Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano,variavel]
         
         # Se mesmo assim não der, tentar ainda um ano anterior
         
         if(is.na(Constantes[linha_constantes, "Valor"])){
           #Tentar usar o ano anterior:
           
-          Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano-2,variavel]
+          Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano-1,variavel]
           
           
         }
@@ -88,7 +88,13 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
     
   }
   
+  
+  
   # Tratar Constantes: Remover Constantes com Valor igual a NA (para que o modelo rode depois.)
+  
+  # Remover desta tabela variáveis que contenham valores NA.
+  Constantes = na.omit(Constantes)
+  
   Constantes
   
 }

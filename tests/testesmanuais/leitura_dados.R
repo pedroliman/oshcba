@@ -6,11 +6,7 @@ library(dplyr)
 oshcba.log_calculadora = oshcba.iniciar_log()
 
 # Rodando Arquivo do Luis Felipe:
-# source("D:/dev/oshcba/tests/testesmanuais/tratamento_dados_lfr.r")
-
-
-#PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais/"
-#setwd(PATH_DATAFILES)
+# source("D:/dev/oshcba/tests/testesmanuais/Import_Data_quality-v1.3.r", encoding = getOption("encoding"))
 
 PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais/"
 setwd(PATH_DATAFILES)
@@ -55,7 +51,7 @@ list_dados_tratados = dadostratados
 
 inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
 
-constantes = obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)
+constantes = oshcba::obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)
 
 # Iniciativas a simular (definidas manualmente aqui):
 
@@ -77,3 +73,5 @@ write.csv2(parametros, "parametros.csv")
 # Rodando Calculadora com opcao "list":
 
 resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list")
+
+resultados = simular_cba(ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx")

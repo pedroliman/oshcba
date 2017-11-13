@@ -19,6 +19,9 @@ library(kableExtra)
 library(pander)
 library(pastecs)
 
+
+
+
 #### Folders & Files
 PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais"
 setwd(PATH_DATAFILES)
