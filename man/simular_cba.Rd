@@ -5,7 +5,8 @@
 \title{Simular CBA}
 \usage{
 simular_cba(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000,
-  tipo_input = "excel", modo = "customizado", output = "completo")
+  tipo_input = "excel", modo = "customizado", output = "completo",
+  verificar_inputs = TRUE)
 }
 \arguments{
 \item{ArquivoInputs}{Arquivo de dados usado como Input (deve seguir um padrao especifico).}

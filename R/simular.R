@@ -7,7 +7,7 @@
 #' @param output Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.
 #' @return um list com os resultados.
 #' @export
-simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo") {
+simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo", verificar_inputs = TRUE) {
 
   # Iniciar Log
   oshcba.iniciar_log()
@@ -45,11 +45,13 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
   }
 
 
-  # Verificar Inputs antes de continuar
-  verificar_inputs(inputs)
+  if(verificar_inputs){
+    # Verificar Inputs antes de continuar
+    verificar_inputs(inputs, parar_execucao_erro_inputs)  
+  }
+  
 
   parametros = obter_parametros(inputs, rep)
-
 
   # Verificar Parâmetros antes de continuar
   verificar_parametros(parametros)

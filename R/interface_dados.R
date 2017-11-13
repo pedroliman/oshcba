@@ -427,3 +427,56 @@ obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs,
   Parametros_Finais
   
 }
+
+
+
+#' obter_historicoFAP_template
+#'
+#' @param arquivo_template caminho do arquivo de template a usar
+#' @param abas_a_ler vetor com abas a lser
+#' @param nomes_inputs vetor com nomes de inputs
+#' @param list_dados_tratados list gerada pela rotina de tratamento de dados
+#' @param cenario_as_is character cenario as is
+#' @param iniciativas_a_simular vetor de iniciativas a simular
+#'
+#' @return data.frame com dois anos de historico do FAP para a simulacao 
+#' @export
+obter_historicoFAP_template = function(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
+  
+  linha_ultimo_ano = 10
+  linha_penultimo_ano = linha_ultimo_ano - 1
+  
+  template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
+  
+  # Criando Data.frame a partir do próprio template
+  Historico_FAP_Base = as.data.frame(template_dados$HistoricoFAP)
+  
+  variaveis_a_buscar = names(Historico_FAP_Base)
+  
+  # Linhas do HistoricoFAP obs
+  list_dados_tratados$DadosObservados[,"Ano"] = rownames(list_dados_tratados$DadosObservados)
+  
+  # Selecionando apenas os dois ultimos anos:
+  
+  historico_fap = list_dados_tratados$DadosObservados[linha_penultimo_ano:linha_ultimo_ano,]
+  
+  historico_fap$Ano = as.numeric(historico_fap$Ano)
+  
+  # Verificar se todas estas variaveis estão no template de dados
+  variaveis_faltantes = !(variaveis_a_buscar %in% names(list_dados_tratados$DadosObservados))
+  
+  nomes_variaveis_faltantes = variaveis_a_buscar[variaveis_faltantes]
+  
+  historico_fap[,nomes_variaveis_faltantes] = 0
+  
+  if (length(variaveis_faltantes) > 0) {
+    oshcba.adicionar_log(paste("Aviso: Variável", nomes_variaveis_faltantes, "não está no arquivo de tratamento de dados. Considerando variável igual a zero."))  
+  }
+  
+  # Se passou deste teste, então pode-se buscar a variável
+  historico_fap = historico_fap[,variaveis_a_buscar]
+  
+  # Filtrando apenas dados observados dos dois ultimos anos:
+  historico_fap
+  
+}

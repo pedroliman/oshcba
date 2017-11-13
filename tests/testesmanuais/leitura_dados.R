@@ -14,9 +14,14 @@ setwd(PATH_DATAFILES)
 # Obtencao de Constantes
 
 # Definindo parametros para a leitura de dados
-arquivo_template = "D:/dev/oshcba/tests/testthat/Dados.xlsx"
-abas_a_ler = c("Constantes", "Parametros")
-nomes_inputs = c("Constantes", "Parametros")
+arquivo_template = "D:/dev/oshcba/tests/testesmanuais/Template_Dados_Xalingo.xlsx"
+abas_a_ler = c("Constantes", "Parametros", "HistoricoFAP")
+nomes_inputs = c("Constantes", "Parametros", "HistoricoFAP")
+
+cenario_as_is = c("ASIS")
+iniciativas_a_simular = c("Iniciativa1", "Iniciativa2")
+
+
 # Definindo Funcao de Input
 
 
@@ -53,31 +58,38 @@ inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
 
 constantes = oshcba::obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)
 
-# Iniciativas a simular (definidas manualmente aqui):
-
-cenario_as_is = c("ASIS")
-iniciativas_a_simular = c("Iniciativa1", "Iniciativa2")
-
-# Corrigindo variaveis manualmente - Constantes
-constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
-
-
+historicoFAP = oshcba::obter_historicoFAP_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
 
 parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
+
+# Iniciativas a simular (definidas manualmente aqui):
+
+
+
+
 
 # Substituindo dados pelos dados tratados pelo script do FELIPE.
 inputs$Constantes =  constantes
 
 inputs$Parametros = parametros
 
+inputs$HistoricoFAP = historicoFAP
+
 write.csv2(constantes, "constantes.csv")
 
 write.csv2(parametros, "parametros.csv")
+
+write.csv2(historicoFAP, "parametros.csv")
+
+
+
+# Corrigindo variaveis manualmente - Constantes
+constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
 
 # Rodando Calculadora com opcao "list":
 
 verificar_inputs(inputs)
 
-resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list")
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
 
 resultados = simular_cba(ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx")
