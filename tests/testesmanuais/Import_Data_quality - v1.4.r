@@ -19,9 +19,6 @@ library(kableExtra)
 library(pander)
 library(pastecs)
 
-
-
-
 #### Folders & Files
 PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais"
 setwd(PATH_DATAFILES)
@@ -582,10 +579,10 @@ eventos_pdf_prob = cbind(
                     DB_ASIS_Simple_Outros_Observado_eventos[,9]/DB_ASIS_Simple_Outros_Observado_nrofunc[,9],
                     DB_ASIS_Simple_Outros_Observado_eventos[,10]/DB_ASIS_Simple_Outros_Observado_nrofunc[,10])
 
-eventos_pdf_Mean = rowMeans(eventos_pdf)
+eventos_pdf_Mean = rowMeans(eventos_pdf, na.rm = TRUE)
 eventos_pdf = cbind(eventos_pdf, eventos_pdf_Mean)
 
-eventos_pdf_prob_Mean = rowMeans(eventos_pdf_prob)
+eventos_pdf_prob_Mean = rowMeans(eventos_pdf_prob, na.rm = TRUE)
 eventos_pdf_prob = cbind(eventos_pdf_prob, eventos_pdf_prob_Mean)
 
 row.names(eventos_pdf) <- c("Afast. > 15d - Doença Ocup.",
@@ -732,10 +729,10 @@ NB_92_Inicial = sum(DB_Calc$NB_92, na.rm = TRUE)
 NB_93_Inicial = sum(DB_Calc$NB_93, na.rm = TRUE)
 NB_94_Inicial = sum(DB_Calc$NB_94, na.rm = TRUE)
 Soma_NBs = NB_91_Inicial + NB_92_Inicial + NB_93_Inicial + NB_94_Inicial
-if(is.na(sum(DB_Calc$Aux_DespesaTotalB91))){CustoMedio_NB_91 = rep(0, 10)} else {CustoMedio_NB_91 = (DB_Calc$Aux_DespesaTotalB91 / DB_Calc$NB_91)}
-if(is.na(sum(DB_Calc$Aux_DespesaTotalB92))){CustoMedio_NB_92 = rep(0, 10)} else {CustoMedio_NB_92 = (DB_Calc$Aux_DespesaTotalB92 / DB_Calc$NB_92)}
-if(is.na(sum(DB_Calc$Aux_DespesaTotalB93))){CustoMedio_NB_93 = rep(NA, 10)} else {CustoMedio_NB_93 = (DB_Calc$Aux_DespesaTotalB93 / DB_Calc$NB_93)}
-if(is.na(sum(DB_Calc$Aux_DespesaTotalB94))){CustoMedio_NB_94 = rep(NA, 10)} else {CustoMedio_NB_94 = (DB_Calc$Aux_DespesaTotalB94 / DB_Calc$NB_94)}
+if(sum(DB_Calc$Aux_DespesaTotalB91, na.rm = TRUE) > 0){CustoMedio_NB_91 = (DB_Calc$Aux_DespesaTotalB91 / DB_Calc$NB_91)} else {CustoMedio_NB_91 = rep(NA, 10)}
+if(sum(DB_Calc$Aux_DespesaTotalB92, na.rm = TRUE) > 0){CustoMedio_NB_92 = (DB_Calc$Aux_DespesaTotalB92 / DB_Calc$NB_92)} else {CustoMedio_NB_92 = rep(NA, 10)}
+if(sum(DB_Calc$Aux_DespesaTotalB93, na.rm = TRUE) > 0){CustoMedio_NB_93 = (DB_Calc$Aux_DespesaTotalB93 / DB_Calc$NB_93)} else {CustoMedio_NB_93 = rep(NA, 10)}
+if(sum(DB_Calc$Aux_DespesaTotalB94, na.rm = TRUE) > 0){CustoMedio_NB_94 = (DB_Calc$Aux_DespesaTotalB94 / DB_Calc$NB_94)} else {CustoMedio_NB_94 = rep(NA, 10)}
 DesligamentosVoluntarios = DB_Calc$Aux_NroTotalDesligamentos - DB_Calc$DesligamentosInvoluntarios
 DiasMedAfast_Men15 = DB_Calc$Aux_TotalDiasAfast_Men15 / Nro_AfMenor15
 HorasPorDia = DB_Calc$Aux_TotalHorasTrabalhadas / DB_Calc$Funcionarios
@@ -850,38 +847,38 @@ DB_Calc = cbind(DB_Calc, CustoMedSubstituporTempo)
 
 # Regressao Desligamentos voluntários
 regressao_DesligamentosVoluntarios = lm(DesligamentosVoluntarios ~ VarPIB + TaxaGravidade, DB_Calc)
-Beta0DesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[1]
-BetaPIBDesigVoluntarios = regressao_DesligamentosVoluntarios$coefficients[2]
+if(regressao_DesligamentosVoluntarios$coefficients[1] > 0) {Beta0DesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[1]} else {Beta0DesligVoluntarios = rep(0, 10)}
+if(regressao_DesligamentosVoluntarios$coefficients[2] > 0) {BetaPIBDesigVoluntarios = regressao_DesligamentosVoluntarios$coefficients[2]} else {BetaPIBDesigVoluntarios = rep(0, 10)}
 BetaFreqDesligVoluntarios = rep(0, 10)
-BetaGravDesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[3]
+if(regressao_DesligamentosVoluntarios$coefficients[3] > 0) {BetaGravDesligVoluntarios = regressao_DesligamentosVoluntarios$coefficients[3]} else {BetaGravDesligVoluntarios = rep(0, 10)}
 
 # Regressao Percentilcusto FAP
 regressao_PercentilcustoFAP = lm(Percentilcusto ~ Indicecusto, DB_Calc)
-Beta0ICustoFAP = regressao_PercentilcustoFAP$coefficients[1]
-Beta1ICustoFAP = regressao_PercentilcustoFAP$coefficients[2]
+if(regressao_PercentilcustoFAP$coefficients[1] > 0){Beta0ICustoFAP = regressao_PercentilcustoFAP$coefficients[1]} else {Beta0ICustoFAP = rep(0, 10)}
+if(regressao_PercentilcustoFAP$coefficients[2] > 0){Beta1ICustoFAP = regressao_PercentilcustoFAP$coefficients[2]} else {Beta1ICustoFAP = rep(0, 10)}
 
 # Regressao Percentilfrequencia FAP
 regressao_PercentilfrequenciaFAP = lm(Percentilfrequencia ~ Indicefrequencia, DB_Calc)
-Beta0IFrequenciaFAP = regressao_PercentilfrequenciaFAP$coefficients[1]
-Beta1IFrequenciaFAP = regressao_PercentilfrequenciaFAP$coefficients[2]
+if(regressao_PercentilfrequenciaFAP$coefficients[1] >0){Beta0IFrequenciaFAP = regressao_PercentilfrequenciaFAP$coefficients[1]} else {Beta0IFrequenciaFAP = rep(0, 10)}
+if(regressao_PercentilfrequenciaFAP$coefficients[2] >0){Beta1IFrequenciaFAP = regressao_PercentilfrequenciaFAP$coefficients[2]} else {Beta1IFrequenciaFAP = rep(0, 10)}
 
 # Regressao Percentilgravidade FAP
 regressao_PercentilgravidadeFAP = lm(Percentilgravidade ~ Indicegravidade, DB_Calc)
-Beta0IGravidadeFAP = regressao_PercentilgravidadeFAP$coefficients[1]
-Beta1IGravidadeFAP = regressao_PercentilgravidadeFAP$coefficients[2]
+if(regressao_PercentilgravidadeFAP$coefficients[1] > 0) {Beta0IGravidadeFAP = regressao_PercentilgravidadeFAP$coefficients[1]} else {Beta0IGravidadeFAP = rep(0, 10)}
+if(regressao_PercentilgravidadeFAP$coefficients[2] > 0) {Beta1IGravidadeFAP = regressao_PercentilgravidadeFAP$coefficients[2]} else {Beta1IGravidadeFAP = rep(0, 10)}
 
 # Regressao ReajustePlanoP
 regressao_ReajustePlano = lm(ReajustePlanoEstimado ~ TaxaGravidade, DB_Calc)
-Beta0ReajustePlano = regressao_ReajustePlano$coefficients[1]
+if(regressao_ReajustePlano$coefficients[1] > 0) {Beta0ReajustePlano = regressao_ReajustePlano$coefficients[1]} else {Beta0ReajustePlano = rep(0, 10)}
 BetaFreqReajustePlano = rep(0, 10)
-BetaGravReajustePlano = regressao_ReajustePlano$coefficients[2]
+if(regressao_ReajustePlano$coefficients[2] > 0) {BetaGravReajustePlano = regressao_ReajustePlano$coefficients[2]} else {BetaGravReajustePlano = rep(0, 10)}
 
 # Regressao Tempo Contratação
 regressao_ImagemTempoCont = lm(TempoContratacaoPadrao ~ TaxaGravidade + VarPIB, DB_Calc)
-Beta0TempoContratacao = regressao_ImagemTempoCont$coefficients[1]
+if(regressao_ImagemTempoCont$coefficients[1] > 0) {Beta0TempoContratacao = regressao_ImagemTempoCont$coefficients[1]} else {Beta0TempoContratacao = rep(0, 10)}
 BetaFreqTempoContratacao = rep(0, 10)
-BetaGravTempoContratacao = regressao_ImagemTempoCont$coefficients[2]
-BetaPIBTempoContratacao = regressao_ImagemTempoCont$coefficients[3]
+if(regressao_ImagemTempoCont$coefficients[2] > 0) {BetaGravTempoContratacao = regressao_ImagemTempoCont$coefficients[2]} else {BetaGravTempoContratacao = rep(0, 10)}
+if(regressao_ImagemTempoCont$coefficients[2] > 0) {BetaPIBTempoContratacao = regressao_ImagemTempoCont$coefficients[3]} else {BetaPIBTempoContratacao = rep(0, 10)}
 
 var_regressoes= cbind(Beta0DesligVoluntarios, 
                       BetaPIBDesigVoluntarios, 
@@ -1597,3 +1594,11 @@ if(dataset_INIC_Selecao[10, 3] == TRUE){xlsx.addTable(wb, sheet20, DB_ARB_INIC_1
 # save the workbook to an Excel file
 saveWorkbook(wb, filename)
   
+### ------------------------------------------------------
+### Sintese dos Objetos
+### ------------------------------------------------------ 
+#eventos_pdf_prob
+#DB_Calc_stats
+#DB_ASIS_Completo_Arbitrado
+#DB_INIC_1
+#DB_ARB_INIC_1

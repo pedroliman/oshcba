@@ -73,13 +73,14 @@ inputs$Constantes =  constantes
 
 inputs$Parametros = parametros
 
-inputs$HistoricoFAP = historicoFAP
+
+# inputs$HistoricoFAP = historicoFAP
 
 write.csv2(constantes, "constantes.csv")
 
 write.csv2(parametros, "parametros.csv")
 
-write.csv2(historicoFAP, "parametros.csv")
+# write.csv2(historicoFAP, "historicofap.csv")
 
 
 

@@ -1,34 +1,34 @@
 ---
-title: "Relatório Síntese dos Dados Importados"
+title: "Relat?rio S?ntese dos Dados Importados"
 output: pdf_document
 #classoption: landscape
 fontsize: 10pt
 geometry: margin=1cm
 ---
 
-## Consistência dos dados do INSS importados:
+## Consist?ncia dos dados do INSS importados:
 
 ```{r, echo=FALSE}
 dados_inss
 ```
 
-## Consistência dos dados importados do módulo simplificado:
+## Consist?ncia dos dados importados do m?dulo simplificado:
 
 ```{r, echo=FALSE}
 kable(check_variaveis1, row.names = FALSE)
 ```
 
 \newpage 
-## Cálculo das probabilidade dos eventos - apoio para parametrizaçãoo das iniciativas
+## C?lculo das probabilidade dos eventos - apoio para parametriza??oo das iniciativas
 ### Eventos Observados:
-### Número de Eventos
+### N?mero de Eventos
 ```{r, echo=FALSE, size="tiny"}
 kable(eventos_pdf, digits = 2)
 ```
 
-### Probabilidade dos Eventos (# eventos / nro funcionários):
+### Probabilidade dos Eventos (# eventos / nro funcion?rios):
 ```{r, echo=FALSE, size="tiny"}
-kable(eventos_pdf_prob, digits = 2) #%>%
+kable(eventos_pdf_prob, digits = 6) #%>%
   #kable_styling(font_size = 5)
 ```
 
