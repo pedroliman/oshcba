@@ -174,14 +174,30 @@ Os gráficos que serão expostos a seguir apresentam como cada dimensão contrib
 
 ### Iniciativa 1: 
 
+**Plataforma para Trabalho em Altura.** Esta iniciativa prevê a aquisição de uma plataforma para realização de trabalho em altura (PTA). Estas atividades em altura contemplam, por exemplo, manutenções, troca de lâmpadas, inventário, cabeamento, etc. Além da aquisição da plataforma em si, os trabalhadores precisam receber capacitação específica para seu manuseio. Atualmente estas atividades de trabalho em altura estão inadequadas do ponto de vista das Normas Regulamentadores (NR-11), aumentando a exposição à multas e risco de acidentes. Além disso, demandam um funcionário a mais para realização da atividade (2 eletricistas por atividade).
+
+
+
 ```{r echo=FALSE}
 grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa1")
 ```
 
 ### Iniciativa 2: 
 
+**Sala de Modelagem.** Esta iniciativa prevê a aquisição de uma nova sala, bem como os equipamentos pertinentes para a modelagem. As atividades da sala de modelagem atualmente são realizadas em um pavilhão externo à empresa. O ambiente de trabalho está inadequado em termos de exaustão e ergonomia. Além disso, há um risco de multas em função da exaustão insuficiente (poeira química).
+
+
+
 ```{r echo=FALSE}
-grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa1")
+grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa2")
+```
+
+### Iniciativa 3 
+**Adequação das serras circulares à NR-12.** A adequação à NR-12 será feita no sentido de estabelecer barreiras físicas para proteção do trabalhador, além de ajustes na instalação elétrica, sensores, botões de emergência, etc. da serra circular. Esta adequação diminuirá significativamente o risco de multas neste equipamento, além de reduzir o risco de acidentes típicos com afastamentos maiores e menores do que 15 dias, ou até sem afastamento.
+
+
+```{r echo=FALSE}
+grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa3")
 ```
 
 

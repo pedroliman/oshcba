@@ -19,7 +19,7 @@ abas_a_ler = c("Constantes", "Parametros", "HistoricoFAP")
 nomes_inputs = c("Constantes", "Parametros", "HistoricoFAP")
 
 cenario_as_is = c("ASIS")
-iniciativas_a_simular = c("Iniciativa1", "Iniciativa2")
+iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3", "Iniciativa4")
 
 
 # Definindo Funcao de Input
@@ -70,6 +70,15 @@ constantes[which(constantes$Variavel == "PInvalidez"), "Valor"] = 0
 # Corrigindo variaveis manualmente - Historico_FAP
 historicoFAP[is.na(historicoFAP)] = 0
 
+
+write.csv2(constantes, "constantes.csv")
+
+write.csv2(parametros, "parametros.csv")
+
+write.csv2(historicoFAP, "historicofap.csv")
+
+
+
 #### ETAPA 2 - Revisar Inputs ####
 
 # Etapa 2: Substituir constantes:
@@ -80,17 +89,12 @@ inputs$Constantes =  constantes
 
 inputs$HistoricoFAP = historicoFAP
 
+# Verificar cuidadosamente este
+# inputs$Parametros = parametros
+
 verificar_inputs(inputs)
 
 # inputs$Parametros = parametros
-
-# inputs$HistoricoFAP = historicoFAP
-
-# write.csv2(constantes, "constantes.csv")
-
-write.csv2(parametros, "parametros.csv")
-
-write.csv2(historicoFAP, "historicofap.csv")
 
 
 # Copiar os dados manualmente para o Excel a partir do CSV.
