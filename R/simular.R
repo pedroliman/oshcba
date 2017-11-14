@@ -47,7 +47,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
 
   if(verificar_inputs){
     # Verificar Inputs antes de continuar
-    verificar_inputs(inputs, parar_execucao_erro_inputs)  
+    verificar_inputs(inputs)  
   }
   
 

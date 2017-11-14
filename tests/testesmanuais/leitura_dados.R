@@ -54,8 +54,6 @@ list_dados_tratados = dadostratados
 
 # Inputs Iniciais - Vamos criar o objeto de inputs a partir do excel e depois substituir dados pelos reais:
 
-inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
-
 constantes = oshcba::obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)
 
 historicoFAP = oshcba::obter_historicoFAP_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
@@ -64,33 +62,38 @@ parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nom
 
 # Iniciativas a simular (definidas manualmente aqui):
 
-
-
-
-
-# Substituindo dados pelos dados tratados pelo script do FELIPE.
-inputs$Constantes =  constantes
-
-inputs$Parametros = parametros
-
-
-# inputs$HistoricoFAP = historicoFAP
-
-write.csv2(constantes, "constantes.csv")
-
-write.csv2(parametros, "parametros.csv")
-
-# write.csv2(historicoFAP, "historicofap.csv")
-
-
-
 # Corrigindo variaveis manualmente - Constantes
 constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
 
-# Rodando Calculadora com opcao "list":
+
+#### ETAPA 2 - Revisar Inputs ####
+
+# Etapa 2: Substituir constantes:
+
+inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
+
+inputs$Constantes =  constantes
 
 verificar_inputs(inputs)
 
-resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
+# inputs$Parametros = parametros
+
+# inputs$HistoricoFAP = historicoFAP
+
+# write.csv2(constantes, "constantes.csv")
+
+write.csv2(parametros, "parametros.csv")
+
+write.csv2(historicoFAP, "historicofap.csv")
+
+
+# Copiar os dados manualmente para o Excel a partir do CSV.
+# 
+
+# Rodando Calculadora com opcao "list":
+
+#verificar_inputs(inputs)
+
+#resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
 
 resultados = simular_cba(ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx")

@@ -8,8 +8,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(oshcba)
-resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
+# library(oshcba)
+# resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
 ```
 
 ## Coleta de Dados Históricos
