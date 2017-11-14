@@ -1,0 +1,18 @@
+"";"2011";"2012";"2013";"2014";"2015";"2016";"Média"
+"Afast. > 15d - Doença Ocup.";NA;1;3;1;0;0;1
+"Afast. > 15d - Doença Não Rel. Trabalho";NA;0;0;0;0;0;0
+"Afast. > 15d - Acidente Típico";NA;2;0;4;2;2;2
+"Afast. > 15d - Acidente Trajeto";NA;0;0;2;0;1;0,6
+"Afast. < 15d - Doença Ocupacional";NA;13;5;4;0;0;4,4
+"Afast. < 15d - DDoença Não Rel. Trabalho";NA;0;0;0;0;0;0
+"Afast. < 15d - Acidente Típico";NA;22;32;28;15;16;22,6
+"Afast. < 15d - Acidente Trajeto";NA;8;2;8;2;2;4,4
+"Óbitos - Doença Ocupacional";NA;0;0;0;0;0;0
+"Óbitos - Doença Não Relacionada ao Trabalho";NA;0;0;0;0;0;0
+"Óbitos - Acidente Típico";NA;1;0;0;0;0;0,2
+"Óbitos - Acidente Trajeto";NA;0;0;0;0;0;0
+"Eventos sem Afast. - Doença Ocupacional";NA;9;2;7;5;0;4,6
+"Eventos sem Afast. - Doença Não Rel. Trabalho";NA;0;0;0;0;0;0
+"Eventos sem Afast. - Acidente Típico";NA;27;17;27;21;12;20,8
+"Eventos sem Afast. - Acidente Trajeto";NA;1;5;1;3;0;2
+"Total de Dias em Falta sem Atestado";NA;1059;1549,44;1607,04;742,56;664,56;1124,52

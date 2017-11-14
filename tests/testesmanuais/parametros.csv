@@ -21,7 +21,7 @@
 "20";"LucroCessanteAcidenteObito";"normaltruncada";NA;NA;-1e-04;1e+07;0;"ASIS";TRUE;FALSE
 "21";"LucroCessanteAcidenteOutros";"normaltruncada";NA;NA;-1e-04;1e+07;0;"ASIS";TRUE;FALSE
 "22";"LucroCessanteInterdicaoFiscalizacao";"normaltruncada";0;0;-1e-04;1e+07;0;"ASIS";TRUE;FALSE
-"23";"TempoComputadoMedio";"normaltruncada";22,7615213922467;1,66338407584873;-1e-04;1e+06;0;"ASIS";TRUE;FALSE
+"23";"TempoComputadoMedio";"normaltruncada";7,79104767029113;6,85604192757315;-1e-04;1e+06;0;"ASIS";TRUE;FALSE
 "24";"DespesasSeguroPatrimonial";"triangular";NA;NA;NA;NA;0;"ASIS";TRUE;TRUE
 "25";"DespesaExposicaoMulta1";"normaltruncada";1051,948;2352,22723679495;0;1e+10;0;"ASIS";TRUE;FALSE
 "26";"DespesaExposicaoMulta2";"normaltruncada";1207,596;2700,26674535684;0;1e+10;0;"ASIS";TRUE;FALSE

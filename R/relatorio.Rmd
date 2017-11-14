@@ -8,18 +8,31 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-# library(oshcba)
+library(oshcba)
+# resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
 # resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
 ```
 
+## Dados Gerais
+- **Empresa**: Xalingo, Santa Cruz do Sul
+- **Participantes Empresa**: Eduardo, XXXX, XXX
+- **Participantes do SESI**: Iuri XXX, Júlia Schenkel, Fabiane XXX
+
+## A Empresa
+A Xalingo Brinquedos é uma empresa de Santa Cruz do Sul – RS, que se dedica à fabricação de jogos e brinquedos de plástico e madeira. A Xalingo é uma empresa que se preocupa constantemente com a sustentabilidade, demonstrando isto por meio de ações em toda a sua produção. Além disso, há uma preocupação constante com o bem-estar de seus colaboradores, o que se reflete em ações voltadas à educação, esporte, saúde, entre outros. Destaca-se que a coleta de dados históricos na empresa e, também, a coleta de informações relativas às iniciativas foram conduzidas em 13 e 14 de novembro. 
+
+
+
 ## Coleta de Dados Históricos
-Os dados foram coletados (55 variáveis com histórico e 3 arbitradas), utilizando o template do Excel destinado para tal atividade. A relação das variáveis coletadas/arbitradas estão disponíveis no anexo A.  Os dados que não estavam disponíveis (falta de histórico ou controle ainda não realizado na empresa), foram arbitrados com o apoio do grupo, baseado na experiência dos participantes da BRS.  
-Após a visita na empresa, um conjunto de ajustes foram realizados na calculadora e, também, no template Excel utilizada para a coleta de dados. Estes ajustes propiciaram o refinamento da calculadora para adequar funcionalidades e assegurar uma aplicação robusta deste protótipo.
+Os dados foram coletados utilizando o template do Excel destinado para tal atividade. A relação das variáveis coletadas/arbitradas estão disponíveis nos apêndices.  Os dados que não estavam disponíveis (falta de histórico ou controle ainda não realizado na empresa), foram arbitrados com o apoio do grupo, baseado na experiência dos participantes da Xalingo.
 
 
 ## Iniciativas Avaliadas
 Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo da calculadora. As iniciativas apresentadas pela empresa BRS contemplam:
-Iniciativa 1 – Avaliação Ergonômica 
+- **Iniciativa 1**: ABC
+- **Iniciativa 2*: ABC
+- **Iniciativa 3**: ABC
+- **Iniciativa 4**: ABC
 Iniciativa 2 – Desenvolvimento de lideranças
 Para cada iniciativa foram coletados dados referentes aos custos de sua implantação e manutenção, bem como foram estimadas as melhorias que poderão ser obtidas a partir da sua implementação. Estas estimativas foram feitas baseadas na probabilidade de redução dos eventos (afastamentos, óbito), redução de faltas, economias (savings) em produtividade, entre outros. 
 Destaca-se que a análise foi realizada em um horizonte temporal de três anos. Este horizonte de tempo foi definido junto aos responsáveis da empresa que acompanharam o piloto.
@@ -44,7 +57,7 @@ A seguir é apresentado o resultado geral desta análise por iniciativa.
 
 resumo_iniciativas = resumo_cba_por_iniciativa(resultados$Resultados_CBR)
 
-knitr::kable(t(resumo_iniciativas))
+knitr::kable(t(resumo_iniciativas), digits = 3)
 
 ```
 
@@ -65,7 +78,7 @@ colunas_reducoes_fiscais = c("BeneficioMultas", "BeneficioFAP")
 
 colunas = c(c("Cenario.y"), colunas_reducoes_fiscais)
 
-knitr::kable(t(beneficios_categorias[colunas]))
+knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
 
 ```
 
@@ -100,7 +113,7 @@ tabela_imprimir = t(as.matrix((beneficios_categorias[colunas])))
 
 # colnames(tabela_imprimir$Cenario.y) = "Beneficio"
 
-knitr::kable(tabela_imprimir)
+knitr::kable(tabela_imprimir, digits = 2)
 
 ```
 
@@ -128,7 +141,7 @@ colunas_despesas_evitaveis = c("BeneficioTurnover",
 
 colunas = c(c("Cenario.y"), colunas_despesas_evitaveis)
 
-knitr::kable(t(beneficios_categorias[colunas]))
+knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
 
 ```
 
@@ -148,7 +161,7 @@ colunas_beneficios_intangiveis = c("BeneficioImagemContratacao",
 
 colunas = c(c("Cenario.y"), colunas_beneficios_intangiveis)
 
-knitr::kable(t(beneficios_categorias[colunas]))
+knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
 
 ```
 
@@ -159,27 +172,20 @@ knitr::kable(t(beneficios_categorias[colunas]))
 
 Os gráficos que serão expostos a seguir apresentam como cada dimensão contribui para a geração da razão benefício-custo total. A partir destes, é possível visualizar a importância relativa de cada umas das categorias na Razão Benefício-Custo apresentado para cada iniciativa.
 
+### Iniciativa 1: 
 
 ```{r echo=FALSE}
-
-# iniciativas = unique(as.vector(resumo$BeneficoMedioPorCategoria$Cenario.y))
-# 
-# for(iniciativa in iniciativas){
-#   grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = iniciativa)  
-# }
-
 grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa1")
+```
 
-grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa2")
+### Iniciativa 2: 
 
-grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa3")
-
-
-
-
+```{r echo=FALSE}
+grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa1")
 ```
 
 
+### Observação da Variabilidade das Iniciativas:
 
 ```{r echo=FALSE}
 grafico_box_plot_por_iniciativa(resultados$Resultados_CBR)
@@ -215,7 +221,7 @@ knitr::kable(resultados$Inputs$DadosProjetados)
 - **Constantes**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$Constantes)
+knitr::kable(resultados$Inputs$Constantes, digits = 2)
 ```
 
 - **Parâmetros**
@@ -224,7 +230,7 @@ knitr::kable(resultados$Inputs$Constantes)
 
 variaveis = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4")
 
-knitr::kable(resultados$Inputs$Parametros[variaveis])
+knitr::kable(resultados$Inputs$Parametros[variaveis], digits = 4)
 ```
 
 - **Cenários**

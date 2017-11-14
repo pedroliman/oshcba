@@ -64,7 +64,11 @@ parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nom
 
 # Corrigindo variaveis manualmente - Constantes
 constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
+constantes[which(constantes$Variavel == "PInvalidez"), "Valor"] = 0
 
+
+# Corrigindo variaveis manualmente - Historico_FAP
+historicoFAP[is.na(historicoFAP)] = 0
 
 #### ETAPA 2 - Revisar Inputs ####
 
@@ -73,6 +77,8 @@ constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
 inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
 
 inputs$Constantes =  constantes
+
+inputs$HistoricoFAP = historicoFAP
 
 verificar_inputs(inputs)
 
@@ -94,6 +100,9 @@ write.csv2(historicoFAP, "historicofap.csv")
 
 #verificar_inputs(inputs)
 
-#resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
+
+rmarkdown::render("D:/dev/oshcba/R/relatorio.Rmd", encoding = "UTF-8")
+
 
 resultados = simular_cba(ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx")

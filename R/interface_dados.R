@@ -462,6 +462,15 @@ obter_historicoFAP_template = function(arquivo_template, abas_a_ler, nomes_input
   
   historico_fap$Ano = as.numeric(historico_fap$Ano)
   
+  # Aqui, ajustar co custo médio usando a média.
+  
+  variaveis_custo_medio = c("CustoMedio_NB_91", "CustoMedio_NB_92", "CustoMedio_NB_93", "CustoMedio_NB_94")
+  
+  # Se o custo médio é 
+  historico_fap[,variaveis_custo_medio] = list_dados_tratados$DadosObservados["mean",variaveis_custo_medio]
+  
+  # A princípio, zerar o custo médio que possio Nan
+  
   # Verificar se todas estas variaveis estão no template de dados
   variaveis_faltantes = !(variaveis_a_buscar %in% names(list_dados_tratados$DadosObservados))
   
