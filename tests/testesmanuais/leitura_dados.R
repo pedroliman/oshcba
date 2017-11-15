@@ -62,7 +62,7 @@ parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nom
 
 # Iniciativas a simular (definidas manualmente aqui):
 
-# Corrigindo variaveis manualmente - Constantes
+# Corrigindo variaveis manualmente - Constantes - Estas variáveis vieram em branco.
 constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = (365-52)
 constantes[which(constantes$Variavel == "PInvalidez"), "Valor"] = 0
 constantes[which(constantes$Variavel == "HorasPorDia"), "Valor"] = 8
@@ -90,7 +90,7 @@ inputs$Constantes =  constantes
 inputs$HistoricoFAP = historicoFAP
 
 # Verificar cuidadosamente este
-# inputs$Parametros = parametros
+inputs$Parametros = parametros
 
 verificar_inputs(inputs)
 
@@ -104,7 +104,7 @@ verificar_inputs(inputs)
 
 #verificar_inputs(inputs)
 
-resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
 
 rmarkdown::render("D:/dev/oshcba/R/relatorio.Rmd", encoding = "UTF-8")
 
