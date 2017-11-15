@@ -19,7 +19,7 @@ abas_a_ler = c("Constantes", "Parametros", "HistoricoFAP")
 nomes_inputs = c("Constantes", "Parametros", "HistoricoFAP")
 
 cenario_as_is = c("ASIS")
-iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3", "Iniciativa4")
+iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3")
 
 
 # Definindo Funcao de Input
@@ -63,9 +63,9 @@ parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nom
 # Iniciativas a simular (definidas manualmente aqui):
 
 # Corrigindo variaveis manualmente - Constantes
-constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = 220
+constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = (365-52)
 constantes[which(constantes$Variavel == "PInvalidez"), "Valor"] = 0
-
+constantes[which(constantes$Variavel == "HorasPorDia"), "Valor"] = 8
 
 # Corrigindo variaveis manualmente - Historico_FAP
 historicoFAP[is.na(historicoFAP)] = 0
@@ -104,9 +104,9 @@ verificar_inputs(inputs)
 
 #verificar_inputs(inputs)
 
-resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
 
 rmarkdown::render("D:/dev/oshcba/R/relatorio.Rmd", encoding = "UTF-8")
 
 
-resultados = simular_cba(ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx")
+#resultados = simular_cba(ArquivoInputs = "D:/dev/oshcba/tests/testthat/Dados.xlsx")

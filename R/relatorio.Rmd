@@ -1,6 +1,6 @@
 ---
 title: "Relatório Calculadora SST | FPS"
-author: "SESI"
+author: "Versão Preliminar - SESI | GMAP | UNISINOS"
 output:
   pdf_document: default
   html_document: default
@@ -15,8 +15,8 @@ library(oshcba)
 
 ## Dados Gerais
 - **Empresa**: Xalingo, Santa Cruz do Sul
-- **Participantes Empresa**: Eduardo, XXXX, XXX
-- **Participantes do SESI**: Iuri XXX, Júlia Schenkel, Fabiane XXX
+- **Participantes Empresa**: Diego Lopes, Jucelaine e Luciano Bredow
+- **Participantes SESI**: Iuri Forte, Júlia Schenkel, Fabiane Bublitz
 
 ## A Empresa
 A Xalingo Brinquedos é uma empresa de Santa Cruz do Sul – RS, que se dedica à fabricação de jogos e brinquedos de plástico e madeira. A Xalingo é uma empresa que se preocupa constantemente com a sustentabilidade, demonstrando isto por meio de ações em toda a sua produção. Além disso, há uma preocupação constante com o bem-estar de seus colaboradores, o que se reflete em ações voltadas à educação, esporte, saúde, entre outros. Destaca-se que a coleta de dados históricos na empresa e, também, a coleta de informações relativas às iniciativas foram conduzidas em 13 e 14 de novembro. 
@@ -244,7 +244,7 @@ knitr::kable(resultados$Inputs$Constantes, digits = 2)
 
 ```{r echo=FALSE}
 
-variaveis = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4")
+variaveis = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2")
 
 knitr::kable(resultados$Inputs$Parametros[variaveis], digits = 4)
 ```

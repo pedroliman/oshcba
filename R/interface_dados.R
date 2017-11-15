@@ -338,16 +338,30 @@ obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs,
       # Aqui dentro as variaveis serao definidas
       print(variavel)
       
+      
+      
       # Verificando se esta variavel é arbitrada
       variavel_arbitrada = if(cenarios_e_as_is[n_cenario]) {
         # Testar variavel arbitrada no cenario as is
         linha_df_variaveis_arbitradas_variavel = which(df_variaveis_arbitradas$VarModelName == variavel)
-        is.null(df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]) | is.na(is.null(df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]))
+        
+        #Verificar se a variável existe no AS IS
+        valor_usual = df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]
+        
+        is.numeric(valor_usual) & length(valor_usual) > 0
+        
+        
+        # is.null(df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]) | is.na(is.null(df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]))
         
       } else {
         # Testar se a variável é arbitrada no cenario Iniciativa
-        is.null(df_variaveis_arbitradas[1,variavel]) | is.na(is.null(df_variaveis_arbitradas[1,variavel]))
+        valor_usual = df_variaveis_arbitradas[1,variavel]
+        
+        is.numeric(valor_usual) & length(valor_usual) > 0
+        
+        #is.null(df_variaveis_arbitradas[1,variavel]) | is.na(is.null(df_variaveis_arbitradas[1,variavel]))
       }
+      
       
       linha_parametro = which(parametros$NomeVariavel == variavel)
       
