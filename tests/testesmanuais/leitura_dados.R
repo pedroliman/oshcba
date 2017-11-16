@@ -107,7 +107,7 @@ inputs$Constantes =  constantes
 inputs$HistoricoFAP = historicoFAP
 
 # Verificar cuidadosamente este
-inputs$Parametros = parametros
+# inputs$Parametros = parametros
 
 verificar_inputs(inputs)
 
@@ -121,7 +121,12 @@ verificar_inputs(inputs)
 
 #verificar_inputs(inputs)
 
-resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = FALSE)
+
+
+resultados = simular_cba(ArquivoInputs = arquivo_template, verificar_inputs = TRUE)
+
+resultados = simular_cba(ArquivoInputs = "/home/pedro/Documents/dev/oshcba/tests/testesmanuais/Template_Dados_Xalingo.xlsx", verificar_inputs = TRUE)
 
 rmarkdown::render("D:/dev/oshcba/R/relatorio.Rmd", encoding = "UTF-8")
 

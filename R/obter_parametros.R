@@ -40,7 +40,7 @@ obter_parametros_por_ano = function (Inputs,cenarios,anos) {
 
     parametro_a_substituir = parametros_por_ano[l,]
 
-    parametro_as_is = subset(parametros_por_ano, CenarioBase == TRUE & Ano == parametro_a_substituir$Ano & NomeVariavel == parametro_a_substituir$NomeVariavel)
+    parametro_as_is = subset(parametros_por_ano, as.logical(CenarioBase) == TRUE & Ano == parametro_a_substituir$Ano & NomeVariavel == parametro_a_substituir$NomeVariavel)
 
     parametros_por_ano[l,variaveis_a_substituir] = parametro_as_is[,variaveis_a_substituir]
 
@@ -102,7 +102,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
 #' @return cenarios
 #' @export
 obter_cenarios = function(Inputs) {
-  cenarios = dplyr::filter(Inputs$Cenarios,Simular)
+  cenarios = dplyr::filter(Inputs$Cenarios, as.logical(Simular))
   cenarios = select(cenarios, -Simular)
   return(cenarios)
 }

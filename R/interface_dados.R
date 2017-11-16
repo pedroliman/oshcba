@@ -46,27 +46,36 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
     } else if (variavel %in% names(list_dados_tratados$DadosObservados)) {
       # Neste caso, usar o dado observado
       #print(paste(variavel, "DadosObservados"))
-      linha_ultimo_ano = 10
-      Constantes["mean", "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano,variavel]
       
-      if(is.na(Constantes[linha_constantes, "Valor"])){
-        #Tentar usar o ano anterior:
+      # Se a variável pede para usar a média, usar a média
+      if(Constantes[linha_constantes,"Fonte"] == "Média") {
         
-        Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano,variavel]
+        Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados["mean",variavel]
         
-        # Se mesmo assim não der, tentar ainda um ano anterior
+      } else {
+        # Se não, usar o último ano, e tentar por dois anos anteriores
+        linha_ultimo_ano = 10
+        Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano,variavel]  
         
+        # Se o valor for NA, tentar obter o dado do penúltimo, ou antepenúltimo ano.
         if(is.na(Constantes[linha_constantes, "Valor"])){
           #Tentar usar o ano anterior:
           
           Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano-1,variavel]
           
+          # Se mesmo assim não der, tentar ainda um ano anterior
+          
+          if(is.na(Constantes[linha_constantes, "Valor"])){
+            #Tentar usar o ano anterior:
+            Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosObservados[linha_ultimo_ano-2,variavel]
+            
+          }
           
         }
         
       }
       
-      # Arbitrados - Iniciativa 1
+      # Se a variável não existe como dado observado no ASIS, buscar na Iniciativa 1
     } else if (variavel %in% names(list_dados_tratados$DadosArbitradosInic1)) {
       # Neste caso, usar o dado observado
       #print(paste(variavel, "DadosObservados"))
@@ -82,8 +91,8 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
       
       # Se não está em nenhum destes lugares há algo errado.
     } else {
-      oshcba.adicionar_log(paste(variavel, "Observacao: Constante nao existe no arquivo de tratamento de dados."))
-      Constantes[linha_constantes, "Valor"] = 1000000
+      oshcba.adicionar_log(paste(variavel, "Observacao: Constante nao existe no arquivo de tratamento de dados. Preenchendo valor com NA."))
+      Constantes[linha_constantes, "Valor"] = NA
     }
     
   }
@@ -93,7 +102,7 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
   # Tratar Constantes: Remover Constantes com Valor igual a NA (para que o modelo rode depois.)
   
   # Remover desta tabela variáveis que contenham valores NA.
-  Constantes = na.omit(Constantes)
+  # Constantes = na.omit(Constantes)
   
   Constantes
   

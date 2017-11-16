@@ -103,11 +103,11 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 
   # Identificar parâmetros que são ou não
 
-  cenario_as_is= subset(inputs$Cenarios, CenarioASIS)$Cenario
+  cenario_as_is= subset(inputs$Cenarios, as.logical(CenarioASIS))$Cenario
 
   parametros_eventos[,"ASIS"] = parametros_eventos[,"Cenario"] == cenario_as_is
 
-  iniciativas_a_avaliar = subset(inputs$Cenarios, Simular == TRUE & CenarioASIS == FALSE)$Cenario
+  iniciativas_a_avaliar = subset(inputs$Cenarios, as.logical(Simular) == TRUE & as.logical(CenarioASIS) == FALSE)$Cenario
 
   variaveis_a_verificar = unique(parametros_eventos$NomeVariavel)
 
@@ -121,7 +121,7 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 
     parametros_a_avaliar = dplyr::filter(parametros_eventos, NomeVariavel == v) # %>% dplyr::select(NomeVariavel, Parametro1, ASIS)
 
-    parametro_as_is = subset(parametros_a_avaliar, ASIS)$Parametro1
+    parametro_as_is = subset(parametros_a_avaliar, as.logical(ASIS))$Parametro1
 
     parametros_a_avaliar[,"Diferenca"] = parametro_as_is - parametros_a_avaliar$Parametro1
 

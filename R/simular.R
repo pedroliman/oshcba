@@ -96,7 +96,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
 
     # Funcoes a calcular informadas pelo usuário:
 
-    df.modulos_solicitados = subset(inputs$Modulos, subset = Calcular)
+    df.modulos_solicitados = subset(inputs$Modulos, subset = as.logical(Calcular))
     v_funcoes_solicitadas_usuario = as.vector(df.modulos_solicitados$Modulo)
 
     # Obtendo Funcoes opcionais que devem ser calculadas
