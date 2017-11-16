@@ -9,6 +9,9 @@ verificar_coerencia_parametros_aleatorios(inputs)
 \arguments{
 \item{inputs}{list de inputs lidos pelo modelo.}
 }
+\value{
+booleano informando se há inconsistência ou não nos parametros aleatorios
+}
 \description{
 verificar_coerencia_parametros_aleatorios
 }

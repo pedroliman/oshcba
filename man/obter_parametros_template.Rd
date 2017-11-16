@@ -4,12 +4,10 @@
 \alias{obter_parametros_template}
 \title{obter_parametros_template}
 \usage{
-obter_parametros_template(arquivo_template, abas_a_ler, nomes_inputs,
+obter_parametros_template(template_dados, abas_a_ler, nomes_inputs,
   list_dados_tratados, cenario_as_is, iniciativas_a_simular)
 }
 \arguments{
-\item{arquivo_template}{caminho do arquivo de template a usar}
-
 \item{abas_a_ler}{vetor com abas a lser}
 
 \item{nomes_inputs}{vetor com nomes de inputs}
@@ -19,6 +17,8 @@ obter_parametros_template(arquivo_template, abas_a_ler, nomes_inputs,
 \item{cenario_as_is}{character cenario as is}
 
 \item{iniciativas_a_simular}{vetor de iniciativas a simular}
+
+\item{arquivo_template}{caminho do arquivo de template a usar}
 }
 \value{
 data.frame de parametros

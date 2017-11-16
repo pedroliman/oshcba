@@ -1,5 +1,5 @@
 # Funcoes Auxiliares
-carregar_template_dados = function(arquivo_template, abas_a_ler, nomes_inputs){
+carregar_template_dados = function(arquivo_template, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs){
   # Carregar Dados do Template - Sabe de onde pegar cada informacao (Seja uma constante ou um parametro).
   # Futuramente isso deve ser substituido
   template_dados = carregar_inputs(arquivo_de_inputs = arquivo_template, 
@@ -8,6 +8,72 @@ carregar_template_dados = function(arquivo_template, abas_a_ler, nomes_inputs){
   
   template_dados  
 }
+
+
+
+#' obter_inputs_list_dados_tratados
+#'
+#' @param arquivo_template caminho para arquivo de dados a ser usado como template
+#' @param abas_a_ler abas a ler
+#' @param nomes_inputs nomes dos inputs a atribuir às abas
+#' @param list_dados_tratados list com os dados tratados
+#'
+#' @return list com inputs transformados a partir dos dados tratados pelo script de tratamento de dados.
+#' @export
+#'
+obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_template, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
+  
+  # Carregar Template de dados
+  template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
+  
+  
+  # Obter Configurações
+  configs = template_dados$Configs
+  
+  # Obter Cenarios
+  cenarios = template_dados$Cenarios
+  
+  
+  # Obter Módulos
+  modulos = template_dados$Modulos
+  
+  
+  # Obter Dados_Projetados
+  dados_projetados = template_dados$DadosProjetados
+  
+  #Obter Custos
+  custos = template_dados$Custos
+  
+  # Obter Constantes
+  constantes = obter_constantes(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados)
+  
+  # Obter Iniciativas a simular
+  iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3")
+  
+  # Obter cenario AS IS:
+    
+  cenario_as_is = "ASIS"
+  
+  # Obter parâmetros
+  parametros = obter_parametros_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
+  
+  #Obter Histórico do FAP
+  historicoFAP = obter_historicoFAP_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
+  
+    # Retornar tudo como um list
+  list(
+    Configs = configs,
+    DadosProjetados = dados_projetados,
+    Parametros = parametros,
+    Cenarios = cenarios,
+    Custos = custos,
+    HistoricoFAP = historicoFAP,
+    Modulos = modulos,
+    Constantes = constantes
+  )
+  
+}
+
 
 # Funcao para Obter Constantes
 #' obter_constantes
@@ -19,9 +85,9 @@ carregar_template_dados = function(arquivo_template, abas_a_ler, nomes_inputs){
 #'
 #' @return dataframe com constantes
 #' @export
-obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados) {
+obter_constantes = function(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados) {
   
-  template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
+  oshcba.adicionar_log("Interface de Dados: Constantes")
   
   # Criando Data.frame a partir do próprio template
   Constantes = as.data.frame(template_dados$Constantes)
@@ -122,9 +188,9 @@ obter_constantes = function(arquivo_template, abas_a_ler, nomes_inputs, list_dad
 #'
 #' @return data.frame de parametros 
 #' @export
-obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
+obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
   
-  template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
+  oshcba.adicionar_log("Interface de Dados: Parâmetros")
   
   # Criando Data.frame a partir do próprio template
   Parametros_base = as.data.frame(template_dados$Parametros)
@@ -315,7 +381,7 @@ obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs,
   for(cenario in cenarios){
     
     n_cenario = which(cenarios == cenario)
-    print(cenario)
+    oshcba.adicionar_log(paste("Buscando parâmetros - ",cenario))
     
     # Criar tabela de parâmetros do cenario com base no parâmetros_base ou no cenario as is.
     if(cenarios_e_as_is[n_cenario]) {
@@ -345,9 +411,6 @@ obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs,
     for(variavel in variaveis_parametros_base) {
       
       # Aqui dentro as variaveis serao definidas
-      print(variavel)
-      
-      
       
       # Verificando se esta variavel é arbitrada
       variavel_arbitrada = if(cenarios_e_as_is[n_cenario]) {
@@ -464,12 +527,12 @@ obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs,
 #'
 #' @return data.frame com dois anos de historico do FAP para a simulacao 
 #' @export
-obter_historicoFAP_template = function(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
+obter_historicoFAP_template = function(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
+  
+  oshcba.adicionar_log("Interface de Dados: Histórico FAP")
   
   linha_ultimo_ano = 9
   linha_penultimo_ano = linha_ultimo_ano - 1
-  
-  template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
   
   # Criando Data.frame a partir do próprio template
   Historico_FAP_Base = as.data.frame(template_dados$HistoricoFAP)
@@ -497,12 +560,14 @@ obter_historicoFAP_template = function(arquivo_template, abas_a_ler, nomes_input
   # Verificar se todas estas variaveis estão no template de dados
   variaveis_faltantes = !(variaveis_a_buscar %in% names(list_dados_tratados$DadosObservados))
   
-  nomes_variaveis_faltantes = variaveis_a_buscar[variaveis_faltantes]
+  nomes_variaveis_faltantes = variaveis_a_buscar[variaveis_faltantes] 
   
   historico_fap[,nomes_variaveis_faltantes] = 0
   
   if (length(variaveis_faltantes) > 0) {
-    oshcba.adicionar_log(paste("Aviso: Variável", nomes_variaveis_faltantes, "não está no arquivo de tratamento de dados. Considerando variável igual a zero."))  
+    oshcba.adicionar_log(paste("Aviso: Variável", 
+                               paste(variaveis_a_buscar[variaveis_faltantes], collapse = ", ") ,
+                               "não está no arquivo de tratamento de dados. Considerando variável igual a zero."))  
   }
   
   # Se passou deste teste, então pode-se buscar a variável

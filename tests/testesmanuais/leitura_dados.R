@@ -69,6 +69,10 @@ dadostratados = list(
 
 list_dados_tratados = dadostratados
 
+
+inputs = oshcba::obter_inputs_list_dados_tratados(list_dados_tratados = list_dados_tratados, arquivo_template = arquivo_template)
+
+
 # Inputs Iniciais - Vamos criar o objeto de inputs a partir do excel e depois substituir dados pelos reais:
 
 constantes = oshcba::obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)

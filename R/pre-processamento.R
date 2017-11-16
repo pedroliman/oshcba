@@ -8,7 +8,6 @@
 #' @param inputs 
 #'
 #' @export
-#'
 verificar_inputs = function(inputs) {
 
   texto_base = "Aviso - Dados Informados Incorretamente:"
@@ -160,10 +159,8 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 #'
 #' @param inputs list de inputs lidos pelo modelo.
 #'
-#' @return
+#' @return booleano informando se há inconsistência ou não nos parametros aleatorios
 #' @export
-#'
-#' @examples
 verificar_coerencia_parametros_aleatorios = function(inputs) {
 
   # A princípio não há inconsistência.

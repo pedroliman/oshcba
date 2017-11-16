@@ -4,17 +4,16 @@
 \alias{obter_constantes}
 \title{obter_constantes}
 \usage{
-obter_constantes(arquivo_template, abas_a_ler, nomes_inputs,
-  list_dados_tratados)
+obter_constantes(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados)
 }
 \arguments{
-\item{arquivo_template}{caminho para o arquivo template de dados}
-
 \item{abas_a_ler}{vetor com abas a ler}
 
 \item{nomes_inputs}{vetor com os nomes dos inputs}
 
 \item{list_dados_tratados}{list com dados tratados}
+
+\item{arquivo_template}{caminho para o arquivo template de dados}
 }
 \value{
 dataframe com constantes
