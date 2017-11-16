@@ -466,7 +466,7 @@ obter_parametros_template = function(arquivo_template, abas_a_ler, nomes_inputs,
 #' @export
 obter_historicoFAP_template = function(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
   
-  linha_ultimo_ano = 10
+  linha_ultimo_ano = 9
   linha_penultimo_ano = linha_ultimo_ano - 1
   
   template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)

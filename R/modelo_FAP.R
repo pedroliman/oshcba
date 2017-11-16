@@ -1,4 +1,4 @@
-##### FAP ####### Teste
+##### FAP #######
 
 calcular_fap = function(parametros, historico) {
 
@@ -255,6 +255,14 @@ calcular_fap = function(parametros, historico) {
   parametros[linhas_fap_men_um,"FAP"] = parametros[linhas_fap_men_um,"FAPSemAjuste"] * 0.5 + 0.5
 
   parametros[linhas_fap_maior_igual_um,"FAP"] = parametros[linhas_fap_maior_igual_um,"FAPSemAjuste"]
+  
+  # Ajustando FAP quando Turnover é superior a 0.75
+  turnover_fap_bloqueado = 0.75
+  linhas_turnover_fap_bloqueado = which(parametros[,"TurnoverGeralMedioFAP"] > turnover_fap_bloqueado) 
+  
+  fap_bloqueado = 1
+  # Quando o FAP estiver bloquead via turnover, o FAP mínimo da empresa será igual a 1.
+  parametros[linhas_turnover_fap_bloqueado,"FAP"] = pmax(parametros[linhas_turnover_fap_bloqueado,"FAP"], fap_bloqueado)
 
 
   # RAT Ajustado

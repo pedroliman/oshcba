@@ -1,6 +1,6 @@
 ################################################################################
 ##
-##  ANOVA
+##  Tratamento de Dados
 ##  Version: 1.0
 ##  Autor: Luis Felipe Camargo e Dieter
 ##

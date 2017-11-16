@@ -87,12 +87,15 @@ constantes[which(constantes$Variavel == "HorasPorDia"), "Valor"] = 8
 # Corrigindo variaveis manualmente - Historico_FAP
 historicoFAP[is.na(historicoFAP)] = 0
 
+# Corrigindo Variaveis manualmente = Parametros
+parametros[is.na(parametros)] = 0
 
-write.csv2(constantes, "constantes.csv")
 
-write.csv2(parametros, "parametros.csv")
+# write.csv2(constantes, "constantes.csv")
 
-write.csv2(historicoFAP, "historicofap.csv")
+# write.csv2(parametros, "parametros.csv")
+
+# write.csv2(historicoFAP, "historicofap.csv")
 
 
 
@@ -107,9 +110,9 @@ inputs$Constantes =  constantes
 inputs$HistoricoFAP = historicoFAP
 
 # Verificar cuidadosamente este
-# inputs$Parametros = parametros
+inputs$Parametros = parametros
 
-verificar_inputs(inputs)
+# verificar_inputs(inputs)
 
 # inputs$Parametros = parametros
 

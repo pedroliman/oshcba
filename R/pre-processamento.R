@@ -11,58 +11,65 @@
 #'
 verificar_inputs = function(inputs) {
 
-  texto_base = "Dados Informados Incorretamente:"
-
+  texto_base = "Aviso - Dados Informados Incorretamente:"
 
   oshcba.adicionar_log("Iniciando Verificacao de Inputs.")
+  
+  
 
   if(!length(inputs) == 8) {
-    oshcba.parar_execucao(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
+    oshcba.adicionar_log(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
   } else {
   }
 
   if (any(is.na(inputs$Configs))) {
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Configuracoes (Configs), existem dados em branco."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Configuracoes (Configs), existem dados em branco."))
   }
 
   if (any(is.na(inputs$Custos))) {
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Custos, existem dados em branco."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Custos, existem dados em branco."))
   }
 
   if (any(is.na(inputs$Cenarios))) {
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
   }
 
   if (any(is.na(inputs$DadosProjetados))) {
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
   }
 
   if (any(is.na(inputs$HistoricoFAP))) {
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
   }
   
   # Historico FAP precisa ter 2 linhas e somente 2 linhas
   if(!(nrow(inputs$HistoricoFAP) == 2)){
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Historico_FAP, devem existir extamente 2 linhas nesta tabela."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Historico_FAP, devem existir extamente 2 linhas nesta tabela."))
   }
 
   if (any(is.na(inputs$Constantes))) {
-    oshcba.parar_execucao(paste(texto_base, " Verificar a Aba de Constantes, existem dados em branco."))
+    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Constantes, existem dados em branco."))
   }
 
   # Verificar se existem estimações "infladas"
-  if(verificar_inconsistencia_reducao_probabilidades(inputs)$InconsistenciaIdentificada){
-    oshcba.parar_execucao("Revise suas estimativas do impacto das Iniciativas. As iniciativas em conjunto reduzem um percentual de acidentes maior do que 100%.")
+  
+  consistencia_reducao_probabilidades = verificar_inconsistencia_reducao_probabilidades(inputs)
+  
+  parametros_incorretos = paste(consistencia_reducao_probabilidades$Variaveis_verificadas[which(consistencia_reducao_probabilidades$Variaveis_verificadas$Inconsistencia_Identificada),"VariaveisVerificadas"], collapse = ", ")
+  
+  if(consistencia_reducao_probabilidades$InconsistenciaIdentificada){
+    oshcba.adicionar_log("Revise suas estimativas do impacto das Iniciativas. As iniciativas em conjunto reduzem um percentual de acidentes maior do que 100%.")
+    oshcba.adicionar_log(paste("Parametros incorretos: ", parametros_incorretos))
   }
 
 
   # Verificar se os parâmetros informados são coerentes com as distribuições de probabilidades
   if(verificar_coerencia_parametros_aleatorios(inputs)){
-    oshcba.parar_execucao("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
+    oshcba.adicionar_log("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
   }
 
   if(verificar_nomes_dataframes(inputs)){
-    oshcba.parar_execucao("O nome das colunas da planilha de entrada não é consistente com o padrão estabelecido. Use a planilha padrão.")
+    oshcba.adicionar_log("O nome das colunas da planilha de entrada não é consistente com o padrão estabelecido. Use a planilha padrão.")
   }
 
 

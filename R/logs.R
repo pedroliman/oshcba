@@ -49,7 +49,7 @@ oshcba.parar_execucao = function(string, vetor_log = oshcba.log_calculadora, sal
   if(salvar_logs_csv) {
     write.csv2(df_logs, file = "logs_execucao.csv")
   }
-
+  
   stop(string)
 
 }
