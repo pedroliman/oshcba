@@ -7,14 +7,14 @@ oshcba.log_calculadora = oshcba.iniciar_log()
 
 # Rodando Arquivo do Luis Felipe:
 # source("D:/dev/oshcba/tests/testesmanuais/Import_Data_quality-v1.3.r", encoding = getOption("encoding"))
-
-PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais/"
-setwd(PATH_DATAFILES)
+# 
+# PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais/"
+# setwd(PATH_DATAFILES)
 
 # Obtencao de Constantes
 
 # Definindo parametros para a leitura de dados
-arquivo_template = "D:/dev/oshcba/tests/testesmanuais/Template_Dados_Xalingo.xlsx"
+arquivo_template = "/home/pedro/Documents/dev/oshcba/tests/testesmanuais/Template_Dados_Xalingo.xlsx"
 abas_a_ler = c("Constantes", "Parametros", "HistoricoFAP")
 nomes_inputs = c("Constantes", "Parametros", "HistoricoFAP")
 
@@ -26,6 +26,23 @@ iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3")
 
 
 dadostratados = list(
+  Modulos = dataset_ASIS_param_Modulos,
+  Cenarios = dataset_INIC_Selecao,
+  Custos = list(Iniciativa1 = dataset_Inic1_Custos,
+                Iniciativa2 = dataset_Inic2_Custos,
+                Iniciativa3 = dataset_Inic3_Custos,
+                Iniciativa4 = dataset_Inic4_Custos,
+                Iniciativa5 = dataset_Inic5_Custos,
+                Iniciativa6 = dataset_Inic6_Custos,
+                Iniciativa7 = dataset_Inic7_Custos,
+                Iniciativa8 = dataset_Inic8_Custos,
+                Iniciativa9 = dataset_Inic9_Custos,
+                Iniciativa10 = dataset_Inic10_Custos
+  ),
+  Configs = list(TaxaDesconto = dataset_ASIS_param_taxadesconto,
+                 CadastroEmpresa = dataset_ASIS_param_cadastEmp,
+                 AnosASimular = dataset_INIC_AnosAvaliacao),
+  DadosProjetados = dataset_INIC_Projetado,
   DadosObservados = DB_Calc_stats,
   DadosArbitrados = DB_ASIS_Completo_Arbitrado,
   DadosObservadosInic1 = DB_INIC_1,

@@ -20,7 +20,7 @@ library(pander)
 library(pastecs)
 
 #### Folders & Files
-PATH_DATAFILES = "D:/dev/oshcba/tests/testesmanuais"
+PATH_DATAFILES = "/home/pedro/Documents/dev/oshcba/tests/testesmanuais"
 setwd(PATH_DATAFILES)
 
 ###############################################################
@@ -647,7 +647,7 @@ row.names(eventos_pdf_arb) <- c("Afast. > 15d - Doença Ocup.:",
 # check_variaveis1
 # eventos_pdf
 # eventos_pdf_arb
-rmarkdown::render("D:/dev/oshcba/tests/testesmanuais/report.Rmd", encoding = getOption("encoding"))
+rmarkdown::render("/home/pedro/Documents/dev/oshcba/tests/testesmanuais/report.rmd", encoding = "UTF-8")
 
 ### ------------------------------------------------------
 ### Variáveis Calculadas
