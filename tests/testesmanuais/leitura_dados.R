@@ -27,12 +27,6 @@ iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3")
 
 
 
-list_dados_tratados = dadostratados
-
-
-inputs = oshcba::obter_inputs_list_dados_tratados(arquivo_template = arquivo_template)
-
-
 #### ETAPA 2 - Revisar Inputs ####
 
 # Etapa 2: Substituir constantes:
