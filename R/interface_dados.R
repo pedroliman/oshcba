@@ -9,6 +9,53 @@ carregar_template_dados = function(arquivo_template, abas_a_ler = oshcba_options
   template_dados  
 }
 
+# Esta função gera uma lista com os dados tratados a partir dos objetos presentes no ambiente global.
+gerar_list_dados_tratados = function() {
+  dadostratados = list(
+    Modulos = dataset_ASIS_param_Modulos,
+    Cenarios = dataset_INIC_Selecao,
+    Baseline = dataset_INIC_BASELINE,
+    Custos = list(Iniciativa1 = dataset_Inic1_Custos,
+                  Iniciativa2 = dataset_Inic2_Custos,
+                  Iniciativa3 = dataset_Inic3_Custos,
+                  Iniciativa4 = dataset_Inic4_Custos,
+                  Iniciativa5 = dataset_Inic5_Custos,
+                  Iniciativa6 = dataset_Inic6_Custos,
+                  Iniciativa7 = dataset_Inic7_Custos,
+                  Iniciativa8 = dataset_Inic8_Custos,
+                  Iniciativa9 = dataset_Inic9_Custos,
+                  Iniciativa10 = dataset_Inic10_Custos
+    ),
+    Configs = list(TaxaDesconto = dataset_ASIS_param_taxadesconto,
+                   CadastroEmpresa = dataset_ASIS_param_cadastEmp,
+                   AnosASimular = dataset_INIC_AnosAvaliacao),
+    DadosProjetados = dataset_INIC_Projetado,
+    DadosObservados = DB_Calc_stats,
+    DadosArbitrados = DB_ASIS_Completo_Arbitrado,
+    DadosObservadosInic1 = DB_INIC_1,
+    DadosArbitradosInic1 = DB_ARB_INIC_1,
+    DadosObservadosInic2 = DB_INIC_2,
+    DadosArbitradosInic2 = DB_ARB_INIC_2,
+    DadosObservadosInic3 = DB_INIC_3,
+    DadosArbitradosInic3 = DB_ARB_INIC_3,
+    DadosObservadosInic4 = DB_INIC_4,
+    DadosArbitradosInic4 = DB_ARB_INIC_4,
+    DadosObservadosInic5 = DB_INIC_5,
+    DadosArbitradosInic5 = DB_ARB_INIC_5,
+    DadosObservadosInic6 = DB_INIC_6,
+    DadosArbitradosInic6 = DB_ARB_INIC_6,
+    DadosObservadosInic7 = DB_INIC_7,
+    DadosArbitradosInic7 = DB_ARB_INIC_7,
+    DadosObservadosInic8 = DB_INIC_8,
+    DadosArbitradosInic8 = DB_ARB_INIC_8,
+    DadosObservadosInic9 = DB_INIC_9,
+    DadosArbitradosInic9 = DB_ARB_INIC_9,
+    DadosObservadosInic10 = DB_INIC_10,
+    DadosArbitradosInic10 = DB_ARB_INIC_10
+  )
+  dadostratados
+}
+
 
 #' obter_inputs_list_dados_tratados
 #'
@@ -20,7 +67,10 @@ carregar_template_dados = function(arquivo_template, abas_a_ler = oshcba_options
 #' @return list com inputs transformados a partir dos dados tratados pelo script de tratamento de dados.
 #' @export
 #'
-obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_template, abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
+obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratados = gerar_list_dados_tratados(), abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs) {
+  
+  oshcba.adicionar_log("### Iniciando Importação de Dados Tratados.")
+  
   
   # Carregar Template de dados
   template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
@@ -29,7 +79,10 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   # Obter Constantes
   constantes = obter_constantes(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados)
   
+  
+  
   ##### Obter Configurações ####
+  oshcba.adicionar_log("Interface de Dados: Configurações")
   configs = template_dados$Configs
   
   # Setar Ano Inicial 
@@ -47,6 +100,7 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   
   
   ##### Obter Cenarios #####
+  oshcba.adicionar_log("Interface de Dados: Cenários")
   cenarios = template_dados$Cenarios
   
   colunas_cenarios = names(template_dados$Cenarios)
@@ -81,6 +135,7 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   iniciativas_a_simular = as.vector(cenarios$Cenario[which(cenarios$Simular & !cenarios$CenarioASIS)])
   
   #### Obter Dados Projetados "Como se fossem da iniciativa" ####
+  oshcba.adicionar_log("Interface de Dados: Dados Projetados")
   variaveis_dados_projetados = names(template_dados$DadosProjetados)
   
   dados_obs_ini1 = list_dados_tratados$DadosObservadosInic1
@@ -97,7 +152,7 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   dados_projetados$VarPIB = dados_projetados$VarPIB / 100
   
   #### Obter Custos ####
-  
+  oshcba.adicionar_log("Interface de Dados: Custos")
   # Iniciando o Dataframe de Custos com o custo "zero" do cenário AS IS.
   custos = data.frame(
     Cenario = cenario_as_is,
@@ -179,6 +234,8 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   
   
   # Módulos estão prontos para serem calculados.
+  
+  oshcba.adicionar_log("### Finalizando Importação de Dados Tratados.")
   
     # Retornar tudo como um list
   list(
@@ -312,6 +369,10 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   
   oshcba.adicionar_log("Interface de Dados: Parâmetros")
   
+  # Definindo o Baseline
+  baseline = list_dados_tratados$Baseline
+  
+  
   # Criando Data.frame a partir do próprio template
   Parametros_base = as.data.frame(template_dados$Parametros)
   
@@ -374,6 +435,9 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   escrever_parametros_triangular = function(vetor_parametros_originais, minimo, usual, maximo) {
     # Neste caso mantém-se o mínimo e máximo
     vetor_parametro = c(minimo, usual, maximo, NA)
+    
+    
+    
     vetor_parametro
   }
   
@@ -383,35 +447,50 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     vetor_parametro
   }
   
-  
+  verificar_se_e_numerico = function(variavel, valor){
+    if (length(valor)==0 | !is.numeric(valor)){
+      oshcba.adicionar_log(paste("Aviso: ", variavel, "não localizada no arquivo de dados tratados. Valor da variavel: ", valor))  
+    }
+  }
   
   # Funcoes para obter dados do cenario as is
   obter_media_observada_asis = function(dataframe, variavel) {
-    dataframe["mean", variavel]
+    v = dataframe["mean", variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   obter_desvio_observado_asis = function(dataframe, variavel) {
-    dataframe["std.dev", variavel]
+    v = dataframe["std.dev", variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   obter_usual_observado_asis = function(dataframe, variavel) {
-    dataframe["mean", variavel]
+    v = dataframe["mean", variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   
   obter_usual_abitrado_asis = function(dataframe, variavel) {
-    linha_dado_arbitrado = which(dataframe$VarModelName == variavel)
-    dataframe[variavel, "Usual"]
+    v = dataframe[variavel, "Usual"]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   obter_minimo_abitrado_asis = function(dataframe, variavel) {
     linha_dado_arbitrado = which(dataframe$VarModelName == variavel)
-    dataframe[variavel, "Mínimo"]
+    v = dataframe[variavel, "Mínimo"]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   obter_maximo_abitrado_asis = function(dataframe, variavel) {
     linha_dado_arbitrado = which(dataframe$VarModelName == variavel)
-    dataframe[variavel, "Máximo"]
+    v = dataframe[variavel, "Máximo"]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   
@@ -419,28 +498,37 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   
   obter_media_observada_iniciativa = function(dataframe, variavel) {
     linha_media = 1 # Rever isso
-    dataframe[linha_media, variavel]
+    v = dataframe[linha_media, variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   # O DESVIO ele vai usar do AS IS - O Desvio tem que vir do AS IS!!!
   obter_desvio_observado_iniciativa = function(parametros_as_is, variavel) {
     linha_variavel = which(parametros_as_is$NomeVariavel == variavel)
-    parametros_as_is[linha_variavel, "Parametro2"]
+    v = parametros_as_is[linha_variavel, "Parametro2"]
+    verificar_se_e_numerico(variavel, valor = v)
   }
   
   obter_usual_abitrado_iniciativa = function(dataframe, variavel) {
     linha_usual = 1 # Rever isso
-    dataframe[linha_usual, variavel]
+    v = dataframe[linha_usual, variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   obter_minimo_abitrado_iniciativa = function(dataframe, variavel) {
     linha_minimo = 3 # Rever isso
-    dataframe[linha_minimo, variavel]
+    v = dataframe[linha_minimo, variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   obter_maximo_abitrado_iniciativa = function(dataframe, variavel) {
     linha_maximo = 2 # Rever isso
-    dataframe[linha_maximo, variavel]
+    v = dataframe[linha_maximo, variavel]
+    verificar_se_e_numerico(variavel, valor = v)
+    v
   }
   
   # Funcoes para obter distribuicoes arbitradas ou observadas:
@@ -467,31 +555,78 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   }
   
   #### FUNCAO NORMAL ####
-  obter_parametros_normal = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_observadas) {
+  obter_parametros_normal = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_observadas, baseline) {
     escrever_parametros_normal(
       vetor_parametros_originais = parametros[linha_parametro, variaveis_parametros],
       media = if(cenarios_e_as_is[n_cenario]) {
-        obter_media_observada_asis(df_variaveis_observadas, variavel = variavel)
+        
+        if(variavel %in% rownames(baseline)) {
+          # Verificar se a variável está no Baseline e usar a variável do Baseline
+          baseline[variavel,]
+        } else {
+          # Se não for uma variável de dentro do Baseline, usar a média normal
+          obter_media_observada_asis(df_variaveis_observadas, variavel = variavel)  
+        }
+        
+        
       } else {
+        # Se é uma variável de iniciativa:
         obter_media_observada_iniciativa(df_variaveis_observadas, variavel = variavel)
+        
       }, 
       desvio = if(cenarios_e_as_is[n_cenario]) {
+        
         obter_desvio_observado_asis(df_variaveis_observadas, variavel = variavel)
+        
       } else {
+        
         obter_desvio_observado_asis(df_variaveis_observadas, variavel = variavel)
+        
       }
     )
   }
   
   
   #### FUNCAO POISSON ####
-  obter_parametros_poisson = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas) {
+  obter_parametros_poisson = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas, df_variaveis_observadas, distribuicao_da_variavel, baseline, variavel_arbitrada) {
     escrever_parametros_poisson(
       vetor_parametros_originais = parametros[linha_parametro, variaveis_parametros],
+      
       taxa = if(cenarios_e_as_is[n_cenario]) {
-        obter_usual_abitrado_asis(df_variaveis_observadas, variavel = variavel)
+        
+        if(variavel %in% rownames(baseline)) {
+          
+        # Para a poisson percentual eventos, é necessário usar um valor distinto de variável  
+          if(distribuicao_da_variavel == "poisson_percentual_eventos") {
+            # Neste caso, é necessário usar o valor da Variavel como "Nev"
+            nome_variavel_eventos = gsub("Pev", "Nev", variavel)
+            baseline[nome_variavel_eventos,]
+            
+          } else {
+            # Se não, usar o prórprio nome da variável no baseline
+            baseline[variavel,]
+          }
+          
+        } else {
+          
+          # Verificar se variável é observada ou arbitrada
+          if(variavel_arbitrada){
+            obter_usual_abitrado_asis(df_variaveis_arbitradas, variavel = variavel)  
+          } else {
+            obter_usual_observado_asis(df_variaveis_observadas, variavel)
+          }
+          
+        }
+        
       } else {
-        obter_usual_abitrado_iniciativa(df_variaveis_observadas, variavel = variavel)
+        
+         # Verificar se variável é observada ou arbitrada
+        if(variavel_arbitrada) {
+          obter_usual_abitrado_iniciativa(df_variaveis_arbitradas, variavel = variavel)  
+        } else {
+          obter_usual_abitrado_iniciativa(df_variaveis_observadas, variavel = variavel)  
+        }
+        
       }
     )
   }
@@ -532,6 +667,10 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       
       # Aqui dentro as variaveis serao definidas
       
+      # if(variavel = "DespesasSeguroPatrimonial"){
+      #   browser()
+      # }
+      
       # Verificando se esta variavel é arbitrada
       variavel_arbitrada = if(cenarios_e_as_is[n_cenario]) {
         # Testar variavel arbitrada no cenario as is
@@ -560,9 +699,9 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       distribuicao_da_variavel = parametros[linha_parametro,"Distribuicao"]
       
       
-      # Só muda a variável se ela for diferente por iniciativa E se não for o cenario as is
+      # Só muda a variável se ela for diferente por iniciativa OU se for o cenario as is
       
-      if(parametros[linha_parametro, "DifPorIniciativa"] | cenarios_e_as_is[n_cenario]) {
+      if(as.logical(parametros[linha_parametro, "DifPorIniciativa"]) | cenarios_e_as_is[n_cenario]) {
         
         # Só neste caso a variável deve ser alterada.
         
@@ -587,7 +726,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
           } else {
             # Se não, usamos uma normal:
             
-            parametros_obtidos = obter_parametros_normal(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_observadas)
+            parametros_obtidos = obter_parametros_normal(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_observadas, baseline)
             
             # Se o cenário é as IS, inclui-se o desvio padrão
             if(cenarios_e_as_is[n_cenario]) {
@@ -603,19 +742,18 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
             
           }
           
-          
-          # Se a distribuicao é posson ou possion percentual
-          
-          if(distribuicao_da_variavel == "poisson" | distribuicao_da_variavel == "poisson_percentual_eventos") {
-            
-            # Então será usada a variavel usual da distribuicao arbitrada.
-            parametros_obtidos = obter_parametros_poisson(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_observadas)
-            
-            parametros[linha_parametro, "Parametro1"] = parametros_obtidos[1]
-            
-          }
+        }
         
-      }
+        # Se a distribuicao é posson ou possion percentual
+        
+        if(distribuicao_da_variavel == "poisson" | distribuicao_da_variavel == "poisson_percentual_eventos") {
+          
+          # Então será usada a variavel usual da distribuicao arbitrada.
+          parametros_obtidos = obter_parametros_poisson(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas, df_variaveis_observadas, distribuicao_da_variavel, baseline, variavel_arbitrada)
+          
+          parametros[linha_parametro, "Parametro1"] = parametros_obtidos[1]
+          
+        }  
       
       }
       

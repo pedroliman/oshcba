@@ -25,82 +25,12 @@ iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3")
 # Definindo Funcao de Input
 
 
-dadostratados = list(
-  Modulos = dataset_ASIS_param_Modulos,
-  Cenarios = dataset_INIC_Selecao,
-  Custos = list(Iniciativa1 = dataset_Inic1_Custos,
-                Iniciativa2 = dataset_Inic2_Custos,
-                Iniciativa3 = dataset_Inic3_Custos,
-                Iniciativa4 = dataset_Inic4_Custos,
-                Iniciativa5 = dataset_Inic5_Custos,
-                Iniciativa6 = dataset_Inic6_Custos,
-                Iniciativa7 = dataset_Inic7_Custos,
-                Iniciativa8 = dataset_Inic8_Custos,
-                Iniciativa9 = dataset_Inic9_Custos,
-                Iniciativa10 = dataset_Inic10_Custos
-  ),
-  Configs = list(TaxaDesconto = dataset_ASIS_param_taxadesconto,
-                 CadastroEmpresa = dataset_ASIS_param_cadastEmp,
-                 AnosASimular = dataset_INIC_AnosAvaliacao),
-  DadosProjetados = dataset_INIC_Projetado,
-  DadosObservados = DB_Calc_stats,
-  DadosArbitrados = DB_ASIS_Completo_Arbitrado,
-  DadosObservadosInic1 = DB_INIC_1,
-  DadosArbitradosInic1 = DB_ARB_INIC_1,
-  DadosObservadosInic2 = DB_INIC_2,
-  DadosArbitradosInic2 = DB_ARB_INIC_2,
-  DadosObservadosInic3 = DB_INIC_3,
-  DadosArbitradosInic3 = DB_ARB_INIC_3,
-  DadosObservadosInic4 = DB_INIC_4,
-  DadosArbitradosInic4 = DB_ARB_INIC_4,
-  DadosObservadosInic5 = DB_INIC_5,
-  DadosArbitradosInic5 = DB_ARB_INIC_5,
-  DadosObservadosInic6 = DB_INIC_6,
-  DadosArbitradosInic6 = DB_ARB_INIC_6,
-  DadosObservadosInic7 = DB_INIC_7,
-  DadosArbitradosInic7 = DB_ARB_INIC_7,
-  DadosObservadosInic8 = DB_INIC_8,
-  DadosArbitradosInic8 = DB_ARB_INIC_8,
-  DadosObservadosInic9 = DB_INIC_9,
-  DadosArbitradosInic9 = DB_ARB_INIC_9,
-  DadosObservadosInic10 = DB_INIC_10,
-  DadosArbitradosInic10 = DB_ARB_INIC_10
-)
+
 
 list_dados_tratados = dadostratados
 
 
-inputs = oshcba::obter_inputs_list_dados_tratados(list_dados_tratados = list_dados_tratados, arquivo_template = arquivo_template)
-
-
-# Inputs Iniciais - Vamos criar o objeto de inputs a partir do excel e depois substituir dados pelos reais:
-
-constantes = oshcba::obter_constantes(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados)
-
-historicoFAP = oshcba::obter_historicoFAP_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
-
-parametros = oshcba::obter_parametros_template(arquivo_template, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
-
-# Iniciativas a simular (definidas manualmente aqui):
-
-# Corrigindo variaveis manualmente - Constantes - Estas variáveis vieram em branco.
-constantes[which(constantes$Variavel == "DiasUteis"), "Valor"] = (365-52)
-constantes[which(constantes$Variavel == "PInvalidez"), "Valor"] = 0
-constantes[which(constantes$Variavel == "HorasPorDia"), "Valor"] = 8
-
-# Corrigindo variaveis manualmente - Historico_FAP
-historicoFAP[is.na(historicoFAP)] = 0
-
-# Corrigindo Variaveis manualmente = Parametros
-parametros[is.na(parametros)] = 0
-
-
-# write.csv2(constantes, "constantes.csv")
-
-# write.csv2(parametros, "parametros.csv")
-
-# write.csv2(historicoFAP, "historicofap.csv")
-
+inputs = oshcba::obter_inputs_list_dados_tratados(arquivo_template = arquivo_template)
 
 
 #### ETAPA 2 - Revisar Inputs ####
