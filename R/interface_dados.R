@@ -10,7 +10,6 @@ carregar_template_dados = function(arquivo_template, abas_a_ler = oshcba_options
 }
 
 
-
 #' obter_inputs_list_dados_tratados
 #'
 #' @param arquivo_template caminho para arquivo de dados a ser usado como template
@@ -72,18 +71,8 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   # Obter cenario AS IS:
   cenario_as_is = as.character(cenarios$Cenario[which(cenarios$CenarioASIS)])
   
-  # Obter Iniciativas a simular
-  iniciativas_a_simular = as.vector(cenarios$Cenario[which(cenarios$Simular)])
-  
-  
-  
-  # Obter Módulos
-  modulos = template_dados$Modulos
-  
-  
-  
-  
-  
+  # Obter Iniciativas a simular - Que precisem ser simuladas e que não sejam o AS IS.
+  iniciativas_a_simular = as.vector(cenarios$Cenario[which(cenarios$Simular & !cenarios$CenarioASIS)])
   
   #### Obter Dados Projetados "Como se fossem da iniciativa" ####
   variaveis_dados_projetados = names(template_dados$DadosProjetados)
@@ -92,6 +81,7 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   
   dados_obs_ini1$Ano = as.numeric(rownames(dados_obs_ini1)) 
   
+  # Filtrando apenas anos a simular nos dados projetados.
   dados_projetados = data.frame(
     dados_obs_ini1[1:configs$HorizonteAvaliacao,variaveis_dados_projetados],row.names = NULL
   )
@@ -100,15 +90,42 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   # Ajustando Variacao do PIB para percentual
   dados_projetados$VarPIB = dados_projetados$VarPIB / 100
   
+  #### Obter Custos ####
   
+  # Iniciando o Dataframe de Custos com o custo "zero" do cenário AS IS.
+  custos = data.frame(
+    Cenario = cenario_as_is,
+    Categoria = "Custo Total",
+    Ano = dados_projetados$Ano,
+    CustoTotal = 0
+  )
   
-  #Obter Custos
-  custos = template_dados$Custos
+  # Criando Vetor dos nomes dos objetos das iniciativas
+  pref_obs_inic = "DadosObservadosInic"
   
+  numero_iniciativas = 1:length(iniciativas_a_simular)
   
+  vetor_dataframe_dados_observados_inic = paste(pref_obs_inic, numero_iniciativas, sep = "")
   
-  
+  for (iniciativa in iniciativas_a_simular) {
     
+    n_iniciativa = which(iniciativas_a_simular == iniciativa)
+    
+    vetor_custos_iniciativa = list_dados_tratados[[vetor_dataframe_dados_observados_inic[n_iniciativa]]]$CustoTotal[1:length(dados_projetados$Ano)]
+    
+    custos = rbind(
+      custos,
+      data.frame(
+        Cenario = iniciativa,
+        Categoria = "Custo Total",
+        Ano = dados_projetados$Ano,
+        CustoTotal = vetor_custos_iniciativa
+      )
+    )  
+    
+  }
+  ## Preencher custos NAs com zeros
+  custos[is.na(custos)] = 0
   
   
   # Obter parâmetros
@@ -116,6 +133,11 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   
   #Obter Histórico do FAP
   historicoFAP = obter_historicoFAP_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
+  
+  
+  # Obter Módulos
+  modulos = template_dados$Modulos
+  
   
     # Retornar tudo como um list
   list(
