@@ -58,15 +58,21 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
       Cenario = "ASIS",
       NomeIniciativa = "AS IS",
       Simular = TRUE,
-      CenarioASIS = TRUE
+      CenarioASIS = TRUE,
+      AnosDelay = 0
     )
     ,data.frame(
       Cenario = list_dados_tratados$Cenarios$Iniciativa,
       NomeIniciativa = list_dados_tratados$Cenarios$NomeIniciativa,
       Simular = as.logical(list_dados_tratados$Cenarios$Selecionada),
-      CenarioASIS = FALSE
+      CenarioASIS = FALSE,
+      AnosDelay = list_dados_tratados$Cenarios$AnosDelay
     )
   )
+  
+  # Corrigindo NAs
+  cenarios$AnosDelay[is.na(cenarios$AnosDelay)] = 0
+  
   
   # Obter cenario AS IS:
   cenario_as_is = as.character(cenarios$Cenario[which(cenarios$CenarioASIS)])
@@ -113,6 +119,10 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
     
     vetor_custos_iniciativa = list_dados_tratados[[vetor_dataframe_dados_observados_inic[n_iniciativa]]]$CustoTotal[1:length(dados_projetados$Ano)]
     
+    # if(!(sum(vetor_custos_iniciativa) > 100)) {
+    #   oshcba.adicionar_log(paste("Aviso: O Custo desta iniciativa possui erros:", iniciativa))
+    # }
+    
     custos = rbind(
       custos,
       data.frame(
@@ -127,17 +137,48 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   ## Preencher custos NAs com zeros
   custos[is.na(custos)] = 0
   
-  
-  # Obter parâmetros
-  parametros = obter_parametros_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
-  
   #Obter Histórico do FAP
   historicoFAP = obter_historicoFAP_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
-  
   
   # Obter Módulos
   modulos = template_dados$Modulos
   
+  # Deve-se calcular todos os modulos que não estão na lista do tratamento de dados.
+  modulos_fora_da_lista = which(!(modulos$NomeBeneficioDadosEntrada %in% rownames(list_dados_tratados$Modulos)))
+  
+  nomes_modulos_selecionados = rownames(subset(list_dados_tratados$Modulos, X__1 == TRUE))
+  
+  # nomes_modulos_selecionados = rownames(list_dados_tratados$Modulos[TRUE])
+  
+  modulos_selecionados_na_lista = which(modulos$NomeBeneficioDadosEntrada %in% nomes_modulos_selecionados)
+  
+  modulos_selecionados = c(modulos_fora_da_lista, modulos_selecionados_na_lista)
+  
+  # Definindo Modulos Selecionados:
+  # Por padrão é falso
+  modulos$Calcular = FALSE
+  
+  # E se ele for selecionado, é verdadeiro
+  modulos$Calcular[modulos_selecionados] = TRUE
+  
+  
+  # Definindo se o modulo deve ser calculado ou não:
+  
+  # Obter parâmetros
+  parametros = obter_parametros_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
+  
+  
+  # Atualizar parametros com delays das iniciativas
+  
+  ## Esta solução é vetorizada (e deveria ser usada com mais frequencia)
+  obter_linha_cenario = function(cenario) {
+    which(cenarios$Cenario == cenario)
+  }
+  
+  parametros$AnosDelay = cenarios$AnosDelay[sapply(X = as.vector(parametros$Cenario),FUN =  obter_linha_cenario)]
+  
+  
+  # Módulos estão prontos para serem calculados.
   
     # Retornar tudo como um list
   list(
