@@ -27,32 +27,89 @@ obter_inputs_list_dados_tratados = function(list_dados_tratados, arquivo_templat
   template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
   
   
-  # Obter Configurações
+  # Obter Constantes
+  constantes = obter_constantes(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados)
+  
+  ##### Obter Configurações ####
   configs = template_dados$Configs
   
-  # Obter Cenarios
+  # Setar Ano Inicial 
+  configs$AnoInicial = min(as.numeric(rownames(list_dados_tratados$DadosObservadosInic1)))
+  
+  # Taxa de Desconto
+  configs$TaxaDeDesconto = list_dados_tratados$Configs$TaxaDesconto[[1]] / 100
+  
+  # l_ultimo_ano = 10
+  configs$FuncionariosBase = constantes$Valor[which(constantes$Variavel == "Funcionarios")]
+  
+  configs$NomeAnalista = list_dados_tratados$Configs$CadastroEmpresa["AnalistaEmpresa",]
+  
+  configs$HorizonteAvaliacao = list_dados_tratados$Configs$AnosASimular[[1]]
+  
+  
+  ##### Obter Cenarios #####
   cenarios = template_dados$Cenarios
+  
+  colunas_cenarios = names(template_dados$Cenarios)
+  n_linhas_cenarios = length(list_dados_tratados$Cenarios$Iniciativa)
+  
+  # Criando Dataframe do zero apenas com dados passados pelo Felipe, Mais uma linha do cenario AS IS. Não preciso usar o template.
+  cenarios = rbind(
+    data.frame(
+      Cenario = "ASIS",
+      NomeIniciativa = "AS IS",
+      Simular = TRUE,
+      CenarioASIS = TRUE
+    )
+    ,data.frame(
+      Cenario = list_dados_tratados$Cenarios$Iniciativa,
+      NomeIniciativa = list_dados_tratados$Cenarios$NomeIniciativa,
+      Simular = as.logical(list_dados_tratados$Cenarios$Selecionada),
+      CenarioASIS = FALSE
+    )
+  )
+  
+  # Obter cenario AS IS:
+  cenario_as_is = as.character(cenarios$Cenario[which(cenarios$CenarioASIS)])
+  
+  # Obter Iniciativas a simular
+  iniciativas_a_simular = as.vector(cenarios$Cenario[which(cenarios$Simular)])
+  
   
   
   # Obter Módulos
   modulos = template_dados$Modulos
   
   
-  # Obter Dados_Projetados
-  dados_projetados = template_dados$DadosProjetados
+  
+  
+  
+  
+  #### Obter Dados Projetados "Como se fossem da iniciativa" ####
+  variaveis_dados_projetados = names(template_dados$DadosProjetados)
+  
+  dados_obs_ini1 = list_dados_tratados$DadosObservadosInic1
+  
+  dados_obs_ini1$Ano = as.numeric(rownames(dados_obs_ini1)) 
+  
+  dados_projetados = data.frame(
+    dados_obs_ini1[1:configs$HorizonteAvaliacao,variaveis_dados_projetados],row.names = NULL
+  )
+  
+  
+  # Ajustando Variacao do PIB para percentual
+  dados_projetados$VarPIB = dados_projetados$VarPIB / 100
+  
+  
   
   #Obter Custos
   custos = template_dados$Custos
   
-  # Obter Constantes
-  constantes = obter_constantes(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados)
   
-  # Obter Iniciativas a simular
-  iniciativas_a_simular = c("Iniciativa1", "Iniciativa2", "Iniciativa3")
   
-  # Obter cenario AS IS:
+  
     
-  cenario_as_is = "ASIS"
+  
   
   # Obter parâmetros
   parametros = obter_parametros_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
