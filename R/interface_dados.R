@@ -124,8 +124,10 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
     )
   )
   
-  # Corrigindo NAs
-  cenarios$AnosDelay[is.na(cenarios$AnosDelay)] = 0
+  
+  # Verificar NAs:
+  cenarios = verificar_nas_e_substituir(cenarios)
+  
   
   
   # Obter cenario AS IS:
@@ -150,6 +152,10 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   
   # Ajustando Variacao do PIB para percentual
   dados_projetados$VarPIB = dados_projetados$VarPIB / 100
+  
+  
+  # Verificar e Corrigir NAs:
+  dados_projetados = verificar_nas_e_substituir(dados_projetados)
   
   #### Obter Custos ####
   oshcba.adicionar_log("Interface de Dados: Custos")
@@ -190,10 +196,14 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
     
   }
   ## Preencher custos NAs com zeros
-  custos[is.na(custos)] = 0
+  custos = verificar_nas_e_substituir(custos)
+  
   
   #Obter Histórico do FAP
   historicoFAP = obter_historicoFAP_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
+  
+  # Preencher dados NA com Zeros
+  historicoFAP = verificar_nas_e_substituir(historicoFAP)
   
   # Obter Módulos
   modulos = template_dados$Modulos
@@ -215,7 +225,6 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   
   # E se ele for selecionado, é verdadeiro
   modulos$Calcular[modulos_selecionados] = TRUE
-  
   
   # Definindo se o modulo deve ser calculado ou não:
   
@@ -241,6 +250,7 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   
   ## Folha de Pagamento: A folha de pagamento informada no FAP é dobrada, e por isso deve ser dividida por dois para obter uma estimativa adequada da folha
   historicoFAP$FolhadePagamento = historicoFAP$FolhadePagamento / 2
+  
   constantes$Valor[which(constantes$Variavel == "FolhadePagamento")] = constantes$Valor[which(constantes$Variavel == "FolhadePagamento")] / 2
   
   

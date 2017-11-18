@@ -322,3 +322,21 @@ colunas_com_na = function(df) {
   colnames(df)[unlist(lapply(df, function(x) any(is.na(x))))]
 }
 
+verificar_nas_e_substituir = function(dataframe, valor_a_substituir = 0) {
+  
+  # Verificar se Existem Nas ou não:
+  variaveis_na = colunas_com_na(dataframe)
+  
+  # Se existem Nas, avisar, e substituir com zero.
+  if(length(variaveis_na) > 0){
+    # Avisar:
+    oshcba.adicionar_log(paste("Aviso: Existem Variaveis com NA:", paste(variaveis_na, collapse = ", "), ". Substutindo valores por ", valor_a_substituir))
+    
+    # Substituir
+    dataframe[is.na(dataframe)] = valor_a_substituir
+  }
+  
+  # Devolver o dataframe:
+  dataframe
+  
+}
