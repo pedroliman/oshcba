@@ -277,6 +277,12 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
           if ((i == 1) | (!all(v_outputs %in% colnames(resultados)))) { # Se estou na primeira iteracao, ou se algum output não foi calculado.
             chamada_da_funcao = paste(f, "(resultados)", sep = "")
             resultados = eval(parse(text = chamada_da_funcao))
+            
+            # Verificar aqui se existem NAs nos resultados
+            if(length(colunas_com_na(resultados)) > 0) {
+              oshcba.adicionar_log(paste("Aviso: Existem Colunas com NAs: ",paste(colunas_com_na(resultados), collapse = ", ")))
+            }
+            
             oshcba.adicionar_log(paste("calcular_funcoes: Funcao Calculada: ",
                           f))
           } else {
@@ -310,5 +316,9 @@ simular_e_mostrar_resultados = function() {
   View(results$Resultados_CBR)
   colnames(results$Resultados_Descontados)
   results
+}
+
+colunas_com_na = function(df) {
+  colnames(df)[unlist(lapply(df, function(x) any(is.na(x))))]
 }
 
