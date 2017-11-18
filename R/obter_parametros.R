@@ -15,11 +15,17 @@ obter_replicacoes = function (rep) {
 
 obter_parametros_por_ano = function (Inputs,cenarios,anos) {
   # Definindo os Parâmetros
-
+  
   parametros_por_ano = merge(cenarios,anos,by=NULL)
-  names(parametros_por_ano) = c("Cenario","CenarioBase","Ano")
+  names(parametros_por_ano) = c("Cenario", "NomeIniciativa", "CenarioBase", "AnosDelay", "Ano")
+  
+  variaveis_necessarias = c("Cenario","CenarioBase","Ano")
+  # Escolhendo Apenas as variáveis que eu realmente preciso
+  parametros_por_ano = parametros_por_ano[,variaveis_necessarias]
+  
+  
   # Atribuindo os Nomes de Parâmetros
-  parametros_por_ano = inner_join(parametros_por_ano,Inputs$Parametros,by="Cenario")
+  parametros_por_ano = dplyr::inner_join(parametros_por_ano,Inputs$Parametros,by="Cenario")
   # TODO: Aqui eu deveria substituir os parâmetros com delay!
 
   ano_inicial = min(parametros_por_ano$Ano)
