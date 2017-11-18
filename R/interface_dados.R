@@ -233,6 +233,22 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   parametros$AnosDelay = cenarios$AnosDelay[sapply(X = as.vector(parametros$Cenario),FUN =  obter_linha_cenario)]
   
   
+  
+  
+  
+  
+  ### Ajustes devidos à forma de Coleta de dados:
+  
+  ## Folha de Pagamento: A folha de pagamento informada no FAP é dobrada, e por isso deve ser dividida por dois para obter uma estimativa adequada da folha
+  historicoFAP$FolhadePagamento = historicoFAP$FolhadePagamento / 2
+  constantes$Valor[which(constantes$Variavel == "FolhadePagamento")] = constantes$Valor[which(constantes$Variavel == "FolhadePagamento")] / 2
+  
+  
+  
+  
+  
+  
+  
   # Módulos estão prontos para serem calculados.
   
   oshcba.adicionar_log("### Finalizando Importação de Dados Tratados.")

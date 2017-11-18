@@ -22,7 +22,13 @@ inputs$Parametros$Parametro2[is.na(inputs$Parametros$Parametro2)] = 0.00001
 inputs$Parametros$Parametro3[is.na(inputs$Parametros$Parametro3)] = 0.00002
 inputs$Parametros$Parametro4[is.na(inputs$Parametros$Parametro4)] = 1000000
 
-resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list")
+## Mudando os Fatores para tentar obter uma forma adequada de calcular
+inputs$Constantes$Valor[which(inputs$Constantes$Variavel == "FatorB91")] = 2
+inputs$Constantes$Valor[which(inputs$Constantes$Variavel == "FatorB92")] = 0
+inputs$Constantes$Valor[which(inputs$Constantes$Variavel == "FatorB93")] = 1
+inputs$Constantes$Valor[which(inputs$Constantes$Variavel == "FatorB94")] = 0
+
+resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", rep = 10)
 
 inputs = carregar_inputs(arquivo_de_inputs = arquivo_template)
 
