@@ -1,5 +1,7 @@
 - Itens que Faltam para a Finalização da Calculadora:
 
+template de dados ajustado (colunas de cenários).
+
 
 2) Retirar a dependência do template de dados a um arquivo excel. Importar como um objeto de dados do R.
 
@@ -20,6 +22,6 @@ modo = "basico")
 4) Integrar o Relatório ao Shiny.
 
 
-
+### Feito ###
 
 OK - 1) Relatório RMD: Manter apenas itens que sejam automatizáveis no relatório, fazer o gráfico funcionar sem precisar repetir o código.
