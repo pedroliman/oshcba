@@ -1,0 +1,17 @@
+- Itens que Faltam para a Finalização da Calculadora:
+
+1) Relatório RMD: Manter apenas itens que sejam automatizáveis no relatório, fazer o gráfico funcionar sem precisar repetir o código.
+
+2) Retirar a dependência do template de dados a um arquivo excel. Importar como um objeto de dados do R.
+
+3) Remover da entrada de dados (principalmente parâmetros) as variáveis que são inputs para funções que não serão calculadas (dessa maneira há mais uma garantia que a calculadora não irá parar por funções desnecessárias.
+
+3) Integrar ao Shiny.
+
+
+## Chamada da Função para Executar a Biblioteca (Esta funcao deve ser chamada quando os objetos de tratamento de dados já existem).
+oshcba::simular_cba(ArquivoInputs = obter_inputs_list_dados_tratados(list_dados_tratados = gerar_list_dados_tratados()),
+tipo_input = "list", 
+modo = "basico")
+
+4) Integrar o Relatório ao Shiny.
