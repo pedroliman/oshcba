@@ -10,7 +10,12 @@
 simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo", verificar_inputs = TRUE) {
 
   # Iniciar Log
-  oshcba.iniciar_log()
+  # Se o log não foi incializado, inicializar o log.
+  if(!exists("oshcba.log_calculadora")){
+    oshcba.iniciar_log()
+  }
+  
+  oshcba.adicionar_log("### Iniciando Simulação de Custos e Benefícios em SST e FPS.")
 
   # Carregar dados internos da biblioteca - Inputs e Outputs de Funcoes
   data("funcoes_inputs_outputs")
@@ -322,3 +327,21 @@ colunas_com_na = function(df) {
   colnames(df)[unlist(lapply(df, function(x) any(is.na(x))))]
 }
 
+verificar_nas_e_substituir = function(dataframe, valor_a_substituir = 0) {
+  
+  # Verificar se Existem Nas ou não:
+  variaveis_na = colunas_com_na(dataframe)
+  
+  # Se existem Nas, avisar, e substituir com zero.
+  if(length(variaveis_na) > 0){
+    # Avisar:
+    oshcba.adicionar_log(paste("Aviso: Existem Variaveis com NA:", paste(variaveis_na, collapse = ", "), ". Substutindo valores por ", valor_a_substituir))
+    
+    # Substituir
+    dataframe[is.na(dataframe)] = valor_a_substituir
+  }
+  
+  # Devolver o dataframe:
+  dataframe
+  
+}

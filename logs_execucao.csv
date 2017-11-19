@@ -1,0 +1,33 @@
+"";"Logs"
+"1";"2017-11-19 11:24:24 - ### CALCULADORA SESI / GMAP | UNISINOS - LOGS DE EXECUÇÃO ###"
+"2";"2017-11-19 11:24:24 - Versão: 1.5.0"
+"3";"2017-11-19 11:24:24 - ### Iniciando Importação de Dados Tratados."
+"4";"2017-11-19 11:24:24 - Interface de Dados: Constantes"
+"5";"2017-11-19 11:24:33 - Erro: Nem todos os dados do tratamento de dados estão disponiveis."
+"6";"2017-11-19 11:24:33 - Error in doTryCatch(return(expr), name, parentenv, handler): object 'dataset_ASIS_param_Modulos' not found
+"
+"7";"2017-11-19 11:24:33 - Excução Interrompida por erro nos arquivos de dados."
+"8";"2017-11-19 11:26:38 - ### Iniciando Importação de Dados Tratados."
+"9";"2017-11-19 11:26:38 - Interface de Dados: Constantes"
+"10";"2017-11-19 11:26:38 - Erro: Nem todos os dados do tratamento de dados estão disponiveis."
+"11";"2017-11-19 11:26:38 - Error in doTryCatch(return(expr), name, parentenv, handler): object 'dataset_ASIS_param_Modulos' not found
+"
+"12";"2017-11-19 11:26:38 - Excução Interrompida por erro nos arquivos de dados."
+"13";"2017-11-19 11:27:00 - ### Iniciando Importação de Dados Tratados."
+"14";"2017-11-19 11:27:00 - Interface de Dados: Constantes"
+"15";"2017-11-19 11:27:00 - Erro: Nem todos os dados do tratamento de dados estão disponiveis."
+"16";"2017-11-19 11:27:00 - Error in doTryCatch(return(expr), name, parentenv, handler): object 'dataset_ASIS_param_Modulos' not found
+"
+"17";"2017-11-19 11:27:00 - Excução Interrompida por erro nos arquivos de dados."
+"18";"2017-11-19 11:27:09 - ### Iniciando Importação de Dados Tratados."
+"19";"2017-11-19 11:27:09 - Interface de Dados: Constantes"
+"20";"2017-11-19 11:27:09 - Erro: Nem todos os dados do tratamento de dados estão disponiveis."
+"21";"2017-11-19 11:27:09 - Error in doTryCatch(return(expr), name, parentenv, handler): object 'dataset_ASIS_param_Modulos' not found
+"
+"22";"2017-11-19 11:27:09 - Excução Interrompida por erro nos arquivos de dados."
+"23";"2017-11-19 11:27:15 - ### Iniciando Importação de Dados Tratados."
+"24";"2017-11-19 11:27:15 - Interface de Dados: Constantes"
+"25";"2017-11-19 11:27:15 - Erro: Nem todos os dados do tratamento de dados estão disponiveis."
+"26";"2017-11-19 11:27:15 - Error in doTryCatch(return(expr), name, parentenv, handler): object 'dataset_ASIS_param_Modulos' not found
+"
+"27";"2017-11-19 11:27:15 - Excução Interrompida por erro nos arquivos de dados."

@@ -56,7 +56,8 @@ resumo_cba_por_categorias = function(resultados_cbr){
 #' @return gráfico waterfall com o CBR
 #' @export
 grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
-  dados_relativos = resumo$RazaoBeneficioCustoPorCategoria
+  
+    dados_relativos = resumo$RazaoBeneficioCustoPorCategoria
   dados_relativos$RazaoBeneficioCusto = rowSums(dados_relativos[,3:length(dados_relativos)-1])
 
 
@@ -74,7 +75,6 @@ grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
 
   #inicia desenv gravf cascata
   for (k in 1:N_GRAF) {
-
 
     Final_2=Final
 
@@ -134,4 +134,16 @@ tabela_soma_razao_beneficio_custo = function(resultados_cbr) {
                         ,Custo=sum(.$Custo))) %>% mutate(RazaoBeneficioCusto = MediaBeneficio / Custo)
 }
 
+
+gerar_graficos_iniciativas = function(resultados) {
+  
+  iniciativas = as.vector(resultados$Inputs$Cenarios$Cenario[which(resultados$Inputs$Cenarios$Simular & !resultados$Inputs$Cenarios$CenarioASIS)])
+  
+  for (i in iniciativas) {
+    print(paste("Gráfico de Benefícios - ", i))
+    g = grafico_dbg_cbr_waterfall(resumo_cba_por_categorias(resultados$Resultados_CBR), iniciativa = i)
+    g
+  }  
+  
+}
 
