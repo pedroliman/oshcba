@@ -2,8 +2,9 @@
 title: "Relatório Calculadora SST | FPS"
 author: "Versão Preliminar - SESI | GMAP | UNISINOS"
 output:
+  html_document: 
+    toc: yes
   pdf_document: default
-  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -29,13 +30,18 @@ Os dados foram coletados utilizando o template do Excel destinado para tal ativi
 
 ## Iniciativas Avaliadas
 Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo da calculadora. As iniciativas apresentadas pela empresa BRS contemplam:
-- **Iniciativa 1**: ABC
-- **Iniciativa 2*: ABC
-- **Iniciativa 3**: ABC
-- **Iniciativa 4**: ABC
-Iniciativa 2 – Desenvolvimento de lideranças
-Para cada iniciativa foram coletados dados referentes aos custos de sua implantação e manutenção, bem como foram estimadas as melhorias que poderão ser obtidas a partir da sua implementação. Estas estimativas foram feitas baseadas na probabilidade de redução dos eventos (afastamentos, óbito), redução de faltas, economias (savings) em produtividade, entre outros. 
-Destaca-se que a análise foi realizada em um horizonte temporal de três anos. Este horizonte de tempo foi definido junto aos responsáveis da empresa que acompanharam o piloto.
+
+- **Iniciativa 1 - Plataforma para Trabalho em Altura.** Esta iniciativa prevê a aquisição de uma plataforma para realização de trabalho em altura (PTA). Estas atividades em altura contemplam, por exemplo, manutenções, troca de lâmpadas, inventário, cabeamento, etc. Além da aquisição da plataforma em si, os trabalhadores precisam receber capacitação específica para seu manuseio. Atualmente estas atividades de trabalho em altura estão inadequadas do ponto de vista das Normas Regulamentadores (NR-11), aumentando a exposição à multas e risco de acidentes. Além disso, demandam um funcionário a mais para realização da atividade (2 eletricistas por atividade).
+
+
+
+- **Iniciativa 2 - Sala de Modelagem.** Esta iniciativa prevê a aquisição de uma nova sala, bem como os equipamentos pertinentes para a modelagem. As atividades da sala de modelagem atualmente são realizadas em um pavilhão externo à empresa. O ambiente de trabalho está inadequado em termos de exaustão e ergonomia. Além disso, há um risco de multas em função da exaustão insuficiente (poeira química).
+
+
+- **Iniciativa 3 - Adequação das serras circulares à NR-12.** A adequação à NR-12 será feita no sentido de estabelecer barreiras físicas para proteção do trabalhador, além de ajustes na instalação elétrica, sensores, botões de emergência, etc. da serra circular. Esta adequação diminuirá significativamente o risco de multas neste equipamento, além de reduzir o risco de acidentes típicos com afastamentos maiores e menores do que 15 dias, ou até sem afastamento.
+
+
+Para cada iniciativa foram coletados dados referentes aos custos de sua implantação e manutenção, bem como foram estimadas as melhorias que poderão ser obtidas a partir da sua implementação. Estas estimativas foram feitas baseadas na probabilidade de redução dos eventos (afastamentos, óbito), redução de faltas, economias (savings) em produtividade, entre outros.
 
 
 ## Valores Obtidos por Benefício Avaliado
@@ -57,7 +63,7 @@ A seguir é apresentado o resultado geral desta análise por iniciativa.
 
 resumo_iniciativas = resumo_cba_por_iniciativa(resultados$Resultados_CBR)
 
-knitr::kable(t(resumo_iniciativas), digits = 3)
+knitr::kable(t(resumo_iniciativas), digits = 3, caption = "Estatísticas da Análise de Custo benefício por Iniciativa.")
 
 ```
 
@@ -172,41 +178,20 @@ knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
 
 Os gráficos que serão expostos a seguir apresentam como cada dimensão contribui para a geração da razão benefício-custo total. A partir destes, é possível visualizar a importância relativa de cada umas das categorias na Razão Benefício-Custo apresentado para cada iniciativa.
 
-### Iniciativa 1: 
-
-**Plataforma para Trabalho em Altura.** Esta iniciativa prevê a aquisição de uma plataforma para realização de trabalho em altura (PTA). Estas atividades em altura contemplam, por exemplo, manutenções, troca de lâmpadas, inventário, cabeamento, etc. Além da aquisição da plataforma em si, os trabalhadores precisam receber capacitação específica para seu manuseio. Atualmente estas atividades de trabalho em altura estão inadequadas do ponto de vista das Normas Regulamentadores (NR-11), aumentando a exposição à multas e risco de acidentes. Além disso, demandam um funcionário a mais para realização da atividade (2 eletricistas por atividade).
-
-
-
 ```{r echo=FALSE}
-grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa1")
+
+iniciativas = as.vector(resultados$Inputs$Cenarios$Cenario[which(resultados$Inputs$Cenarios$Simular & !resultados$Inputs$Cenarios$CenarioASIS)])
+for (i in iniciativas) {
+  print(grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = i))
+  cat('\n')
+}
 ```
-
-### Iniciativa 2: 
-
-**Sala de Modelagem.** Esta iniciativa prevê a aquisição de uma nova sala, bem como os equipamentos pertinentes para a modelagem. As atividades da sala de modelagem atualmente são realizadas em um pavilhão externo à empresa. O ambiente de trabalho está inadequado em termos de exaustão e ergonomia. Além disso, há um risco de multas em função da exaustão insuficiente (poeira química).
-
-
-
-```{r echo=FALSE}
-grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa2")
-```
-
-### Iniciativa 3 
-**Adequação das serras circulares à NR-12.** A adequação à NR-12 será feita no sentido de estabelecer barreiras físicas para proteção do trabalhador, além de ajustes na instalação elétrica, sensores, botões de emergência, etc. da serra circular. Esta adequação diminuirá significativamente o risco de multas neste equipamento, além de reduzir o risco de acidentes típicos com afastamentos maiores e menores do que 15 dias, ou até sem afastamento.
-
-
-```{r echo=FALSE}
-grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = "Iniciativa3")
-```
-
 
 ### Observação da Variabilidade das Iniciativas:
 
 ```{r echo=FALSE}
 grafico_box_plot_por_iniciativa(resultados$Resultados_CBR)
 ```
-
 
 ## Apêndice - Registros para a Reprodutibilidade dos Calculos
 
