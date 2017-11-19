@@ -10,7 +10,12 @@
 simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo", verificar_inputs = TRUE) {
 
   # Iniciar Log
-  oshcba.iniciar_log()
+  # Se o log não foi incializado, inicializar o log.
+  if(!exists("oshcba.log_calculadora")){
+    oshcba.iniciar_log()
+  }
+  
+  oshcba.adicionar_log("### Iniciando Simulação de Custos e Benefícios em SST e FPS.")
 
   # Carregar dados internos da biblioteca - Inputs e Outputs de Funcoes
   data("funcoes_inputs_outputs")

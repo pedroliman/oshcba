@@ -1,10 +1,12 @@
 ---
 title: "Relatório Calculadora SST | FPS"
-author: "Versão Preliminar - SESI | GMAP | UNISINOS"
+author: "Análise de Custos e Benefícios de Iniciativas em SST e FPS."
 output:
+  pdf_document: 
+    number_sections: yes
+    toc: yes
   html_document: 
     toc: yes
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -14,14 +16,13 @@ library(oshcba)
 # resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
 ```
 
-## Dados Gerais
+# Dados Gerais
 - **Empresa**: Xalingo, Santa Cruz do Sul
 - **Participantes Empresa**: Diego Lopes, Jucelaine e Luciano Bredow
 - **Participantes SESI**: Iuri Forte, Júlia Schenkel, Fabiane Bublitz
 
 ## A Empresa
 A Xalingo Brinquedos é uma empresa de Santa Cruz do Sul – RS, que se dedica à fabricação de jogos e brinquedos de plástico e madeira. A Xalingo é uma empresa que se preocupa constantemente com a sustentabilidade, demonstrando isto por meio de ações em toda a sua produção. Além disso, há uma preocupação constante com o bem-estar de seus colaboradores, o que se reflete em ações voltadas à educação, esporte, saúde, entre outros. Destaca-se que a coleta de dados históricos na empresa e, também, a coleta de informações relativas às iniciativas foram conduzidas em 13 e 14 de novembro. 
-
 
 
 ## Coleta de Dados Históricos
@@ -43,6 +44,7 @@ Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo d
 
 Para cada iniciativa foram coletados dados referentes aos custos de sua implantação e manutenção, bem como foram estimadas as melhorias que poderão ser obtidas a partir da sua implementação. Estas estimativas foram feitas baseadas na probabilidade de redução dos eventos (afastamentos, óbito), redução de faltas, economias (savings) em produtividade, entre outros.
 
+# Resultados
 
 ## Valores Obtidos por Benefício Avaliado
 Nesta seção serão apresentados os valores obtidos para o conjunto de benefícios avaliados. Esta apresentação será feita na seguinte ordem de categorias: i) Reduções Fiscais; ii) Despesas Evitáveis; iii) Melhor uso dos recursos; e, iv) Intangível. A sequência de ordenamento da apresentação de resultados parte das categorias cujo os resultados são objetivos em termos de cálculo para elementos indiretos, finalizando em uma categoria intangível na qual as questões subjetivas são incorporadas ao cálculo.
@@ -193,7 +195,7 @@ for (i in iniciativas) {
 grafico_box_plot_por_iniciativa(resultados$Resultados_CBR)
 ```
 
-## Apêndice - Registros para a Reprodutibilidade dos Calculos
+# Apêndice - Registros para a Reprodutibilidade dos Calculos
 
 ### Logs
 
@@ -205,7 +207,7 @@ knitr::kable(oshcba.obter_log())
 ```
 
 
-### Probabilidades Informadas
+### Dados de Entrada
 
 - **Configurações**
 
