@@ -146,4 +146,3 @@ gerar_graficos_iniciativas = function(resultados) {
   }  
   
 }
-

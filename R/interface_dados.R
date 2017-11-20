@@ -252,6 +252,8 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   parametros = obter_parametros_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
   
   
+  parametros = verificar_nas_e_substituir(parametros)
+  
   # Atualizar parametros com delays das iniciativas
   
   ## Esta solução é vetorizada (e deveria ser usada com mais frequencia)
@@ -688,7 +690,8 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     if(cenarios_e_as_is[n_cenario]) {
       parametros_asis = Parametros_base
       parametros = parametros_asis
-    } else {parametros = parametros_asis}
+    } else {
+      parametros = parametros_asis}
     
     # Definindo o nome do parametro
     parametros$Cenario = cenario
@@ -746,6 +749,12 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       
       
       # Só muda a variável se ela for diferente por iniciativa OU se for o cenario as is
+      
+      # if(variavel == "DespesaExposicaoMulta1") {
+      #   browser()
+      # }
+      
+      parametros[linha_parametro,]
       
       if(as.logical(parametros[linha_parametro, "DifPorIniciativa"]) | cenarios_e_as_is[n_cenario]) {
         
@@ -809,7 +818,10 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     # Aqui os dataframes serao unidos:
     
     if(cenarios_e_as_is[n_cenario]) {
+      # Iniciar os parâmetros finais considerando o parâmetro AS IS:
       Parametros_Finais = parametros
+      # Definir o parametros AS IS como o parametro calculado
+      parametros_asis = parametros
     } else {Parametros_Finais = rbind(Parametros_Finais, parametros)}
     
   }

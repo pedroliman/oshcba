@@ -954,7 +954,7 @@ calcular_qualidade = function(parametros) {
 ############ SEGURO PATRIMONIAL ##################
 calcular_seguro_patrimonial = function(parametros) {
   # Ganho do Seguro Patrimonial é Arbitrado Diretamente
-  parametros["DespesasSeguroPatrimonial"] = -1 * parametros["DespesasSeguroPatrimonial"]
+  parametros["DespesasSeguroPatrimonial"] = 1 * parametros["DespesasSeguroPatrimonial"]
   parametros
 }
 
