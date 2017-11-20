@@ -7,7 +7,7 @@
 #' @param output Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.
 #' @return um list com os resultados.
 #' @export
-simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo", verificar_inputs = TRUE) {
+simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo", verificar_inputs = FALSE) {
 
   # Iniciar Log
   # Se o log não foi incializado, inicializar o log.
