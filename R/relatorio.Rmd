@@ -2,16 +2,20 @@
 title: "Relatório Calculadora SST | FPS"
 author: "Análise de Custos e Benefícios de Iniciativas em SST e FPS."
 output:
-  pdf_document: 
+  pdf_document:
+    latex_engine: xelatex
     number_sections: yes
     toc: yes
-  html_document: 
+  word_document:
+    toc: yes
+  html_document:
     toc: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(oshcba)
+library(knitr)
 # resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
 # resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
 ```
@@ -86,7 +90,7 @@ colunas_reducoes_fiscais = c("BeneficioMultas", "BeneficioFAP")
 
 colunas = c(c("Cenario.y"), colunas_reducoes_fiscais)
 
-knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
+knitr::kable(t(beneficios_categorias[colunas]), digits = 2, caption = "Benefícios Capturados em Reduções Fiscais.")
 
 ```
 
@@ -121,7 +125,7 @@ tabela_imprimir = t(as.matrix((beneficios_categorias[colunas])))
 
 # colnames(tabela_imprimir$Cenario.y) = "Beneficio"
 
-knitr::kable(tabela_imprimir, digits = 2)
+knitr::kable(tabela_imprimir, digits = 2, caption = "Benefícios Capturados em Despesas Evitáveis.")
 
 ```
 
@@ -149,7 +153,7 @@ colunas_despesas_evitaveis = c("BeneficioTurnover",
 
 colunas = c(c("Cenario.y"), colunas_despesas_evitaveis)
 
-knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
+knitr::kable(t(beneficios_categorias[colunas]), digits = 2, caption = "Benefícios Capturados em Melhor Uso dos Recursos.")
 
 ```
 
@@ -169,7 +173,7 @@ colunas_beneficios_intangiveis = c("BeneficioImagemContratacao",
 
 colunas = c(c("Cenario.y"), colunas_beneficios_intangiveis)
 
-knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
+knitr::kable(t(beneficios_categorias[colunas]), digits = 2, caption = "Benefícios Intangíveis.")
 
 ```
 
@@ -181,9 +185,9 @@ knitr::kable(t(beneficios_categorias[colunas]), digits = 2)
 Os gráficos que serão expostos a seguir apresentam como cada dimensão contribui para a geração da razão benefício-custo total. A partir destes, é possível visualizar a importância relativa de cada umas das categorias na Razão Benefício-Custo apresentado para cada iniciativa.
 
 ```{r echo=FALSE}
-
 iniciativas = as.vector(resultados$Inputs$Cenarios$Cenario[which(resultados$Inputs$Cenarios$Simular & !resultados$Inputs$Cenarios$CenarioASIS)])
 for (i in iniciativas) {
+  cat('\n')
   print(grafico_dbg_cbr_waterfall(resumo_categorias, iniciativa = i))
   cat('\n')
 }
@@ -203,7 +207,7 @@ A seguir são apresentados os logs de execução gerados pela calculadora.
 
 
 ```{r echo=FALSE}
-knitr::kable(oshcba.obter_log())
+knitr::kable(oshcba.obter_log(), caption = "Logs de Execução da Calculadora.")
 ```
 
 
@@ -212,63 +216,61 @@ knitr::kable(oshcba.obter_log())
 - **Configurações**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$Configs)
+knitr::kable(resultados$Inputs$Configs, caption = "Configurações.")
 ```
 
 - **Dados Projetados**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$DadosProjetados)
+knitr::kable(resultados$Inputs$DadosProjetados, caption = "Dados Projetados para as Simulações")
 ```
 
 - **Constantes**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$Constantes, digits = 2)
+knitr::kable(resultados$Inputs$Constantes, digits = 2, caption= "Variaveis Constantes.")
 ```
 
 - **Parâmetros**
 
-```{r echo=FALSE}
+```{r echo=FALSE, results='asis'}
 
-variaveis = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2")
+variaveis = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4", "Cenario")
+parametros = resultados$Inputs$Parametros[variaveis]
+cenarios = as.vector(unique(parametros$Cenario))
+colnames(parametros) = c("Variavel", "Distrib.", "P1", "P2", "P3", "P4", "Inic.")
+#knitr::kable(parametros, digits = 3)
 
-knitr::kable(resultados$Inputs$Parametros[variaveis], digits = 4)
+for (c in cenarios) {
+  print(kable(parametros[which(parametros$Inic. == c), 1:6],digits = 3, caption = paste("Parametros - ", c)))
+}
+
+
+#kable(parametros, format = "latex", booktabs = T)  %>% kable_styling(font_size = 7)
+#knitr::kable(parametros, "latex", booktabs = T) %>% 
+
 ```
 
-- **Cenários**
+- **Iniciativas**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$Cenarios)
+knitr::kable(resultados$Inputs$Cenarios, caption = "Iniciativas Simuladas")
 ```
 
 - **Custos**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$Custos)
+knitr::kable(resultados$Inputs$Custos, caption = "Custos das Iniciativas")
 ```
 
 - **Módulos Selecionados**
 
 ```{r echo=FALSE}
-knitr::kable(resultados$Inputs$Modulos)
+knitr::kable(resultados$Inputs$Modulos, caption = "Módulos Selecionados")
 ```
 
 - **Histórico FAP**
 
 ```{r echo=FALSE}
-knitr::kable(t(resultados$Inputs$HistoricoFAP))
+knitr::kable(t(resultados$Inputs$HistoricoFAP), caption = "Dados dos dois últios anos de Histórico do FAP considerado.")
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-

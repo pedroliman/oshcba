@@ -78,7 +78,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
 
 
   # Verificando se a distribuição informada existe
-  distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_percentual_eventos", "poisson")
+  distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_perc", "poisson")
 
   if(!distribuicao %in% distribuicoes_possiveis){
     oshcba.parar_execucao(paste("Dados Inconsistentes: A distribuicao", distribuicao, "está incorreta. Confira os parâmetros informados."))
@@ -94,7 +94,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    #O Lâmbda informado é para a população de funcionários "como um todo".
                    #O número de funcionários mantém-se constante.
                    #Esta opção só deve ser usada para os parâmetros que começam com Pev"
-                   "poisson_percentual_eventos" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/funcionarios_base,
+                   "poisson_perc" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)/funcionarios_base,
 
                    # A poisson Pura não realiza normalização segundo o número de funcionários.
                    "poisson" = mc2d::mcstoc(func = rpois,lambda=parametro1, seed = seed)

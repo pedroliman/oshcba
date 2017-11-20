@@ -436,7 +436,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   
   # Definindo distribuicoes:
   
-  distribuicoes_parametros = c("normal", "normaltruncada", "poisson_percentual_eventos", "triangular", "poisson")
+  distribuicoes_parametros = c("normal", "normaltruncada", "poisson_perc", "triangular", "poisson")
   
   
   # Nomes dos Objetos dentro dos lists de cada iniciativa: Obs: O As IS é diferente dos demais.
@@ -643,7 +643,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         if(variavel %in% rownames(baseline)) {
           
         # Para a poisson percentual eventos, é necessário usar um valor distinto de variável  
-          if(distribuicao_da_variavel == "poisson_percentual_eventos") {
+          if(distribuicao_da_variavel == "poisson_perc") {
             # Neste caso, é necessário usar o valor da Variavel como "Nev"
             nome_variavel_eventos = gsub("Pev", "Nev", variavel)
             baseline[nome_variavel_eventos,]
@@ -792,7 +792,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         
         # Se a distribuicao é posson ou possion percentual
         
-        if(distribuicao_da_variavel == "poisson" | distribuicao_da_variavel == "poisson_percentual_eventos") {
+        if(distribuicao_da_variavel == "poisson" | distribuicao_da_variavel == "poisson_perc") {
           
           # Então será usada a variavel usual da distribuicao arbitrada.
           parametros_obtidos = obter_parametros_poisson(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas, df_variaveis_observadas, distribuicao_da_variavel, baseline, variavel_arbitrada)

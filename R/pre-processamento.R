@@ -170,7 +170,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
   parametros_inputs = inputs$Parametros
 
   # Verificando se todas as distribuicoes informadas estão dentre as distribuicoes possiveis
-  distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_percentual_eventos", "poisson")
+  distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_perc", "poisson")
   n_parametros_exigidos = c(2,4,2,3,1,1)
 
 
