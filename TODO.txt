@@ -3,6 +3,9 @@
 template de dados ajustado (colunas de cenários).
 
 
+- Eventos Arbitrados estão usando dados do baseline, mesmo que tenham sido arbitrados.
+
+
 
 
 3) Remover da entrada de dados (principalmente parâmetros) as variáveis que são inputs para funções que não serão calculadas (dessa maneira há mais uma garantia que a calculadora não irá parar por funções desnecessárias.

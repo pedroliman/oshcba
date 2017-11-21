@@ -91,15 +91,11 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   
   oshcba.adicionar_log("### Iniciando Importação de Dados Tratados.")
   
-  
   # Carregar Template de dados
   template_dados = carregar_template_dados(arquivo_template = arquivo_template, abas_a_ler = abas_a_ler, nomes_inputs = nomes_inputs)
   
-  
   # Obter Constantes
   constantes = obter_constantes(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados)
-  
-  
   
   ##### Obter Configurações ####
   oshcba.adicionar_log("Interface de Dados: Configurações")
@@ -144,11 +140,8 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
     )
   )
   
-  
   # Verificar NAs:
   cenarios = verificar_nas_e_substituir(cenarios)
-  
-  
   
   # Obter cenario AS IS:
   cenario_as_is = as.character(cenarios$Cenario[which(cenarios$CenarioASIS)])
@@ -331,7 +324,7 @@ obter_constantes = function(template_dados, abas_a_ler, nomes_inputs, list_dados
     if (variavel %in% list_dados_tratados$DadosArbitrados) {
       # Neste caso, usar o dado arbitrado.
       #print(paste(variavel, "DadosArbitrados"))
-      linha_dado_arbitrado = which(list_dados_tratados$DadosArbitrados$VarModelName == variavel)
+      linha_dado_arbitrado = which(rownames(list_dados_tratados$DadosArbitrados) == variavel)
       Constantes[linha_constantes, "Valor"] = list_dados_tratados$DadosArbitrados[linha_dado_arbitrado, "Usual"]
       
     } else if (variavel %in% names(list_dados_tratados$DadosObservados)) {
@@ -528,14 +521,14 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   }
   
   obter_minimo_abitrado_asis = function(dataframe, variavel) {
-    linha_dado_arbitrado = which(dataframe$VarModelName == variavel)
+    linha_dado_arbitrado = which(rownames(dataframe) == variavel)
     v = dataframe[variavel, "Mínimo"]
     verificar_se_e_numerico(variavel, valor = v)
     v
   }
   
   obter_maximo_abitrado_asis = function(dataframe, variavel) {
-    linha_dado_arbitrado = which(dataframe$VarModelName == variavel)
+    linha_dado_arbitrado = which(rownames(dataframe) == variavel)
     v = dataframe[variavel, "Máximo"]
     verificar_se_e_numerico(variavel, valor = v)
     v
@@ -642,8 +635,16 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       
       taxa = if(cenarios_e_as_is[n_cenario]) {
         
-        if(variavel %in% rownames(baseline)) {
+        # Verificar se variável é observada ou arbitrada
+        if(variavel_arbitrada){
           
+          obter_usual_abitrado_asis(df_variaveis_arbitradas, variavel = variavel) 
+          
+        } else {
+        
+        # Se a variável não é abritrada, então ela pode estar no Baseline, ou ser uma variável que não está no Baseline.
+        if(variavel %in% rownames(baseline)) {
+        
         # Para a poisson percentual eventos, é necessário usar um valor distinto de variável  
           if(distribuicao_da_variavel == "poisson_perc") {
             # Neste caso, é necessário usar o valor da Variavel como "Nev"
@@ -656,11 +657,6 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
           }
           
         } else {
-          
-          # Verificar se variável é observada ou arbitrada
-          if(variavel_arbitrada){
-            obter_usual_abitrado_asis(df_variaveis_arbitradas, variavel = variavel)  
-          } else {
             obter_usual_observado_asis(df_variaveis_observadas, variavel)
           }
           
@@ -668,7 +664,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         
       } else {
         
-         # Verificar se variável é observada ou arbitrada
+         # Se o cenário não é AS IS, o Baseline não precisa ser consultado.
         if(variavel_arbitrada) {
           obter_usual_abitrado_iniciativa(df_variaveis_arbitradas, variavel = variavel)  
         } else {
@@ -714,34 +710,38 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     
     for(variavel in variaveis_parametros_base) {
       
-      # Aqui dentro as variaveis serao definidas
-      
-      # if(variavel = "DespesasSeguroPatrimonial"){
-      #   browser()
-      # }
-      
       # Verificando se esta variavel é arbitrada
       variavel_arbitrada = if(cenarios_e_as_is[n_cenario]) {
         # Testar variavel arbitrada no cenario as is
-        linha_df_variaveis_arbitradas_variavel = which(df_variaveis_arbitradas$VarModelName == variavel)
+        linha_df_variaveis_arbitradas_variavel = which(rownames(df_variaveis_arbitradas) == variavel)
         
         #Verificar se a variável existe no AS IS
         valor_usual = df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]
         
-        is.numeric(valor_usual) & length(valor_usual) > 0
+        # Verificando se o valor usual realmente não é nulo, não é NA, é numérico e tem um valor.
+        decisao = !is.null(valor_usual) & !is.na(valor_usual) & is.numeric(valor_usual) & (length(valor_usual) > 0)
         
+        # Se a decisao não é verdadeira, ela tem que ser obrigatóriamente falsa (e não um valor lógico vazio).
         
-        # is.null(df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]) | is.na(is.null(df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]))
+        #### continuar daqui ####
+        if((decisao == TRUE)){
+          decisao = FALSE
+        }
+        decisao
         
       } else {
         # Testar se a variável é arbitrada no cenario Iniciativa
         valor_usual = df_variaveis_arbitradas[1,variavel]
         
-        is.numeric(valor_usual) & length(valor_usual) > 0
+        # Verificando se o valor usual realmente não é nulo, não é NA, é numérico e tem um valor.
+        !is.null(valor_usual) & !is.na(valor_usual) & is.numeric(valor_usual) & (length(valor_usual) > 0)
         
-        #is.null(df_variaveis_arbitradas[1,variavel]) | is.na(is.null(df_variaveis_arbitradas[1,variavel]))
+        # Se a decisao não é verdadeira, ela tem que ser obrigatóriamente falsa (e não um valor lógico vazio).
+        if(!(decisao == TRUE)){
+          decisao = FALSE
+        }
+        decisao
       }
-      
       
       linha_parametro = which(parametros$NomeVariavel == variavel)
       
@@ -749,10 +749,6 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       
       
       # Só muda a variável se ela for diferente por iniciativa OU se for o cenario as is
-      
-      # if(variavel == "DespesaExposicaoMulta1") {
-      #   browser()
-      # }
       
       parametros[linha_parametro,]
       

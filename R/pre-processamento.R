@@ -29,9 +29,10 @@ verificar_inputs = function(inputs) {
     oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Custos, existem dados em branco."))
   }
 
-  if (any(is.na(inputs$Cenarios))) {
-    oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
-  }
+  # É provável que esta aba tenha dados em branco porque as abas tem
+  # if (any(is.na(inputs$Cenarios))) {
+  #   oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
+  # }
 
   if (any(is.na(inputs$DadosProjetados))) {
     oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Dados Projetados, existem dados em branco."))
@@ -253,9 +254,9 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
 
       # Ordem das variaveis minimo < media < maximo
 
-      minimo_e_menor = all(minimo < moda)
+      minimo_e_menor = all(minimo <= moda)
 
-      maximo_e_maior = all(moda < maximo)
+      maximo_e_maior = all(moda <= maximo)
 
       # O máximo tem que ser maior que o mínimo e a média
       if (!all(minimo_e_menor, maximo_e_maior)){
