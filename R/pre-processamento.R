@@ -213,9 +213,9 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
 
       # Ordem das variaveis minimo < media < maximo
 
-      minimo_e_menor = all(minimo < media)
+      minimo_e_menor = all(minimo <= media)
 
-      maximo_e_maior = all(media < maximo)
+      maximo_e_maior = all(media <= maximo)
 
       # O máximo tem que ser maior que o mínimo e a média
       if (!all(minimo_e_menor, maximo_e_maior)){

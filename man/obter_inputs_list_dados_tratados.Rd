@@ -4,14 +4,15 @@
 \alias{obter_inputs_list_dados_tratados}
 \title{obter_inputs_list_dados_tratados}
 \usage{
-obter_inputs_list_dados_tratados(list_dados_tratados, arquivo_template,
+obter_inputs_list_dados_tratados(arquivo_template,
+  list_dados_tratados = gerar_list_dados_tratados(),
   abas_a_ler = oshcba_options$abas_a_ler,
   nomes_inputs = oshcba_options$nomes_inputs)
 }
 \arguments{
-\item{list_dados_tratados}{list com os dados tratados}
-
 \item{arquivo_template}{caminho para arquivo de dados a ser usado como template}
+
+\item{list_dados_tratados}{list com os dados tratados}
 
 \item{abas_a_ler}{abas a ler}
 

@@ -15,7 +15,18 @@ carregar_template_dados = function(arquivo_template = "./tests/testthat/Dados.xl
 }
 
 # Esta função gera uma lista com os dados tratados a partir dos objetos presentes no ambiente global.
+#' gerar_list_dados_tratados
+#'
+#' Esta função obtém do ambiente global uma série de objetos disponibilizados pelas rotinas de tratamento de dados, e retorna um objeto list com estes dados organizados de modo adequado para a interface de dados.
+#'
+#' @return list de dados tratados no formato adequado para a função de interface de dados.
+#' @export
 gerar_list_dados_tratados = function() {
+  
+  # Se o log não foi incializado, inicializar o log.
+  if(!exists("oshcba.log_calculadora")){
+    oshcba.iniciar_log()
+  }
   
   dadostratados = tryCatch(
     {
@@ -718,28 +729,26 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         #Verificar se a variável existe no AS IS
         valor_usual = df_variaveis_arbitradas[linha_df_variaveis_arbitradas_variavel,"Usual"]
         
-        # Verificando se o valor usual realmente não é nulo, não é NA, é numérico e tem um valor.
-        decisao = !is.null(valor_usual) & !is.na(valor_usual) & is.numeric(valor_usual) & (length(valor_usual) > 0)
+        # browser()
+        
+        # Verificando se o tamanho é maior do que zero - Esta verificação é mais robusta
+        if((length(valor_usual) > 0)) {
+          decisao = !is.na(valor_usual) & is.numeric(valor_usual)
+        } else {decisao = FALSE}
         
         # Se a decisao não é verdadeira, ela tem que ser obrigatóriamente falsa (e não um valor lógico vazio).
-        
-        #### continuar daqui ####
-        if((decisao == TRUE)){
-          decisao = FALSE
-        }
         decisao
         
       } else {
         # Testar se a variável é arbitrada no cenario Iniciativa
         valor_usual = df_variaveis_arbitradas[1,variavel]
         
-        # Verificando se o valor usual realmente não é nulo, não é NA, é numérico e tem um valor.
-        !is.null(valor_usual) & !is.na(valor_usual) & is.numeric(valor_usual) & (length(valor_usual) > 0)
+        # Verificando se o tamanho é maior do que zero - Esta verificação é mais robusta
+        if((length(valor_usual) > 0)) {
+          decisao = !is.na(valor_usual) & is.numeric(valor_usual)
+        } else {decisao = FALSE}
         
         # Se a decisao não é verdadeira, ela tem que ser obrigatóriamente falsa (e não um valor lógico vazio).
-        if(!(decisao == TRUE)){
-          decisao = FALSE
-        }
         decisao
       }
       
