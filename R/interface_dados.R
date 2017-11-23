@@ -468,7 +468,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   # Criar funcoes para escrever parâmetros para cada uma das distribuicoes
   
   escrever_parametros_normal = function(vetor_parametros_originais, media, desvio) {
-    vetor_parametro = c(media, desvio)
+    vetor_parametro = c(media, desvio, 0, 0)
     vetor_parametro
   }
   
@@ -480,22 +480,20 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   
   escrever_parametros_poisson_percentual_eventos = function(vetor_parametros_originais, taxa) {
     # Neste caso mantém-se o mínimo e máximo
-    vetor_parametro = c(taxa, NA, NA, NA)
+    vetor_parametro = c(taxa, 0, 0, 0)
     vetor_parametro
   }
   
   escrever_parametros_triangular = function(vetor_parametros_originais, minimo, usual, maximo) {
     # Neste caso mantém-se o mínimo e máximo
-    vetor_parametro = c(minimo, usual, maximo, NA)
-    
-    
+    vetor_parametro = c(minimo, usual, maximo, 0)
     
     vetor_parametro
   }
   
   escrever_parametros_poisson = function(vetor_parametros_originais, taxa) {
     # Neste caso mantém-se o mínimo e máximo
-    vetor_parametro = c(taxa, NA, NA, NA)
+    vetor_parametro = c(taxa, 0, 0, 0)
     vetor_parametro
   }
   
