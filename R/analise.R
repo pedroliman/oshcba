@@ -11,13 +11,13 @@ resumo_cba_por_iniciativa = function(resultados_cbr){
   resultados_cbr$Cenario.y = as.factor(resultados_cbr$Cenario.y)
   resultados_cbr %>%
     dplyr::group_by(Cenario.y) %>% dplyr::summarise(
-      LimiteInferiorCBR = quantile(RazaoBeneficioCusto, probs = 0.025),
-      MediaCBR = mean(RazaoBeneficioCusto),
-      LimiteSuperiorCBR = quantile(RazaoBeneficioCusto, probs = 0.975),
-      ProbCBRMaior1 = mean((RazaoBeneficioCusto > 1)*1),
-      LimiteInferiorBeneficio = quantile(BeneficioTotalCBR, probs = 0.025),
-      MediaBeneficio = mean(BeneficioTotalCBR),
-      LimiteSuperiorBeneficio = quantile(BeneficioTotalCBR, probs = 0.975),
+      Media_RBC = mean(RazaoBeneficioCusto),
+      Limite_Inferior_RBC = quantile(RazaoBeneficioCusto, probs = 0.025),
+      Limite_Superior_RBC = quantile(RazaoBeneficioCusto, probs = 0.975),
+      Prob_RCB_Maior1 = mean((RazaoBeneficioCusto > 1)*1),
+      Media_Beneficio = mean(BeneficioTotalCBR),
+      Limite_Inferior_Beneficio = quantile(BeneficioTotalCBR, probs = 0.025),
+      Limite_Superior_Beneficio = quantile(BeneficioTotalCBR, probs = 0.975),
       Custo = mean(CustoTotalCBR)
                                                     )
 }

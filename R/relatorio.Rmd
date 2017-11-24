@@ -67,7 +67,7 @@ Nesta seção serão apresentados os valores obtidos para o conjunto de benefíc
 
 ## Resultados Gerais - Resumo Por Iniciativa
 
-A seguir é apresentado o resultado geral desta análise por iniciativa.
+A seguir é apresentado o resultado geral da analise de custos e benefícios por iniciativa. A linha "Média_RBC" representa o valor esperado da razão benefício custo de cada uma das iniciativas. Desta maneira, para cada real investido na iniciativa em questão, espera-se que serão retornados o número de reais indicados nesta variável como benefícios,
 
 ```{r echo=FALSE}
 
@@ -77,6 +77,7 @@ knitr::kable(t(resumo_iniciativas), digits = 3, caption = "Estatísticas da Aná
 
 ```
 
+Os limites superiores e inferiores representam um intervalo de confiança de 95% para o retorno, e a variável "Prob_RCB_Maior1" apresenta a probabilidade do investimento retornar mais benefícios monetários do que o investimento realizado na iniciativa. Em seguida, a tabela apresenta o benefício médio em reais atribuído a iniciativa, bem como o seu respectivo intervalo de confiança. Finalmente, a tabela apresenta o custo total da iniciativa. Todos os custos e benefícios são apresentados em unidades monetárias ajustadas a valor presente, usando a taxa de desconto informada no apêndice.
 
 ### Reduções Fiscais
 
