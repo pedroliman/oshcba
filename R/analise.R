@@ -35,6 +35,10 @@ resumo_cba_por_categorias = function(resultados_cbr){
     dplyr::select(starts_with("Benef"), ends_with("CBR"), ends_with("Custo"))
 
   medias_cbr_por_iniciativa = resultados_cbr_analisar %>% dplyr::summarise_all(funs(mean))
+  
+  medias_cbr_por_iniciativa = as.data.frame(medias_cbr_por_iniciativa)
+  
+  medias_cbr_por_iniciativa = data.frame(lapply(medias_cbr_por_iniciativa, function(y) if(is.numeric(y)) round(y, 2) else y))
 
   cbr_por_categoria = medias_cbr_por_iniciativa %>% dplyr::group_by(Cenario.y) %>% dplyr::select(starts_with("Benef"), -BeneficioTotalCBR)
   cbr_por_categoria[,2:length(cbr_por_categoria)] = cbr_por_categoria[,2:length(cbr_por_categoria)] / medias_cbr_por_iniciativa$CustoTotalCBR
@@ -102,7 +106,7 @@ grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
 
     p<-ggplot(Final_2, aes(dimensoes, fill = tipo)) + geom_rect(aes(x = dimensoes,xmin = id - 0.45,
                                                                     xmax = id + 0.45, ymin = end,ymax = start))+
-      theme(axis.text.x = element_text(angle=90))+ theme(legend.position="none")
+      theme(axis.text.x = element_text(angle=90))+ theme(legend.position="none") + ggtitle(paste(iniciativa), "Razão benefício custo por categorias.")
 
 
   }

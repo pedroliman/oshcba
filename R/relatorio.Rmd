@@ -1,21 +1,25 @@
 ---
-title: "Relatório Calculadora SST | FPS"
-author: "Análise de Custos e Benefícios de Iniciativas em SST e FPS."
+title: "Calculadora Sistêmica da Razão Benefício-Custo de Iniciativas em FPS e SST"
+author: "SESI/RS e GMAP | UNISINOS"
+abstract: "Este documento apresenta os resultados oriundos da aplicação da Calculadora Sistêmica do Benefício-Custo em FPS e SST do SESI. Sendo assim, na primeira seção do documento são apresentados os dados gerais da empresa, bem como os detalhamentos de como os dados da situação atual e das iniciativas foram coletados. Na segunda seção são apresentados os resultados desta aplicação, com foco nos valores que foram obtidos para cada benefício avaliado, os resultados por iniciativa. Estes resultados são ilustrados, ainda, por meio de gráficos específicos. Por fim, são expostos os registros para reprodutibilidade dos cálculos na seção de Apêndice."
 output:
   pdf_document:
-    latex_engine: xelatex
     number_sections: yes
     toc: yes
   word_document:
     toc: yes
   html_document:
     toc: yes
+header-includes:
+   - \renewcommand{\contentsname}{Índice}
+   - \renewcommand{\abstractname}{Resumo}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(oshcba)
 library(knitr)
+
 # resultados = simular_cba(ArquivoInputs = inputs, tipo_input = "list", verificar_inputs = TRUE)
 # resultados = simular_cba("D:/dev/oshcba/tests/testthat/Dados.xlsx")
 ```
@@ -26,15 +30,15 @@ library(knitr)
 - **Participantes SESI**: Iuri Forte, Júlia Schenkel, Fabiane Bublitz
 
 ## A Empresa
-A Xalingo Brinquedos é uma empresa de Santa Cruz do Sul – RS, que se dedica à fabricação de jogos e brinquedos de plástico e madeira. A Xalingo é uma empresa que se preocupa constantemente com a sustentabilidade, demonstrando isto por meio de ações em toda a sua produção. Além disso, há uma preocupação constante com o bem-estar de seus colaboradores, o que se reflete em ações voltadas à educação, esporte, saúde, entre outros. Destaca-se que a coleta de dados históricos na empresa e, também, a coleta de informações relativas às iniciativas foram conduzidas em 13 e 14 de novembro. 
+A Xalingo Brinquedos é uma empresa de Santa Cruz do Sul – RS, que se dedica à fabricação de jogos e brinquedos de plástico e madeira. A Xalingo é uma empresa que se preocupa constantemente com a sustentabilidade, demonstrando isto por meio de ações em toda a sua produção. Além disso, há uma preocupação constante com o bem-estar de seus colaboradores, o que se reflete em ações voltadas à educação, esporte, saúde, entre outros (informações extraídas do site da empresa). Destaca-se que a coleta de dados históricos na empresa e, também, a coleta de informações relativas às iniciativas foram conduzidas em 13 e 14 de novembro. 
 
 
-## Coleta de Dados Históricos
+## Coleta de Dados da Situação Atual - AS IS
 Os dados foram coletados utilizando o template do Excel destinado para tal atividade. A relação das variáveis coletadas/arbitradas estão disponíveis nos apêndices.  Os dados que não estavam disponíveis (falta de histórico ou controle ainda não realizado na empresa), foram arbitrados com o apoio do grupo, baseado na experiência dos participantes da Xalingo.
 
 
 ## Iniciativas Avaliadas
-Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo da calculadora. As iniciativas apresentadas pela empresa BRS contemplam:
+Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo da calculadora. As iniciativas apresentadas pela empresa contemplam:
 
 - **Iniciativa 1 - Plataforma para Trabalho em Altura.** Esta iniciativa prevê a aquisição de uma plataforma para realização de trabalho em altura (PTA). Estas atividades em altura contemplam, por exemplo, manutenções, troca de lâmpadas, inventário, cabeamento, etc. Além da aquisição da plataforma em si, os trabalhadores precisam receber capacitação específica para seu manuseio. Atualmente estas atividades de trabalho em altura estão inadequadas do ponto de vista das Normas Regulamentadores (NR-11), aumentando a exposição à multas e risco de acidentes. Além disso, demandam um funcionário a mais para realização da atividade (2 eletricistas por atividade).
 
@@ -182,7 +186,7 @@ knitr::kable(t(beneficios_categorias[colunas]), digits = 2, caption = "Benefíci
 
 ## Gráficos por Iniciativa
 
-Os gráficos que serão expostos a seguir apresentam como cada dimensão contribui para a geração da razão benefício-custo total. A partir destes, é possível visualizar a importância relativa de cada umas das categorias na Razão Benefício-Custo apresentado para cada iniciativa.
+Os gráficos que serão expostos a seguir apresentam como cada dimensão contribui para a geração da razão benefício-custo total. A partir destes, é possível visualizar a importância relativa de cada umas das categorias na Razão Benefício-Custo apresentado para cada iniciativa. Tons de azul mais escuros representam categorias de benefícios mais firmes, enquanto categorias com tons menos 
 
 ```{r echo=FALSE}
 iniciativas = as.vector(resultados$Inputs$Cenarios$Cenario[which(resultados$Inputs$Cenarios$Simular & !resultados$Inputs$Cenarios$CenarioASIS)])
@@ -193,13 +197,27 @@ for (i in iniciativas) {
 }
 ```
 
-### Observação da Variabilidade das Iniciativas:
+### Variabilidade da Razão Benefício-Custo das Iniciativas
+
+O gráfico a seguir apresenta uma síntese da variabilidade da razão benefício custo de cada uma das iniciativas. Os elementos dos gráficos tem os seguintes significados:
+
+- **Quartil 1 (Q1) (limite inferior do retângulo)**: Valor da razão benefício custo que é maior do que 25 % dos casos simulados.
+
+- **Mediana (linha horizontal dentro do retângulo)**: Valor da razão benefício custo que é maior do que 50 % dos casos simulados.
+
+- **Quartil 3 (limite superior do retângulo) (Q3)**: Valor da razão benefício custo que é maior do que 75 % dos casos simulados.
+
+- **Ponta superior da linha vertical**: Extende-se ao valor de $Q3+1.5*(Q3 -Q1)$. Representa observações da razão benefício-custo não consideradas como outliers.
+
+- **Ponta inferior da linha vertical**: Extende-se ao valor de $Q1-1.5*(Q3-Q1)$. Representa observações da razão benefício-custo não consideradas como outliers.
+
+- **Pontos identificados individualmente**: Casos simulados considerados como outliers. São considerados outliers pontos que estejam acima ou abaixo das seguintes fórmulas: $x< Q1-1.5*(Q3-Q1) \ ; x > Q3+1.5*(Q3 -Q1)$
 
 ```{r echo=FALSE}
 grafico_box_plot_por_iniciativa(resultados$Resultados_CBR)
 ```
 
-# Apêndice - Registros para a Reprodutibilidade dos Calculos
+# Apêndice - Registros para a Reprodutibilidade dos Cálculos
 
 ### Logs
 
