@@ -8,18 +8,6 @@ rm(oshcba.log_calculadora)
 
 list_inputs = oshcba::obter_inputs_list_dados_tratados()
 
-variaveis_a_dividir = c("Parametro1", "Parametro2", "Parametro3")
-
-list_inputs$Parametros[which(list_inputs$Parametros$NomeVariavel == "Pev_Afmenor15_DoenOcup"),variaveis_a_dividir]
-
-# Ajustar Inputs Manualmente
-
-# Código para Corrigir temporáriamente os Parametros triangulares incorretos (Iniciativas)
-list_inputs$Parametros[which(list_inputs$Parametros$NomeVariavel == "Pev_Afmenor15_DoenOcup" & list_inputs$Parametros$Cenario != "ASIS"),variaveis_a_dividir] = list_inputs$Parametros[which(list_inputs$Parametros$NomeVariavel == "Pev_Afmenor15_DoenOcup" & list_inputs$Parametros$Cenario != "ASIS"),variaveis_a_dividir] / 508.25
-
-list_inputs$Parametros[which(list_inputs$Parametros$NomeVariavel == "Pev_Afmenor15_DoenOcup"),variaveis_a_dividir]
-
-
 # Desligando módulos manualmente:
 verificar_inputs(list_inputs)
 
