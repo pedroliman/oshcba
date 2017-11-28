@@ -20,7 +20,7 @@ library(pander)
 library(pastecs)
 
 #### Folders & Files
-PATH_DATAFILES = "./tests/testesmanuais"
+PATH_DATAFILES = "/home/pedro/Documents/dev/oshcba/tests/testesmanuais/"
 setwd(PATH_DATAFILES)
 
 ###############################################################
@@ -88,7 +88,14 @@ row.names(dataset_ASIS_param_Modulos) <- c("BeneficioFAP",
                                            "BeneficioImagemContratacao",
                                            "BeneficioClima")
 
+
+### Pnl, 28/11/17 - Garantindo que o vetor de parâmetros a simular é booleano.
+dataset_ASIS_param_Modulos[,1] = as.logical(dataset_ASIS_param_Modulos[,1])
+
 DB_ASIS_param_Modulos = data.frame(t(dataset_ASIS_param_Modulos))
+
+
+
 
 dataset_ASIS_param_taxadesconto = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada - v1.3 - Versão Completa.xlsx", 
                                                      range = "Parametrização!C46",
@@ -162,7 +169,7 @@ DB_ASIS_Simple_Outros_Observado_nrofunc = DB_ASIS_Simple_Outros_Observado[6,] # 
 
 ### 1. Ler Planilha de ASIS - Simplificado_FAP
 ### ------------------------------------------------------
-if(DB_ASIS_param_Modulos$BeneficioFAP == "VERDADEIRO"){ # Carregar somente se o usuário selecionou o módulo
+if(DB_ASIS_param_Modulos$BeneficioFAP == TRUE){ # Carregar somente se o usuário selecionou o módulo
 
 dataset_ASIS_Simp_FAP = data.frame(read_excel(path = "CBA_SESI_Planilha_Dados_Entrada - v1.3 - Versão Completa.xlsx", 
                                                         range = "Simplificado_FAP!E6:N19",
