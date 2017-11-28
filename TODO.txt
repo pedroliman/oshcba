@@ -1,5 +1,11 @@
 - Itens que Faltam para a Finalização da Calculadora:
 
+
+- Usar o modo de cálculo informado pelo felipe para "chamar" a calculadora;
+- Eliminar das constantes e parâmetros os parâmetros que não forem usados por funções exigidas pela calculadora;
+- Pensar em uma solução para a normal truncada quando o desvio é zero. Talvez valha a pena mudar para a normal "sem ser truncada", se o desvio for menor do que 0,000001, ou algo assim. Desta maneira o erro da normal truncada será minimizado.
+
+
 template de dados ajustado (colunas de cenários).
 
 

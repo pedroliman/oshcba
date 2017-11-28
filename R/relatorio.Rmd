@@ -1,7 +1,7 @@
 ---
 title: "Calculadora Sistêmica da Razão Benefício-Custo de Iniciativas em FPS e SST"
 author: "SESI/RS e GMAP | UNISINOS"
-abstract: "Este documento apresenta os resultados oriundos da aplicação da Calculadora Sistêmica do Benefício-Custo em FPS e SST do SESI. Sendo assim, na primeira seção do documento são apresentados os dados gerais da empresa, bem como os detalhamentos de como os dados da situação atual e das iniciativas foram coletados. Na segunda seção são apresentados os resultados desta aplicação, com foco nos valores que foram obtidos para cada benefício avaliado, os resultados por iniciativa. Estes resultados são ilustrados, ainda, por meio de gráficos específicos. Por fim, são expostos os registros para reprodutibilidade dos cálculos na seção de Apêndice."
+abstract: "Este documento apresenta os resultados oriundos da aplicação da Calculadora Sistêmica do Benefício-Custo em FPS e SST do SESI. Sendo assim, na primeira seção do documento são apresentados os dados gerais da empresa, bem como os detalhamentos de como os dados da situação atual e das iniciativas foram coletados. Na segunda seção são apresentados os resultados desta aplicação, com foco nos valores que foram obtidos para cada benefício avaliado, os resultados por iniciativa. Estes resultados são ilustrados, ainda, por meio de gráficos específicos. Por fim, são expostos os registros para reprodutibilidade dos cálculos na seção de Apêndice. Observação: Este documento trata-se de um template com dados fictícios, não correspondendo à um caso real de aplicação da calculadora."
 output:
   pdf_document:
     number_sections: yes
@@ -25,30 +25,26 @@ library(knitr)
 ```
 
 # Dados Gerais
-- **Empresa**: Xalingo, Santa Cruz do Sul
-- **Participantes Empresa**: Diego Lopes, Jucelaine e Luciano Bredow
-- **Participantes SESI**: Iuri Forte, Júlia Schenkel, Fabiane Bublitz
+- **Empresa**: Nome, Cidade
+- **Participantes Empresa**: Nomes dos Participantes da Empresa
+- **Participantes SESI**: Nomes dos Analistas do Sesi.
 
 ## A Empresa
-A Xalingo Brinquedos é uma empresa de Santa Cruz do Sul – RS, que se dedica à fabricação de jogos e brinquedos de plástico e madeira. A Xalingo é uma empresa que se preocupa constantemente com a sustentabilidade, demonstrando isto por meio de ações em toda a sua produção. Além disso, há uma preocupação constante com o bem-estar de seus colaboradores, o que se reflete em ações voltadas à educação, esporte, saúde, entre outros (informações extraídas do site da empresa). Destaca-se que a coleta de dados históricos na empresa e, também, a coleta de informações relativas às iniciativas foram conduzidas em 13 e 14 de novembro. 
+A [NOME DA EMPRESA] é uma empresa situada na cidade de [nome da cidade, que se dedica à [nome da atividade]. Parágrafo introdutório a respeito da empresa. 
 
 
 ## Coleta de Dados da Situação Atual - AS IS
-Os dados foram coletados utilizando o template do Excel destinado para tal atividade. A relação das variáveis coletadas/arbitradas estão disponíveis nos apêndices.  Os dados que não estavam disponíveis (falta de histórico ou controle ainda não realizado na empresa), foram arbitrados com o apoio do grupo, baseado na experiência dos participantes da Xalingo.
+Os dados foram coletados utilizando o template do Excel destinado para tal atividade. A relação das variáveis coletadas/arbitradas estão disponíveis nos apêndices.  Os dados que não estavam disponíveis (falta de histórico ou controle ainda não realizado na empresa), foram arbitrados com o apoio do grupo, baseado na experiência dos participantes da empresa.
 
 
 ## Iniciativas Avaliadas
 Foram avaliadas duas iniciativas durante o piloto de aplicação do protótipo da calculadora. As iniciativas apresentadas pela empresa contemplam:
 
-- **Iniciativa 1 - Plataforma para Trabalho em Altura.** Esta iniciativa prevê a aquisição de uma plataforma para realização de trabalho em altura (PTA). Estas atividades em altura contemplam, por exemplo, manutenções, troca de lâmpadas, inventário, cabeamento, etc. Além da aquisição da plataforma em si, os trabalhadores precisam receber capacitação específica para seu manuseio. Atualmente estas atividades de trabalho em altura estão inadequadas do ponto de vista das Normas Regulamentadores (NR-11), aumentando a exposição à multas e risco de acidentes. Além disso, demandam um funcionário a mais para realização da atividade (2 eletricistas por atividade).
+- **Iniciativa 1 - [Nome da Iniciativa].** Esta iniciativa contempla a [descrição da iniciativa].
 
+- **Iniciativa 2 - [Nome da Iniciativa].** Esta iniciativa contempla a [descrição da iniciativa].
 
-
-- **Iniciativa 2 - Sala de Modelagem.** Esta iniciativa prevê a aquisição de uma nova sala, bem como os equipamentos pertinentes para a modelagem. As atividades da sala de modelagem atualmente são realizadas em um pavilhão externo à empresa. O ambiente de trabalho está inadequado em termos de exaustão e ergonomia. Além disso, há um risco de multas em função da exaustão insuficiente (poeira química).
-
-
-- **Iniciativa 3 - Adequação das serras circulares à NR-12.** A adequação à NR-12 será feita no sentido de estabelecer barreiras físicas para proteção do trabalhador, além de ajustes na instalação elétrica, sensores, botões de emergência, etc. da serra circular. Esta adequação diminuirá significativamente o risco de multas neste equipamento, além de reduzir o risco de acidentes típicos com afastamentos maiores e menores do que 15 dias, ou até sem afastamento.
-
+- **Iniciativa 3 - [Nome da Iniciativa].** Esta iniciativa contempla a [descrição da iniciativa].
 
 Para cada iniciativa foram coletados dados referentes aos custos de sua implantação e manutenção, bem como foram estimadas as melhorias que poderão ser obtidas a partir da sua implementação. Estas estimativas foram feitas baseadas na probabilidade de redução dos eventos (afastamentos, óbito), redução de faltas, economias (savings) em produtividade, entre outros.
 
@@ -67,7 +63,7 @@ Nesta seção serão apresentados os valores obtidos para o conjunto de benefíc
 
 ## Resultados Gerais - Resumo Por Iniciativa
 
-A seguir é apresentado o resultado geral da analise de custos e benefícios por iniciativa. A linha "Média_RBC" representa o valor esperado da razão benefício custo de cada uma das iniciativas. Desta maneira, para cada real investido na iniciativa em questão, espera-se que serão retornados o número de reais indicados nesta variável como benefícios,
+A seguir é apresentado o resultado geral da analise de custos e benefícios por iniciativa. A linha "Média_RBC" representa o valor esperado da razão benefício custo de cada uma das iniciativas. Desta maneira, para cada real investido na iniciativa em questão, espera-se que serão retornados o número de reais indicados nesta variável como benefícios.
 
 ```{r echo=FALSE}
 
