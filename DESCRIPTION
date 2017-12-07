@@ -13,8 +13,6 @@ Imports:
     readxl,
     ggplot2,
     lhs,
-    shiny,
-    shinythemes,
     dplyr,
     purrr
 Depends:

@@ -21,5 +21,9 @@ list_inputs$Modulos$Calcular = !(list_inputs$Modulos$Modulo %in% modulos_a_desli
 # Onde a Distribuição for normaltruncada e o desvio for zero, usar a normal ao invés de normal truncada.
 
 resultados = simular_cba(ArquivoInputs = list_inputs , tipo_input = "list")
+
+
+
+
 rmarkdown::render("/home/pedro/Documents/dev/oshcba/R/relatorio.Rmd", encoding = "UTF-8")
   
