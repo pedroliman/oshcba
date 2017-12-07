@@ -83,7 +83,12 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
   if(!distribuicao %in% distribuicoes_possiveis){
     oshcba.parar_execucao(paste("Dados Inconsistentes: A distribuicao", distribuicao, "está incorreta. Confira os parâmetros informados."))
   }
-
+  
+  # Se a distribuicao é normal truncada, e o parâmetro 2 (desvio) é zero, "converter" para normal, pois não faz sentido truncar.
+  if((distribuicao == "normaltruncada") & (parametro2 == 0)) {
+    distribuicao = "normal"
+  }
+  
   amostra = switch(distribuicao,
                    "normal" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, seed = seed),
                    "normaltruncada" = mc2d::mcstoc(func = rnorm,mean=parametro1,sd=parametro2, rtrunc = TRUE, linf = parametro3, lsup = parametro4, seed = seed),
