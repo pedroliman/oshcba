@@ -71,7 +71,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
   # seed = 1000
 
 
-  # Verificando se distribuicao que veio é correta, ou é inconsistente:
+  # Verificando se distribuição que veio é correta, ou é inconsistente:
   if(length(distribuicao) == 0){
     oshcba.parar_execucao("Dados Inconsistentes: Confira se os parâmetros do modelo foram informados de modo consistente na aba Parametros.")
   }
@@ -84,7 +84,7 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
     oshcba.parar_execucao(paste("Dados Inconsistentes: A distribuicao", distribuicao, "está incorreta. Confira os parâmetros informados."))
   }
   
-  # Se a distribuicao é normal truncada, e o parâmetro 2 (desvio) é zero, "converter" para normal, pois não faz sentido truncar.
+  # Se a distribuição é normal truncada, e o parâmetro 2 (desvio) é zero, "converter" para normal, pois não faz sentido truncar.
   if((distribuicao == "normaltruncada") & (parametro2 == 0)) {
     distribuicao = "normal"
   }
@@ -106,11 +106,11 @@ obter_amostra = function(distribuicao,parametro1,parametro2,parametro3,parametro
                    )
 }
 
-#' Obter Cenarios
+#' Obter Cenários
 #'
 #' @param Inputs Objeto de Inputs (lista)
 #'
-#' @return cenarios
+#' @return cenários
 #' @export
 obter_cenarios = function(Inputs) {
   cenarios = dplyr::filter(Inputs$Cenarios, as.logical(Simular))
@@ -195,7 +195,7 @@ projetar_variaveis_deterministicas = function(dados_projetados, constantes) {
     dados_projetados[vetor_constantes[c]] = vetor_valores[c]
   }
 
-  # Retornar Dados Projetados com todas as informacoes
+  # Retornar Dados Projetados com todas as informações
   dados_projetados
 
 }
@@ -203,11 +203,11 @@ projetar_variaveis_deterministicas = function(dados_projetados, constantes) {
 
 
 
-#' Obter Parametros
+#' Obter Parâmetros
 #'
-#' @param Inputs Inputs Carregados com a funcao carregar_inputs()
+#' @param Inputs Inputs Carregados com a função carregar_inputs()
 #'
-#' @return Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
+#' @return Dataframe com parâmetros para simulação (incluindo parâmetros com distribuição e dados projetados).
 #' @export
 obter_parametros = function(Inputs, rep = 1000) {
   oshcba.adicionar_log("obter_parametros.R/obter_parametros: Iniciando Obtencao de Parametros: funcao obter_parametros(inputs).")
@@ -226,14 +226,14 @@ obter_parametros = function(Inputs, rep = 1000) {
   dados_projetados = projetar_variaveis_deterministicas(dados_projetados = Inputs$DadosProjetados, constantes = Inputs$Constantes)
 
 
-  # Unindo Parametros aos Dados Projetados
+  # Unindo Parâmetros aos Dados Projetados
   parametros = inner_join(parametros,dados_projetados,by="Ano")
 
   custos = select(Inputs$Custos,Cenario,Ano,CustoTotal)
   parametros = left_join(parametros,custos,by=c("Ano","Cenario"))
   oshcba.adicionar_log("obter_parametros.R/obter_parametros: Finalizando obtencao de parametros.")
 
-  # Ordenando o Df para o Calculo Iterativo
+  # Ordenando o Df para o Cálculo Iterativo
   parametros = dplyr::arrange(parametros, Cenario, Replicacao, Ano)
 
   return(parametros)
