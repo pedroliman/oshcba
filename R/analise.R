@@ -1,5 +1,3 @@
-
-
 #' resumo_cbr_por_iniciativa
 #'
 #' @param resultados_cbr data.frame com resultados por iniciativa (na coluna Cenario.y)
@@ -89,7 +87,7 @@ grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
 
     Final_2=subset(Final_2, Final_2[,k]!=0)
 
-    #n?o sei se ? ne
+   
     Final_2$id <- seq_along(Final_2[,k])
     #Final_2$type <- ifelse(Final_2[,k] > 0, "in", "total")
 
@@ -117,7 +115,7 @@ grafico_dbg_cbr_waterfall = function (resumo, iniciativa = "Iniciativa1") {
 #'
 #' @param resultados_cbr  dataframe com resultados formatados no modelo "CBR".
 #'
-#' @return grafico com cbr por iniciativa
+#' @return gráfico com cbr por iniciativa
 #' @export
 grafico_box_plot_por_iniciativa = function(resultados_cbr) {
   ggplot(resultados_cbr,aes(resultados_cbr$Cenario.y,resultados_cbr$RazaoBeneficioCusto)) + geom_boxplot() + theme(axis.title.y = element_blank(),axis.title.x=element_blank())
@@ -128,7 +126,7 @@ grafico_box_plot_por_iniciativa = function(resultados_cbr) {
 #'
 #' @param resultados_cbr dataframe com resultados formatados no modelo "CBR".
 #'
-#' @return dataframe com resumo do CBR por iniciativa e razao beneficio custo total
+#' @return dataframe com resumo do CBR por iniciativa e razão benefício custo total
 #' @export
 tabela_soma_razao_beneficio_custo = function(resultados_cbr) {
   resumo_cba_por_iniciativa(resultados_cbr = resultados_cbr) %>%
