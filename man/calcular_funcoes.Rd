@@ -2,22 +2,22 @@
 % Please edit documentation in R/simular.R
 \name{calcular_funcoes}
 \alias{calcular_funcoes}
-\title{Calcular Funcoes}
+\title{Calcular Funções}
 \usage{
 calcular_funcoes(parametros, inputs_funcoes, output_funcoes, funcoes)
 }
 \arguments{
-\item{parametros}{Dataframe de parametros a serem usados para o calculo}
+\item{parametros}{Dataframe de parâmetros a serem usados para o cálculo}
 
-\item{inputs_funcoes}{Dataframe de inputs por Funcao}
+\item{inputs_funcoes}{Dataframe de inputs por Função}
 
-\item{output_funcoes}{Dataframe de Outputs por Funcao}
+\item{output_funcoes}{Dataframe de Outputs por Função}
 
-\item{funcoes}{Vetor com o nome das Funcoes a serem calculadas}
+\item{funcoes}{Vetor com o nome das Funções a serem calculadas}
 }
 \value{
-Dataframe de resultados com as variaveis calculadas
+Dataframe de resultados com as variáveis calculadas
 }
 \description{
-Calcular Funcoes
+Calcular Funções
 }

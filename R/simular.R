@@ -1,10 +1,10 @@
 #' Simular CBA
 #'
-#' @param ArquivoInputs Arquivo de dados usado como Input (deve seguir um padrao especifico).
-#' @param modo Modo de simulacao "basico", "simplificado" ou "customizado".
-#' @param rep Numero de replicacoes (padrão 1000)
-#' @param tipo_input "excel" ou "list". A opcao list pode ser usada para chamar a funcao pelo R.
-#' @param output Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.
+#' @param ArquivoInputs Arquivo de dados usado como Input (deve seguir um padrão específico).
+#' @param modo Modo de simulacao "básico", "simplificado" ou "customizado".
+#' @param rep Número de replicações (padrão 1000)
+#' @param tipo_input "excel" ou "list". A opção list pode ser usada para chamar a função pelo R.
+#' @param output Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todas as variáveis de simulação.
 #' @return um list com os resultados.
 #' @export
 simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000, tipo_input = "excel", modo="customizado", output= "completo", verificar_inputs = FALSE) {
@@ -17,7 +17,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
   
   oshcba.adicionar_log("### Iniciando Simulação de Custos e Benefícios em SST e FPS.")
 
-  # Carregar dados internos da biblioteca - Inputs e Outputs de Funcoes
+  # Carregar dados internos da biblioteca - Inputs e Outputs de Funções
   data("funcoes_inputs_outputs")
 
 
@@ -41,7 +41,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
   }
 
 
-  # Se o tipo de input é excel, usaremos a funcao carregar inputs, caso contrário, passaremos ele diretamente para a verificação.
+  # Se o tipo de input é excel, usaremos a função carregar inputs, caso contrário, passaremos ele diretamente para a verificação.
   if(tipo_input == "excel"){
     inputs = carregar_inputs(ArquivoInputs, abas_a_ler = oshcba_options$abas_a_ler,
                              nomes_inputs = oshcba_options$nomes_inputs)
@@ -61,18 +61,18 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
   # Verificar Parâmetros antes de continuar
   verificar_parametros(parametros)
 
-  # Calculando Modulos de Beneficio - Observar que a Ordem das Ioeracoes
+  # Calculando Módulos de Benefício - Observar que a Ordem das Iterações
   # Importa
 
   oshcba.adicionar_log("simular: Iniciando Calculo dos Resultados do Modelo.")
 
 
-  # Criando Variáveis Financeiras que não existem nos parametros com valor igual a zero.
+  # Criando Variáveis Financeiras que não existem nos parâmetros com valor igual à zero.
   v_financeiras_nao_existem = oshcba_options$variaveis_a_descontar[!(oshcba_options$variaveis_a_descontar %in% names(parametros))]
   parametros[v_financeiras_nao_existem] = 0
 
 
-  # Calculando Funcoes Base
+  # Calculando Funções Base
   resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
                                 output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_base)
 
@@ -99,12 +99,12 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
     v_funcoes_calculadas = c(oshcba_options$v_funcoes_base, oshcba_options$v_funcoes_basicas, oshcba_options$v_funcoes_fap)
     v_funcoes_passiveis_calculo = oshcba_options$v_funcoes[!(oshcba_options$v_funcoes %in% v_funcoes_calculadas)]
 
-    # Funcoes a calcular informadas pelo usuário:
+    # Funções a calcular informadas pelo usuário:
 
     df.modulos_solicitados = subset(inputs$Modulos, subset = as.logical(Calcular))
     v_funcoes_solicitadas_usuario = as.vector(df.modulos_solicitados$Modulo)
 
-    # Obtendo Funcoes opcionais que devem ser calculadas
+    # Obtendo Funções opcionais que devem ser calculadas
     v_funcoes_opcionais_a_calcular = v_funcoes_passiveis_calculo[(v_funcoes_passiveis_calculo %in% v_funcoes_solicitadas_usuario)]
 
 
@@ -115,15 +115,15 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
 
   oshcba.adicionar_log("simular: Finalizando Calculo dos Resultados do Modelo.")
 
-  # Descontando Variaveis Monetarias
+  # Descontando Variáveis Monetárias
   resultados_descontados = descontar_fluxo_de_caixa(variaveis_a_descontar = oshcba_options$variaveis_a_descontar,
                                                     ano_inicial = inputs$Configs$AnoInicial, i = inputs$Configs$TaxaDeDesconto,
                                                     parametros = resultados, sufixo = oshcba_options$sufixo_vars_fc)
 
-  # Obtendo Cenarios
+  # Obtendo Cenários
   cenarios = obter_cenarios(inputs)
 
-  ## Calculando Variaveis do CBR
+  ## Calculando Variáveis do CBR
   resultados_CBR = calcular_cbr(resultados_descontados, cenarios)
 
   ## Definindo Lista Completa de Inputs, Options, ensemble e
@@ -148,7 +148,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
 calcular_cbr = function(resultados, cenarios) {
 
   oshcba.adicionar_log("calcular_cbr: Inciando Calculo da Razao Custo Beneficio.")
-  ### Sintetizando Resultados por Cenario e Replicacao
+  ### Sintetizando Resultados por Cenário e Replicação
   ## Lembrar:
   resultados_sintetizados = resultados %>% group_by(Cenario, Replicacao) %>%
     summarise(
@@ -218,7 +218,7 @@ calcular_cbr = function(resultados, cenarios) {
     BeneficioGanhoProdutividade = beneficio(Soma_GanhoProdutividadeDescontado.y, Soma_GanhoProdutividadeDescontado.x),
     BeneficioGanhoImagemReceita = beneficio(Soma_GanhoImagemReceitaDescontado.y, Soma_GanhoImagemReceitaDescontado.x),
     BeneficioSeguroPatrimonial = beneficio(Soma_DespesasSeguroPatrimonialDescontado.y, Soma_DespesasSeguroPatrimonialDescontado.x)
-    ) %>% ## Aqui entrariam outros beneficios
+    ) %>% ## Aqui entrariam outros benefícios
     mutate(BeneficioTotalCBR = BeneficioTurnover +
              BeneficioAbsenteismo +
              BeneficioMultas +
@@ -241,28 +241,28 @@ calcular_cbr = function(resultados, cenarios) {
              BeneficioSeguroPatrimonial) %>% mutate(RazaoBeneficioCusto = cbr(benefits = BeneficioTotalCBR,
                                                                                               costs = CustoTotalCBR))
 
-  ### Mantendo Apenas Variaveis uteis
+  ### Mantendo Apenas Variáveis úteis
 
   resultados_CBR = resultados_CBR %>% select(-Soma_CustoTotalDescontado.x, -Soma_CustoTotalDescontado.y)
   oshcba.adicionar_log("calcular_cbr: Finalizando Calculo da Razao Custo Beneficio.")
   return(resultados_CBR)
 }
 
-#' Calcular Funcoes
+#' Calcular Funções
 #'
-#' @param parametros Dataframe de parametros a serem usados para o calculo
-#' @param inputs_funcoes Dataframe de inputs por Funcao
-#' @param output_funcoes Dataframe de Outputs por Funcao
-#' @param funcoes Vetor com o nome das Funcoes a serem calculadas
+#' @param parametros Dataframe de parâmetros a serem usados para o cálculo
+#' @param inputs_funcoes Dataframe de inputs por Função
+#' @param output_funcoes Dataframe de Outputs por Função
+#' @param funcoes Vetor com o nome das Funções a serem calculadas
 #'
-#' @return Dataframe de resultados com as variaveis calculadas
+#' @return Dataframe de resultados com as variáveis calculadas
 #' @export
 #'
 calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
                             funcoes) {
   iteracoes = oshcba_options$iteracoes
   resultados = parametros
-  # Esta funcao calcula as demais funcoes
+  # Esta função calcula as demais funções
   for (i in 1:iteracoes) {
     for (f in funcoes) {
       v_inputs = inputs_funcoes %>% dplyr::filter(Funcao == f) %>%
@@ -270,15 +270,15 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
       v_outputs = output_funcoes %>% dplyr::filter(Funcao == f) %>%
         .$Outputs
 
-      # Verificando se vetores de inputs e outputs estao corretos
+      # Verificando se vetores de inputs e outputs estão corretos
       if (any(c(length(v_inputs) == 0, length(v_outputs) == 0))) {
         oshcba.adicionar_log(paste("calcular_funcoes: Lista de Inputs ou Outputs esta vazia: ",
                               f))
       } else {
-        # So executar a funcao se..  Todos os Inputs estao presentes:
+        # Só executar a função se..  Todos os Inputs estão presentes:
         if (all(v_inputs %in% colnames(resultados))) {
 
-          # TODO: E se nem Todos os Outputs estao presentes
+          # TODO: E se nem Todos os Outputs estão presentes
           if ((i == 1) | (!all(v_outputs %in% colnames(resultados)))) { # Se estou na primeira iteracao, ou se algum output não foi calculado.
             chamada_da_funcao = paste(f, "(resultados)", sep = "")
             resultados = eval(parse(text = chamada_da_funcao))

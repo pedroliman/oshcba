@@ -9,15 +9,15 @@ simular_cba(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000,
   verificar_inputs = FALSE)
 }
 \arguments{
-\item{ArquivoInputs}{Arquivo de dados usado como Input (deve seguir um padrao especifico).}
+\item{ArquivoInputs}{Arquivo de dados usado como Input (deve seguir um padrão específico).}
 
-\item{rep}{Numero de replicacoes (padrão 1000)}
+\item{rep}{Número de replicações (padrão 1000)}
 
-\item{tipo_input}{"excel" ou "list". A opcao list pode ser usada para chamar a funcao pelo R.}
+\item{tipo_input}{"excel" ou "list". A opção list pode ser usada para chamar a função pelo R.}
 
-\item{modo}{Modo de simulacao "basico", "simplificado" ou "customizado".}
+\item{modo}{Modo de simulacao "básico", "simplificado" ou "customizado".}
 
-\item{output}{Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todos as as variaveis de simulacao.}
+\item{output}{Tipo do output. ("completo" ou "simples"). O modo simples retorna apenas os resultados finais, enquanto o modo completo retorna todas as variáveis de simulação.}
 }
 \value{
 um list com os resultados.

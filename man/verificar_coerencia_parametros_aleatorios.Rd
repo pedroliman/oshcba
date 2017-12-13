@@ -10,7 +10,7 @@ verificar_coerencia_parametros_aleatorios(inputs)
 \item{inputs}{list de inputs lidos pelo modelo.}
 }
 \value{
-booleano informando se há inconsistência ou não nos parametros aleatorios
+booleano informando se há inconsistência ou não nos parâmetros aleatórios
 }
 \description{
 verificar_coerencia_parametros_aleatorios
