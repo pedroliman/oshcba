@@ -14,14 +14,14 @@ obter_parametros_template(template_dados, abas_a_ler, nomes_inputs,
 
 \item{list_dados_tratados}{list gerada pela rotina de tratamento de dados}
 
-\item{cenario_as_is}{character cenario as is}
+\item{cenario_as_is}{character cenário as is}
 
 \item{iniciativas_a_simular}{vetor de iniciativas a simular}
 
 \item{arquivo_template}{caminho do arquivo de template a usar}
 }
 \value{
-data.frame de parametros
+data.frame de parâmetros
 }
 \description{
 obter_parametros_template

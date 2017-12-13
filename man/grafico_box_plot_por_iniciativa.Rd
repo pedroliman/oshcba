@@ -10,7 +10,7 @@ grafico_box_plot_por_iniciativa(resultados_cbr)
 \item{resultados_cbr}{dataframe com resultados formatados no modelo "CBR".}
 }
 \value{
-grafico com cbr por iniciativa
+gráfico com cbr por iniciativa
 }
 \description{
 grafico_box_plot_por_iniciativa

@@ -10,7 +10,7 @@ tabela_soma_razao_beneficio_custo(resultados_cbr)
 \item{resultados_cbr}{dataframe com resultados formatados no modelo "CBR".}
 }
 \value{
-dataframe com resumo do CBR por iniciativa e razao beneficio custo total
+dataframe com resumo do CBR por iniciativa e razão benefício custo total
 }
 \description{
 tabela_soma_razao_beneficio_custo

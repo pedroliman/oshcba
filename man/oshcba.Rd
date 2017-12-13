@@ -4,14 +4,14 @@
 \name{oshcba}
 \alias{oshcba}
 \alias{oshcba-package}
-\title{oshcba: Um pacote para Analise de Custo Beneficio em Saude e Seguranca do Trabalho}
+\title{oshcba: Um pacote para Análise de Custo Benefício em Saúde e Segurança do Trabalho.}
 \description{
-Este Pacote contem funcoes necessarias para uma analise de custo e beneficio probabilistica.
+Este Pacote contém funções necessárias para uma análise de custo e benefício probabilística.
 }
-\section{Funcoes Disponiveis}{
+\section{Funções Disponíveis}{
 
 
-Diversas funcoes sao incluidas em cada um dos arquivos:
+Diversas funçoes são incluídas em cada um dos arquivos:
 Dados.R: carregar_inputs(),
 cba.R:
 simular.R:

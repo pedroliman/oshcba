@@ -7,7 +7,7 @@
 valor_presente(fc, t, i)
 }
 \arguments{
-\item{fc}{Fluxo de Caixa (numero, em valores monetarios)}
+\item{fc}{Fluxo de Caixa (número, em valores monetaários)}
 
 \item{t}{Tempo do fluxo de caixa.}
 

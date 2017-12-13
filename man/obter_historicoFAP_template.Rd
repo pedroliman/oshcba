@@ -8,20 +8,20 @@ obter_historicoFAP_template(template_dados, abas_a_ler, nomes_inputs,
   list_dados_tratados, cenario_as_is, iniciativas_a_simular)
 }
 \arguments{
-\item{abas_a_ler}{vetor com abas a lser}
+\item{abas_a_ler}{vetor com abas a ler}
 
 \item{nomes_inputs}{vetor com nomes de inputs}
 
 \item{list_dados_tratados}{list gerada pela rotina de tratamento de dados}
 
-\item{cenario_as_is}{character cenario as is}
+\item{cenario_as_is}{caractér cenário as is}
 
 \item{iniciativas_a_simular}{vetor de iniciativas a simular}
 
 \item{arquivo_template}{caminho do arquivo de template a usar}
 }
 \value{
-data.frame com dois anos de historico do FAP para a simulacao
+data.frame com dois anos de histórico do FAP para a simulação
 }
 \description{
 obter_historicoFAP_template

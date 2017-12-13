@@ -13,5 +13,5 @@ oshcba.parar_execucao(string, vetor_log = oshcba.log_calculadora,
 \item{vetor_log}{o vetor de log existente}
 }
 \description{
-Esta funcao pode ser usada para parar a execução da biblioteca salvando um arquivo com os logs na pasta atual.
+Esta função pode ser usada para parar a execução da biblioteca salvando um arquivo com os logs na pasta atual.
 }

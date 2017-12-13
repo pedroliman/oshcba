@@ -3,11 +3,11 @@
 \name{oshcba.iniciar_log}
 \alias{oshcba.iniciar_log}
 \title{oshcba.iniciar_log
-Esta funcao inicia o vetor de logs da calculadora.}
+Esta função inicia o vetor de logs da calculadora.}
 \usage{
 oshcba.iniciar_log()
 }
 \description{
 oshcba.iniciar_log
-Esta funcao inicia o vetor de logs da calculadora.
+Esta função inicia o vetor de logs da calculadora.
 }

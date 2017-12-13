@@ -2,19 +2,19 @@
 % Please edit documentation in R/cba.R
 \name{cbr}
 \alias{cbr}
-\title{Razao Beneficio Custo}
+\title{Razão Benefício Custo}
 \usage{
 cbr(costs, benefits)
 }
 \arguments{
-\item{costs}{Os Custos da Iniciativa em Valores Monetarios (numerico).}
+\item{costs}{Os Custos da Iniciativa em Valores Monetários (numérico).}
 
-\item{benefits}{O Beneficio em Valores Monetarios (numerico).}
+\item{benefits}{O Benefício em Valores Monetários (numérico).}
 }
 \value{
-Razao Beneficio Custo
+Razão Benefício Custo
 }
 \description{
-Esta funcao Calcula a razao beneficio custo
+Esta função Calcula a razão benefício custo
 }
 \keyword{cbr}

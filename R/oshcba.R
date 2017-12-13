@@ -1,10 +1,10 @@
-#' oshcba: Um pacote para Analise de Custo Beneficio em Saude e Seguranca do Trabalho
+#' oshcba: Um pacote para Análise de Custo Benefício em Saúde e Segurança do Trabalho.
 #'
-#' Este Pacote contem funcoes necessarias para uma analise de custo e beneficio probabilistica.
+#' Este Pacote contém funções necessárias para uma análise de custo e benefício probabilística.
 #' @author Pedro Nascimento de Lima
-#' @section Funcoes Disponiveis:
+#' @section Funções Disponíveis:
 #'
-#' Diversas funcoes sao incluidas em cada um dos arquivos:
+#' Diversas funçoes são incluídas em cada um dos arquivos:
 #' Dados.R: carregar_inputs(),
 #' cba.R:
 #' simular.R:
@@ -14,7 +14,7 @@
 #' @name oshcba
 NULL
 
-# Pacote de Simulacao Montecarlo
+# Pacote de Simulação Montecarlo
 #
 #
 # You can learn more about package authoring with RStudio at:

@@ -2,7 +2,7 @@
 % Please edit documentation in R/obter_parametros.R
 \name{obter_cenarios}
 \alias{obter_cenarios}
-\title{Obter Cenarios}
+\title{Obter Cenários}
 \usage{
 obter_cenarios(Inputs)
 }
@@ -10,8 +10,8 @@ obter_cenarios(Inputs)
 \item{Inputs}{Objeto de Inputs (lista)}
 }
 \value{
-cenarios
+cenários
 }
 \description{
-Obter Cenarios
+Obter Cenários
 }

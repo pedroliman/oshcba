@@ -2,16 +2,16 @@
 % Please edit documentation in R/obter_parametros.R
 \name{obter_parametros}
 \alias{obter_parametros}
-\title{Obter Parametros}
+\title{Obter Parâmetros}
 \usage{
 obter_parametros(Inputs, rep = 1000)
 }
 \arguments{
-\item{Inputs}{Inputs Carregados com a funcao carregar_inputs()}
+\item{Inputs}{Inputs Carregados com a função carregar_inputs()}
 }
 \value{
-Dataframe com parametros para simulacao (incluindo parametros com distribuicao e dados projetados).
+Dataframe com parâmetros para simulação (incluindo parâmetros com distribuição e dados projetados).
 }
 \description{
-Obter Parametros
+Obter Parâmetros
 }

@@ -8,15 +8,15 @@ descontar_fluxo_de_caixa(variaveis_a_descontar, ano_inicial, i, parametros,
   sufixo)
 }
 \arguments{
-\item{variaveis_a_descontar}{Vetor com nome de variaveis que terao o fluxo de caixa descontado}
+\item{variaveis_a_descontar}{Vetor com nome de variáveis que terão o fluxo de caixa descontado}
 
 \item{ano_inicial}{Número do Ano inicial que sera descontado}
 
 \item{i}{Taxa de Desconto.}
 
-\item{parametros}{Dataframe de parametros que contem variaveis a descontar.}
+\item{parametros}{Dataframe de parâmetros que contém variáveis a descontar.}
 
-\item{sufixo}{Sufixo que as variaveis descontadas receberao.}
+\item{sufixo}{Sufixo que as variáveis descontadas receberão.}
 }
 \value{
 fluco de caixa descontado
