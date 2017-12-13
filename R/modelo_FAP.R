@@ -1,8 +1,7 @@
 ##### FAP #######
-
 calcular_fap = function(parametros, historico) {
 
-  # Calculando o Custo Total em Beneficios considerando dados simulados
+  # Calculando o Custo Total em Benefícios considerando dados simulados
   parametros["CustoTotalBeneficiosFAP"] =
     parametros["NB_91"] * parametros["CustoMedio_NB_91"] +
     parametros["NB_92"] * parametros["CustoMedio_NB_92"] +
@@ -10,7 +9,7 @@ calcular_fap = function(parametros, historico) {
     parametros["NB_94"] * parametros["CustoMedio_NB_94"]
 
 
-  # Calculando variáveis intermediárias com iteracao
+  # Calculando variáveis intermediárias com iteração
 
   ano_inicial = min(parametros$Ano)
 
@@ -53,7 +52,7 @@ calcular_fap = function(parametros, historico) {
   #
   #   } else if (parametros[l,"Ano"] == ano_inicial + 1){
   #
-  #     # Segundo Ano do Historico e Ano Anterior
+  #     # Segundo Ano do Histórico e Ano Anterior
   #     parametros[l,"EventosFrequenciaFAP"] = rowSums(historico[2,colunas_frequencia]) + rowSums(parametros[l-1,colunas_frequencia])
   #
   #     parametros[l,"FolhaSalarialMediaFAP"] = (historico[2,folha] + parametros[l-1,folha])/2
@@ -157,7 +156,7 @@ calcular_fap = function(parametros, historico) {
 
 
   # Calculando Variáveis para os Demais Anos:
-  # Segundo Ano do Historico e Ano Anterior
+  # Segundo Ano do Histórico e Ano Anterior
   parametros[linhas_outros_anos,"EventosFrequenciaFAP"] = rowSums(parametros[linhas_outros_anos-1,colunas_frequencia]) + rowSums(parametros[linhas_outros_anos-2,colunas_frequencia])
 
   parametros[linhas_outros_anos,"FolhaSalarialMediaFAP"] = (parametros[linhas_outros_anos-2,folha]+parametros[linhas_outros_anos-1,folha])/2
@@ -182,19 +181,19 @@ calcular_fap = function(parametros, historico) {
 
 
   # Calculando Índices e Percentis do FAP
-  # Calculando Índice de Frequencia e Percentis
+  # Calculando Índice de Frequência e Percentis
 
   parametros["IndiceFrequenciaFAP"] = parametros["EventosFrequenciaFAP"] * 1000 / parametros["FuncionariosMedioFAP"]
 
   parametros["PercentilFrequenciaFAP"] = parametros["Beta0IFrequenciaFAP"] + parametros["Beta1IFrequenciaFAP"] * parametros["IndiceFrequenciaFAP"]
 
 
-  # Calculando Indice de Gravidade
+  # Calculando Índice de Gravidade
   parametros["IndiceGravidadeFAP"] = parametros["DenomIndiceGravidadeFAP"] /  parametros["FuncionariosMedioFAP"]
 
   parametros["PercentilGravidadeFAP"] = parametros["Beta0IGravidadeFAP"] + parametros["Beta1IGravidadeFAP"] * parametros["IndiceGravidadeFAP"]
 
-  # Calculando Indice de Custo
+  # Calculando Índice de Custo
 
   parametros["IndiceCustoFAP"] = parametros["CustoBeneficiosFAP_Ultimos2Anos"] / parametros["FolhaSalarialMediaFAP"]
 
@@ -210,14 +209,14 @@ calcular_fap = function(parametros, historico) {
   percentis = c("PercentilFrequenciaFAP", "PercentilGravidadeFAP", "PercentilCustoFAP")
   for (p in percentis) {
 
-    # Se o percentil calclado foi menor do que zero, seu valor deve ser 0
+    # Se o percentil calculado foi menor do que zero, seu valor deve ser 0
     #parametros[which(parametros[p] < batente_inferior),p] = batente_inferior
 
     parametros = aplicar_batentes(dados = parametros, variavel = p, valor_minimo = batente_inferior, valor_maximo = batente_superior)
 
     #parametros = aplicar_batente_minimo(dados = parametros, variavel = p, valor_minimo = batente_inferior)
 
-    # Da mesma forma, se o percentil calclado foi maior do que 100, seu valor deve ser 100
+    # Da mesma forma, se o percentil calculado foi maior do que 100, seu valor deve ser 100
     #parametros[which(parametros[p] > batente_superior),p] = batente_superior
 
     #parametros = aplicar_batente_maximo(dados = parametros, variavel = p, valor_maximo = batente_superior)
@@ -261,7 +260,7 @@ calcular_fap = function(parametros, historico) {
   linhas_turnover_fap_bloqueado = which(parametros[,"TurnoverGeralMedioFAP"] > turnover_fap_bloqueado) 
   
   fap_bloqueado = 1
-  # Quando o FAP estiver bloquead via turnover, o FAP mínimo da empresa será igual a 1.
+  # Quando o FAP estiver bloqueado via turnover, o FAP mínimo da empresa será igual a 1.
   parametros[linhas_turnover_fap_bloqueado,"FAP"] = pmax(parametros[linhas_turnover_fap_bloqueado,"FAP"], fap_bloqueado)
 
 
@@ -279,7 +278,7 @@ calcular_fap = function(parametros, historico) {
   parametros[linhas_sem_anos_niciais,"DespesaFAP"] =  -parametros[linhas_sem_anos_niciais-1,"RATAjustado"] * parametros[linhas_sem_anos_niciais,"FolhadePagamento"]
 
 
-  # Funcao Antiga com FOR.
+  # Função Antiga com FOR.
   # for (l in 1:nrow(parametros)) {
   #
   #   # Ajustando o Bônus quando o FAP é menor do que 1
