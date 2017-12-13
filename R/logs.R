@@ -1,9 +1,7 @@
-#
-
-# Funcoes Simples para obter o controle de logs internos da calculadora.
+# Funções Simples para obter o controle de logs internos da calculadora.
 # Criando uma variável global para os logs como um data.fram
 #' oshcba.iniciar_log
-#' Esta funcao inicia o vetor de logs da calculadora.
+#' Esta função inicia o vetor de logs da calculadora.
 #' @export
 oshcba.iniciar_log = function(){
   oshcba.log_calculadora <<- vector(mode = "character")
@@ -21,7 +19,7 @@ oshcba.adicionar_log = function(string, vetor_log = oshcba.log_calculadora) {
   # Adicionar Data e Hora para o Log:
   string = paste(Sys.time(),string, sep = " - ")
 
-  # Adicionar Linha ao Log (na variavel global)
+  # Adicionar Linha ao Log (na variável global)
   oshcba.log_calculadora <<- c(vetor_log, string)
 
   # Exibir o Log como Mensagem
@@ -31,7 +29,7 @@ oshcba.adicionar_log = function(string, vetor_log = oshcba.log_calculadora) {
 
 #' oshcba.parar_execucao
 #'
-#' Esta funcao pode ser usada para parar a execução da biblioteca salvando um arquivo com os logs na pasta atual.
+#' Esta função pode ser usada para parar a execução da biblioteca salvando um arquivo com os logs na pasta atual.
 #' @param string character com o texto a adicionar ao vetor de logs
 #' @param vetor_log o vetor de log existente
 #' @export
@@ -39,10 +37,10 @@ oshcba.parar_execucao = function(string, vetor_log = oshcba.log_calculadora, sal
   # Adicionar Data e Hora para o Log:
   string = paste(Sys.time(),string, sep = " - ")
 
-  # Adicionar Linha ao Log (na variavel global)
+  # Adicionar Linha ao Log (na variável global)
   oshcba.log_calculadora <<- c(vetor_log, string)
 
-  # Para execucao com mensagem de log
+  # Para execução com mensagem de log
   df_logs = oshcba.obter_log()
 
   # Escrever os logs em um csv na pasta atual.
