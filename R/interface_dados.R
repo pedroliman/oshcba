@@ -1,7 +1,7 @@
-# Funcoes Auxiliares
+# Funções Auxiliares
 carregar_template_dados = function(arquivo_template = "./tests/testthat/Dados.xlsx", tipo_template = "interno", abas_a_ler = oshcba_options$abas_a_ler, nomes_inputs = oshcba_options$nomes_inputs){
-  # Carregar Dados do Template - Sabe de onde pegar cada informacao (Seja uma constante ou um parametro).
-  # Futuramente isso deve ser substituido
+  # Carregar Dados do Template - Sabe de onde pegar cada informação (Seja uma constante ou um parâmetro).
+  # Futuramente isso deve ser substituído
   
   if (tipo_template == "interno") {
     data(oshcba.inputs_template)
@@ -126,14 +126,14 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   configs$HorizonteAvaliacao = list_dados_tratados$Configs$AnosASimular[[1]]
   
   
-  ##### Obter Cenarios #####
+  ##### Obter Cenários #####
   oshcba.adicionar_log("Interface de Dados: Cenários")
   cenarios = template_dados$Cenarios
   
   colunas_cenarios = names(template_dados$Cenarios)
   n_linhas_cenarios = length(list_dados_tratados$Cenarios$Iniciativa)
   
-  # Criando Dataframe do zero apenas com dados passados pelo Felipe, Mais uma linha do cenario AS IS. Não preciso usar o template.
+  # Criando Dataframe do zero apenas com dados passados pelo Felipe, Mais uma linha do cenário AS IS. Não preciso usar o template.
   cenarios = rbind(
     data.frame(
       Cenario = "ASIS",
@@ -154,7 +154,7 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   # Verificar NAs:
   cenarios = verificar_nas_e_substituir(cenarios)
   
-  # Obter cenario AS IS:
+  # Obter cenário AS IS:
   cenario_as_is = as.character(cenarios$Cenario[which(cenarios$CenarioASIS)])
   
   # Obter Iniciativas a simular - Que precisem ser simuladas e que não sejam o AS IS.
@@ -174,7 +174,7 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   )
   
   
-  # Ajustando Variacao do PIB para percentual
+  # Ajustando Variação do PIB para percentual
   dados_projetados$VarPIB = dados_projetados$VarPIB / 100
   
   
@@ -232,7 +232,7 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   # Obter Módulos
   modulos = template_dados$Modulos
   
-  # Deve-se calcular todos os modulos que não estão na lista do tratamento de dados.
+  # Deve-se calcular todos os módulos que não estão na lista do tratamento de dados.
   modulos_fora_da_lista = which(!(modulos$NomeBeneficioDadosEntrada %in% rownames(list_dados_tratados$Modulos)))
   
   nomes_modulos_selecionados = rownames(subset(list_dados_tratados$Modulos, X__1 == TRUE))
@@ -250,7 +250,7 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   # E se ele for selecionado, é verdadeiro
   modulos$Calcular[modulos_selecionados] = TRUE
   
-  # Definindo se o modulo deve ser calculado ou não:
+  # Definindo se o módulo deve ser calculado ou não:
   
   # Obter parâmetros
   parametros = obter_parametros_template(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular)
@@ -258,9 +258,9 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
   
   parametros = verificar_nas_e_substituir(parametros)
   
-  # Atualizar parametros com delays das iniciativas
+  # Atualizar parâmetros com delays das iniciativas
   
-  ## Esta solução é vetorizada (e deveria ser usada com mais frequencia)
+  ## Esta solução é vetorizada (e deveria ser usada com mais frequência)
   obter_linha_cenario = function(cenario) {
     which(cenarios$Cenario == cenario)
   }
@@ -304,7 +304,7 @@ obter_inputs_list_dados_tratados = function(arquivo_template, list_dados_tratado
 }
 
 
-# Funcao para Obter Constantes
+# Função para Obter Constantes
 #' obter_constantes
 #'
 #' @param arquivo_template caminho para o arquivo template de dados
@@ -405,17 +405,17 @@ obter_constantes = function(template_dados, abas_a_ler, nomes_inputs, list_dados
 
 
 
-# Funcao para Obter Parametros
+# Função para Obter Parâmetros
 #' obter_parametros_template
 #'
 #' @param arquivo_template caminho do arquivo de template a usar
 #' @param abas_a_ler vetor com abas a lser
 #' @param nomes_inputs vetor com nomes de inputs
 #' @param list_dados_tratados list gerada pela rotina de tratamento de dados
-#' @param cenario_as_is character cenario as is
+#' @param cenario_as_is character cenário as is
 #' @param iniciativas_a_simular vetor de iniciativas a simular
 #'
-#' @return data.frame de parametros 
+#' @return data.frame de parâmetros 
 #' @export
 obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
   
@@ -428,19 +428,19 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   # Criando Data.frame a partir do próprio template
   Parametros_base = as.data.frame(template_dados$Parametros)
   
-  # Selecionando apenas variaveis necessarias:
+  # Selecionando apenas variáveis necessárias:
   variaveis_necessarias = c("NomeVariavel", "Distribuicao", "Parametro1", "Parametro2", "Parametro3", "Parametro4", "AnosDelay", "Cenario", "SeedFixa", "DifPorIniciativa")
   
   Parametros_base = as.data.frame(template_dados$Parametros[,variaveis_necessarias])
   
-  # Selecionando apenas variaveis do Cenario AS IS como ponto de partida:
+  # Selecionando apenas variáveis do Cenário AS IS como ponto de partida:
   
   Parametros_base = dplyr::filter(Parametros_base, Cenario == "ASIS")
   
-  # Zerando os Parametros numericos (exceto mínimos e máximos)
+  # Zerando os Parâmetros numéricos (exceto mínimos e máximos)
   variaveis_parametros = c("Parametro1", "Parametro2", "Parametro3", "Parametro4")
   
-  # Definindo distribuicoes:
+  # Definindo distribuições:
   
   distribuicoes_parametros = c("normal", "normaltruncada", "poisson_perc", "triangular", "poisson")
   
@@ -465,7 +465,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   variaveis_parametros_base = unique(Parametros_base$NomeVariavel)
   
   
-  # Criar funcoes para escrever parâmetros para cada uma das distribuicoes
+  # Criar funções para escrever parâmetros para cada uma das distribuições
   
   escrever_parametros_normal = function(vetor_parametros_originais, media, desvio) {
     vetor_parametro = c(media, desvio, 0, 0)
@@ -503,7 +503,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     }
   }
   
-  # Funcoes para obter dados do cenario as is
+  # Funções para obter dados do cenário as is
   obter_media_observada_asis = function(dataframe, variavel) {
     v = dataframe["mean", variavel]
     verificar_se_e_numerico(variavel, valor = v)
@@ -544,7 +544,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   }
   
   
-  # Funcoes para obter variaveis das iniciativas
+  # Funções para obter variáveis das iniciativas
   
   obter_media_observada_iniciativa = function(dataframe, variavel) {
     linha_media = 1 # Rever isso
@@ -581,8 +581,8 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     v
   }
   
-  # Funcoes para obter distribuicoes arbitradas ou observadas:
-  #### FUNCAO TRIANGULAR ####
+  # Funções para obter distribuições arbitradas ou observadas:
+  #### FUNÇÃO TRIANGULAR ####
   obter_parametros_triangular = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas) {
     escrever_parametros_triangular(
       vetor_parametros_originais = parametros[linha_parametro, variaveis_parametros],
@@ -604,7 +604,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     )
   }
   
-  #### FUNCAO NORMAL ####
+  #### FUNÇÃO NORMAL ####
   obter_parametros_normal = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_observadas, baseline) {
     escrever_parametros_normal(
       vetor_parametros_originais = parametros[linha_parametro, variaveis_parametros],
@@ -637,7 +637,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
   }
   
   
-  #### FUNCAO POISSON ####
+  #### FUNÇÃO POISSON ####
   obter_parametros_poisson = function(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas, df_variaveis_observadas, distribuicao_da_variavel, baseline, variavel_arbitrada) {
     escrever_parametros_poisson(
       vetor_parametros_originais = parametros[linha_parametro, variaveis_parametros],
@@ -651,17 +651,17 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
           
         } else {
         
-        # Se a variável não é abritrada, então ela pode estar no Baseline, ou ser uma variável que não está no Baseline.
+        # Se a variável não é arbitrada, então ela pode estar no Baseline, ou ser uma variável que não está no Baseline.
         if(variavel %in% rownames(baseline)) {
         
         # Para a poisson percentual eventos, é necessário usar um valor distinto de variável  
           if(distribuicao_da_variavel == "poisson_perc") {
-            # Neste caso, é necessário usar o valor da Variavel como "Nev"
+            # Neste caso, é necessário usar o valor da Variável como "Nev"
             nome_variavel_eventos = gsub("Pev", "Nev", variavel)
             baseline[nome_variavel_eventos,]
             
           } else {
-            # Se não, usar o prórprio nome da variável no baseline
+            # Se não, usar o próprio nome da variável no baseline
             baseline[variavel,]
           }
           
@@ -691,20 +691,20 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     n_cenario = which(cenarios == cenario)
     oshcba.adicionar_log(paste("Buscando parâmetros - ",cenario))
     
-    # Criar tabela de parâmetros do cenario com base no parâmetros_base ou no cenario as is.
+    # Criar tabela de parâmetros do cenário com base no parâmetros_base ou no cenário as is.
     if(cenarios_e_as_is[n_cenario]) {
       parametros_asis = Parametros_base
       parametros = parametros_asis
     } else {
       parametros = parametros_asis}
     
-    # Definindo o nome do parametro
+    # Definindo o nome do parâmetro
     parametros$Cenario = cenario
     
-    # Definindo o dataframe de variaveis arbitradas e Observadas
+    # Definindo o dataframe de variáveis arbitradas e Observadas
     if(cenarios_e_as_is[n_cenario]) {
       
-      #Continuar daqui - definir dataframes de dados arbitrados e observados por tipo de cenario.
+      #Continuar daqui - definir dataframes de dados arbitrados e observados por tipo de cenário.
       
       df_variaveis_arbitradas = list_dados_tratados[[arb_as_is]]
       df_variaveis_observadas = list_dados_tratados[[obs_as_is]]
@@ -719,9 +719,9 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
     
     for(variavel in variaveis_parametros_base) {
       
-      # Verificando se esta variavel é arbitrada
+      # Verificando se esta variável é arbitrada
       variavel_arbitrada = if(cenarios_e_as_is[n_cenario]) {
-        # Testar variavel arbitrada no cenario as is
+        # Testar variável arbitrada no cenário as is
         linha_df_variaveis_arbitradas_variavel = which(rownames(df_variaveis_arbitradas) == variavel)
         
         #Verificar se a variável existe no AS IS
@@ -738,7 +738,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         decisao
         
       } else {
-        # Testar se a variável é arbitrada no cenario Iniciativa
+        # Testar se a variável é arbitrada no cenário Iniciativa
         valor_usual = df_variaveis_arbitradas[1,variavel]
         
         # Verificando se o tamanho é maior do que zero - Esta verificação é mais robusta
@@ -755,7 +755,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       distribuicao_da_variavel = parametros[linha_parametro,"Distribuicao"]
       
       
-      # Só muda a variável se ela for diferente por iniciativa OU se for o cenario as is
+      # Só muda a variável se ela for diferente por iniciativa OU se for o cenário as is
       
       parametros[linha_parametro,]
       
@@ -763,7 +763,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         
         # Só neste caso a variável deve ser alterada.
         
-        # Se a distribuicao original é triangular
+        # Se a distribuição original é triangular
         if(distribuicao_da_variavel == "triangular") {
           
           # Busca a Variável Arbitratada
@@ -773,7 +773,7 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
         }
         
         
-        # Se a distribuicao é normal ou normal truncada
+        # Se a distribuição é normal ou normal truncada
         if(distribuicao_da_variavel == "normal" | distribuicao_da_variavel == "normaltruncada") {
           
           # Se a variável é arbitrada, então deve se tornar uma triangular
@@ -802,11 +802,11 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
           
         }
         
-        # Se a distribuicao é posson ou possion percentual
+        # Se a distribuição é poisson ou poisson percentual
         
         if(distribuicao_da_variavel == "poisson" | distribuicao_da_variavel == "poisson_perc") {
           
-          # Então será usada a variavel usual da distribuicao arbitrada.
+          # Então será usada a variável usual da distribuição arbitrada.
           parametros_obtidos = obter_parametros_poisson(parametros, variavel, linha_parametro, cenarios_e_as_is, n_cenario, df_variaveis_arbitradas, df_variaveis_observadas, distribuicao_da_variavel, baseline, variavel_arbitrada)
           
           parametros[linha_parametro, "Parametro1"] = parametros_obtidos[1]
@@ -818,12 +818,12 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
       
     }
     
-    # Aqui os dataframes serao unidos:
+    # Aqui os dataframes serão unidos:
     
     if(cenarios_e_as_is[n_cenario]) {
       # Iniciar os parâmetros finais considerando o parâmetro AS IS:
       Parametros_Finais = parametros
-      # Definir o parametros AS IS como o parametro calculado
+      # Definir o parâmetros AS IS como o parâmetro calculado
       parametros_asis = parametros
     } else {Parametros_Finais = rbind(Parametros_Finais, parametros)}
     
@@ -838,13 +838,13 @@ obter_parametros_template = function(template_dados, abas_a_ler, nomes_inputs, l
 #' obter_historicoFAP_template
 #'
 #' @param arquivo_template caminho do arquivo de template a usar
-#' @param abas_a_ler vetor com abas a lser
+#' @param abas_a_ler vetor com abas a ler
 #' @param nomes_inputs vetor com nomes de inputs
 #' @param list_dados_tratados list gerada pela rotina de tratamento de dados
-#' @param cenario_as_is character cenario as is
+#' @param cenario_as_is caractér cenário as is
 #' @param iniciativas_a_simular vetor de iniciativas a simular
 #'
-#' @return data.frame com dois anos de historico do FAP para a simulacao 
+#' @return data.frame com dois anos de histórico do FAP para a simulação 
 #' @export
 obter_historicoFAP_template = function(template_dados, abas_a_ler, nomes_inputs, list_dados_tratados, cenario_as_is, iniciativas_a_simular) {
   
@@ -874,9 +874,9 @@ obter_historicoFAP_template = function(template_dados, abas_a_ler, nomes_inputs,
   # Se o custo médio é 
   historico_fap[,variaveis_custo_medio] = list_dados_tratados$DadosObservados["mean",variaveis_custo_medio]
   
-  # A princípio, zerar o custo médio que possio Nan
+  # A princípio, zerar o custo médio que poisson Nan
   
-  # Verificar se todas estas variaveis estão no template de dados
+  # Verificar se todas estas variáveis estão no template de dados
   variaveis_faltantes = !(variaveis_a_buscar %in% names(list_dados_tratados$DadosObservados))
   
   nomes_variaveis_faltantes = variaveis_a_buscar[variaveis_faltantes] 
