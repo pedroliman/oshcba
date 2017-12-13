@@ -1,14 +1,13 @@
-
-### RAZAO BENEFICIO CUSTO ####
+### RAZÃO BENEFÍCIO CUSTO ####
 
 # library(dplyr)
-#' Razao Beneficio Custo
+#' Razão Benefício Custo
 #'
-#' Esta funcao Calcula a razao beneficio custo
-#' @param benefits O Beneficio em Valores Monetarios (numerico).
-#' @param costs Os Custos da Iniciativa em Valores Monetarios (numerico).
+#' Esta função Calcula a razão benefício custo
+#' @param benefits O Benefício em Valores Monetários (numérico).
+#' @param costs Os Custos da Iniciativa em Valores Monetários (numérico).
 #' @keywords cbr
-#' @return Razao Beneficio Custo
+#' @return Razão Benefício Custo
 #' @export
 cbr = function(costs, benefits) {
   return(benefits/costs)
@@ -41,7 +40,7 @@ custo = function(custos_com_intervencao,custos_sem_intervencao) {
 
 #' Fluxo de Caixa Descontado
 #'
-#' @param fc Fluxo de Caixa (numero, em valores monetarios)
+#' @param fc Fluxo de Caixa (número, em valores monetaários)
 #' @param t Tempo do fluxo de caixa.
 #' @param i Taxa de Juros.
 #'
@@ -56,20 +55,20 @@ valor_presente = function(fc,t,i) {
 #' Calcula o Fluxo de Caixa Descontado Individual de um Conjunto de Variáveis Definido.
 #'
 #'
-#' @param variaveis_a_descontar Vetor com nome de variaveis que terao o fluxo de caixa descontado
+#' @param variaveis_a_descontar Vetor com nome de variáveis que terão o fluxo de caixa descontado
 #' @param ano_inicial Número do Ano inicial que sera descontado
 #' @param i Taxa de Desconto.
-#' @param parametros Dataframe de parametros que contem variaveis a descontar.
-#' @param sufixo Sufixo que as variaveis descontadas receberao.
+#' @param parametros Dataframe de parâmetros que contém variáveis a descontar.
+#' @param sufixo Sufixo que as variáveis descontadas receberão.
 #'
 #' @return fluco de caixa descontado
 descontar_fluxo_de_caixa = function(variaveis_a_descontar,ano_inicial,i,parametros, sufixo) {
-  #Definindo Variavels Auxiliadoras
+  #Definindo Variáveis Auxiliadoras
   novas_variaveis = paste(variaveis_a_descontar,sufixo,sep = "")
 
   oshcba.adicionar_log("descontar_fluxo_de_caixa: Iniciando Calculo do Valor Presente Liquido das variaveis.")
 
-  # Descontando Variaveis
+  # Descontando Variáveis
   for (v in variaveis_a_descontar) {
     var_descontada = which(variaveis_a_descontar == v)
     nova_variavel = novas_variaveis[var_descontada]
