@@ -27,14 +27,14 @@ carregar_inputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx", aba
 
 }
 
-# Esta funcao tem o objetivo de escrever os arquivos de dados internos à calculadora que rastreiam as variáveis que são inputs e outputs para cada funcao.
+# Esta função tem o objetivo de escrever os arquivos de dados internos à calculadora que rastreiam as variáveis que são inputs e outputs para cada função.
 
 #' escrever_arquivo_inputs_outputs
 #'
-#' Esta funcao é de uso interno, e foi criada para fins de desenvolvimento. A cada alteração na estrutura de variáveis de input das funcoes do modelo, esta funcao deve ser rodada novamente.
-#' Esta funcao atualiza o arquivo de dados usado pela calculadora que contém os inputs e outputs de cada funcao.
+#' Esta função é de uso interno, e foi criada para fins de desenvolvimento. A cada alteração na estrutura de variáveis de input das funções do modelo, esta função deve ser rodada novamente.
+#' Esta função atualiza o arquivo de dados usado pela calculadora que contém os inputs e outputs de cada função.
 #'
-#' @param arquivo_de_inputs : Arquivo de Inputs (em excel), que contenha duas abas com os inputs e outputs de cada funcao.
+#' @param arquivo_de_inputs : Arquivo de Inputs (em excel), que contenha duas abas com os inputs e outputs de cada função.
 #'
 #' @export
 escrever_arquivo_inputs_outputs = function (arquivo_de_inputs="./tests/testthat/Dados.xlsx") {
