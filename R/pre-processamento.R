@@ -1,4 +1,4 @@
-# Pre-Processamento
+# Pré-Processamento.
 # resultados = simular_cba(modo = "completo")
 #
 # inputs = resultados$Inputs
@@ -31,7 +31,7 @@ verificar_inputs = function(inputs) {
 
   # É provável que esta aba tenha dados em branco porque as abas tem
   # if (any(is.na(inputs$Cenarios))) {
-  #   oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Cenarios, existem dados em branco."))
+  #   oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Cenários, existem dados em branco."))
   # }
 
   if (any(is.na(inputs$DadosProjetados))) {
@@ -42,7 +42,7 @@ verificar_inputs = function(inputs) {
     oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Historico_FAP, existem dados em branco."))
   }
   
-  # Historico FAP precisa ter 2 linhas e somente 2 linhas
+  # Histórico FAP precisa ter 2 linhas e somente 2 linhas
   if(!(nrow(inputs$HistoricoFAP) == 2)){
     oshcba.adicionar_log(paste(texto_base, " Verificar a Aba de Historico_FAP, devem existir extamente 2 linhas nesta tabela."))
   }
@@ -75,9 +75,9 @@ verificar_inputs = function(inputs) {
 
   # Verificando algumas variáveis em Dados Projetados que devem ser maiores do que zero:
   # Cancelando Esta verificação, ela deve ser feita somente depois que os parâmetros foram estimados.
-  # variaveis = c("Ano", "Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO")
+  # variáveis = c("Ano", "Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO")
   # if(!all(inputs$DadosProjetados[variaveis] > 0)) {
-  #   oshcba.parar_execucao(paste(texto_base, "Verifique a Aba de Dados Projetados. Existem informacoes zeradas."))
+  #   oshcba.parar_execucao(paste(texto_base, "Verifique a Aba de Dados Projetados. Existem informações zeradas."))
   # }
 
   oshcba.adicionar_log("Terminando Verificação de Inputs.")
@@ -92,7 +92,7 @@ verificar_parametros = function(parametros) {
 
   v_maior_que_zero = c("Funcionarios", "FolhadePagamento", "RATTabela", "DiasUteis", "HorasPorDia", "CustoMDO", "CustoMedSubstitu")
 
-  # Verificando variaveis que deveriam ser maiores do que zero:
+  # Verificando variáveis que deveriam ser maiores do que zero:
   if(any(parametros[v_maior_que_zero] <= 0)){
     oshcba.parar_execucao(paste(texto_base, "Existem variaveis básicas zeradas em seus inputs (ex.: Funcionarios, Folha de Pagamento, etc."))
   }
@@ -121,7 +121,7 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
   variavel_inconsistente = vector(length = length(variaveis_a_verificar))
 
 
-  # Verificando as Variaveis
+  # Verificando as Variáveis
   for (v in variaveis_a_verificar) {
 
     indice_v = which(variaveis_a_verificar == v)
@@ -160,7 +160,7 @@ verificar_inconsistencia_reducao_probabilidades = function(inputs) {
 #'
 #' @param inputs list de inputs lidos pelo modelo.
 #'
-#' @return booleano informando se há inconsistência ou não nos parametros aleatorios
+#' @return booleano informando se há inconsistência ou não nos parâmetros aleatórios
 #' @export
 verificar_coerencia_parametros_aleatorios = function(inputs) {
 
@@ -170,18 +170,18 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
   # Identificando Inputs
   parametros_inputs = inputs$Parametros
 
-  # Verificando se todas as distribuicoes informadas estão dentre as distribuicoes possiveis
+  # Verificando se todas as distribuições informadas estão dentre as distribuições possíveis
   distribuicoes_possiveis = c("normal", "normaltruncada", "uniforme", "triangular", "poisson_perc", "poisson")
   n_parametros_exigidos = c(2,4,2,3,1,1)
 
 
-  # Verificando se existe alguma distribuicao que nao está dentre as disponiveis
+  # Verificando se existe alguma distribuição que nao está dentre as disponíveis
   if(!any(parametros_inputs$Distribuicao %in% distribuicoes_possiveis)){
     ha_inconsistencia = TRUE
     oshcba.adicionar_log("Aviso: Foram Informadas distribuicoes de probabilidade na aba parametros não suportadas pela calculadora.")
   }
 
-  # Verificações para cada tipo de distribuicao
+  # Verificações para cada tipo de distribuição
 
   for (d in seq_along(distribuicoes_possiveis)){
 
@@ -201,9 +201,9 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
 
 
 
-    # Realizando Verificacoes individuais por distribuicao
+    # Realizando Verificações individuais por distribuição
 
-    # Verificando distribuicao normal truncada.
+    # Verificando distribuição normal truncada.
     if (distribuicao == "normaltruncada"){
 
       media = parametros_numericos$Parametro1
@@ -211,7 +211,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
       minimo = parametros_numericos$Parametro3
       maximo = parametros_numericos$Parametro4
 
-      # Ordem das variaveis minimo < media < maximo
+      # Ordem das variáveis mínimo < média < máximo
 
       minimo_e_menor = all(minimo <= media)
 
@@ -226,13 +226,13 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
     }
 
 
-    # Verificando distribuicao uniforme
+    # Verificando distribuição uniforme
     if (distribuicao == "uniforme"){
 
       minimo = parametros_numericos$Parametro1
       maximo = parametros_numericos$Parametro2
 
-      # Ordem das variaveis maximo > minimo
+      # Ordem das variáveis máximo > mínimo
 
       maximo_e_maior = all(maximo > minimo)
 
@@ -245,14 +245,14 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
     }
 
 
-    # Verificando distribuicao Triangular
+    # Verificando distribuição Triangular
     if (distribuicao == "triangular"){
 
       moda = parametros_numericos$Parametro2
       minimo = parametros_numericos$Parametro1
       maximo = parametros_numericos$Parametro3
 
-      # Ordem das variaveis minimo < media < maximo
+      # Ordem das variáveis mínimo < média < máximo
 
       minimo_e_menor = all(minimo <= moda)
 
@@ -268,7 +268,7 @@ verificar_coerencia_parametros_aleatorios = function(inputs) {
 
   }
 
-  # Se não houve inconsistencia, retornar esta informacao
+  # Se não houve inconsistência, retornar esta informação
   ha_inconsistencia
 
 }
@@ -314,7 +314,7 @@ verificar_nomes_dataframes = function(inputs) {
     }
   }
 
-  # Se não houve inconsistencia, retornar esta informacao
+  # Se não houve inconsistência, retornar esta informação
   ha_inconsistencia
 
 }
