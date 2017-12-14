@@ -48,13 +48,32 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
   } else {
     inputs = ArquivoInputs
   }
+  
+  # Definindo Funcoes a calcular
+  funcoes_base = oshcba_options$v_funcoes_base
+  funcoes_basicas = oshcba_options$v_funcoes_basicas
+  funcoes_fap = oshcba_options$v_funcoes_fap
+  
+  # Calculando Funções selecionadas:
+  v_funcoes_calculadas = c(funcoes_base, funcoes_basicas, funcoes_fap)
+  v_funcoes_passiveis_calculo = oshcba_options$v_funcoes[!(oshcba_options$v_funcoes %in% v_funcoes_calculadas)]
+  
+  # Funções a calcular informadas pelo usuário:
+  df.modulos_solicitados = subset(inputs$Modulos, subset = as.logical(Calcular))
+  v_funcoes_solicitadas_usuario = as.vector(df.modulos_solicitados$Modulo)
+  
+  # Obtendo Funções opcionais que devem ser calculadas
+  v_funcoes_opcionais_a_calcular = v_funcoes_passiveis_calculo[(v_funcoes_passiveis_calculo %in% v_funcoes_solicitadas_usuario)]
+  
+  v_funcoes_opcionais_nao_calcular = v_funcoes_passiveis_calculo[!(v_funcoes_passiveis_calculo %in% v_funcoes_opcionais_a_calcular)]
 
-
+  # Aqui os Inputs que não serão utilizados devem ser removidos.
+  inputs = excluir_inputs_nao_utilizados(inputs, funcoes_inputs_outputs, v_funcoes_opcionais_nao_calcular, v_funcoes_opcionais_a_calcular, v_funcoes_calculadas)
+  
   if(verificar_inputs){
     # Verificar Inputs antes de continuar
     verificar_inputs(inputs)  
   }
-  
 
   parametros = obter_parametros(inputs, rep)
 
@@ -74,18 +93,17 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
 
   # Calculando Funções Base
   resultados = calcular_funcoes(parametros = parametros, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
-                                output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_base)
+                                output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = funcoes_base)
 
   # Calculando funções Básicas
   resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
-                                output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_basicas)
-
+                                output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = funcoes_basicas)
 
 
   # Se é simplificado ou customizado, precisa rodar os benefícios INSS e o FAP.
   if(modo == "simplificado" | modo == "customizado") {
     resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
-                                  output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = oshcba_options$v_funcoes_fap)
+                                  output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = funcoes_fap)
 
 
     oshcba.adicionar_log("simular: Simulando FAP.")
@@ -95,19 +113,7 @@ simular_cba = function(ArquivoInputs = "./tests/testthat/Dados.xlsx", rep = 1000
 
   # Se é customizado, calcular funções selecionadas pelo usuário
   if(modo == "customizado") {
-    # Calculando Funções selecionadas:
-    v_funcoes_calculadas = c(oshcba_options$v_funcoes_base, oshcba_options$v_funcoes_basicas, oshcba_options$v_funcoes_fap)
-    v_funcoes_passiveis_calculo = oshcba_options$v_funcoes[!(oshcba_options$v_funcoes %in% v_funcoes_calculadas)]
-
-    # Funções a calcular informadas pelo usuário:
-
-    df.modulos_solicitados = subset(inputs$Modulos, subset = as.logical(Calcular))
-    v_funcoes_solicitadas_usuario = as.vector(df.modulos_solicitados$Modulo)
-
-    # Obtendo Funções opcionais que devem ser calculadas
-    v_funcoes_opcionais_a_calcular = v_funcoes_passiveis_calculo[(v_funcoes_passiveis_calculo %in% v_funcoes_solicitadas_usuario)]
-
-
+    
     resultados = calcular_funcoes(parametros = resultados, inputs_funcoes = funcoes_inputs_outputs$FuncoesInputs,
                                   output_funcoes = funcoes_inputs_outputs$FuncoesOutputs, funcoes = v_funcoes_opcionais_a_calcular)
 
@@ -296,6 +302,7 @@ calcular_funcoes = function(parametros, inputs_funcoes, output_funcoes,
           }
 
         } else {
+          browser()
           oshcba.parar_execucao(paste("calcular_funcoes: Existem erros em seu arquivo de dados. Realize a simulação com um arquivo válido. Faltam Inputs para calcular esta função: ",
                         f))
         }

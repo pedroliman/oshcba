@@ -14,7 +14,6 @@ verificar_inputs = function(inputs) {
 
   oshcba.adicionar_log("Iniciando Verificacao de Inputs.")
   
-  
 
   if(!length(inputs) == 8) {
     oshcba.adicionar_log(paste(texto_base, "Planilha de Inputs não contém todas as abas necessárias."))
@@ -81,6 +80,8 @@ verificar_inputs = function(inputs) {
   # }
 
   oshcba.adicionar_log("Terminando Verificação de Inputs.")
+  
+  inputs
 }
 
 
@@ -317,4 +318,35 @@ verificar_nomes_dataframes = function(inputs) {
   # Se não houve inconsistência, retornar esta informação
   ha_inconsistencia
 
+}
+
+
+excluir_inputs_nao_utilizados = function(inputs, funcoes_inputs_outputs, v_funcoes_opcionais_nao_calcular, v_funcoes_opcionais_a_calcular, v_funcoes_calculadas) {
+  # Devem ser as variáveis que APENAS são inputs das funcoes a serem calculadas.
+  funcoes_nao_necessarias = (funcoes_inputs_outputs$FuncoesInputs$Funcao %in% v_funcoes_opcionais_nao_calcular)&(as.logical(funcoes_inputs_outputs$FuncoesInputs$Param_Externo))&!(funcoes_inputs_outputs$FuncoesInputs$Funcao %in% v_funcoes_calculadas)
+  
+  
+  tabela_de_inputs_funcoes_solicitadas = funcoes_inputs_outputs$FuncoesInputs[which(funcoes_inputs_outputs$FuncoesInputs$Funcao %in% c(v_funcoes_calculadas,v_funcoes_opcionais_a_calcular)),]
+  
+  tabela_de_inputs_funcoes_nao_solicitadas = funcoes_inputs_outputs$FuncoesInputs[which(funcoes_inputs_outputs$FuncoesInputs$Funcao %in% v_funcoes_opcionais_nao_calcular),]
+  
+  # Eliminando da tabela de inputs de funcoes não solicitadas variáveis que são internas:
+  tabela_de_inputs_funcoes_nao_solicitadas = subset(tabela_de_inputs_funcoes_nao_solicitadas, as.logical(Param_Externo))
+  
+  # Eliminando desta tabela inputs que estejam nas funções solicitadas:
+  
+  tabela_de_inputs_funcoes_nao_solicitadas = tabela_de_inputs_funcoes_nao_solicitadas[which(!(tabela_de_inputs_funcoes_nao_solicitadas$Inputs %in% tabela_de_inputs_funcoes_solicitadas$Inputs)),]
+  
+  variaveis_a_eliminar = unique(tabela_de_inputs_funcoes_nao_solicitadas$Inputs)
+  
+  # Informar estas variáveis no Log:
+  oshcba.adicionar_log(paste("Eliminando Variáveis Desnecessárias para o calculo",paste(variaveis_a_eliminar, collapse = ", ")))
+  
+  # Filtrar Apenas Constantes Necessárias:
+  inputs$Constantes = inputs$Constantes[which(!(inputs$Constantes$Variavel %in% variaveis_a_eliminar)),]
+  
+  # Filtrar Apenas Parâmetros Necessários:
+  inputs$Parametros = inputs$Parametros[which(!(inputs$Parametros$NomeVariavel %in% variaveis_a_eliminar)),]
+  
+  return(inputs)
 }
