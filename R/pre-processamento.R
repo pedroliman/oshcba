@@ -61,11 +61,11 @@ verificar_inputs = function(inputs) {
     oshcba.adicionar_log(paste("Parametros incorretos: ", parametros_incorretos))
   }
 
-
+  consistencia_parametros_aleatorios = verificar_coerencia_parametros_aleatorios(inputs)
   # Verificar se os parâmetros informados são coerentes com as distribuições de probabilidades
-  if(verificar_coerencia_parametros_aleatorios(inputs)){
-    oshcba.adicionar_log("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
-  }
+  # if(verificar_coerencia_parametros_aleatorios(inputs)){
+  #   oshcba.adicionar_log("Os parametros informados nao são consistentes com as distribuicoes de probabilidade informadas.")
+  # }
 
   if(verificar_nomes_dataframes(inputs)){
     oshcba.adicionar_log("O nome das colunas da planilha de entrada não é consistente com o padrão estabelecido. Use a planilha padrão.")
