@@ -92,3 +92,30 @@ simular_e_gravar_resultados = function () {
   write.table(resultados$Resultados_Descontados, "Resultados_CBR.csv",sep=";",dec=",",row.names = FALSE)
   resultados
 }
+
+
+#' filtrar_data_frame_linhas_sem_na
+#'
+#' @param data_frame_input data.frame com variaveis a serem filtradas
+#'
+#' @return dataframe filtrado, removendo NAs e valores com length == 0
+#' @export
+#'
+filtrar_data_frame_linhas_sem_na = function(data_frame_input) {
+  data_frame_input = as.data.frame(data_frame_input)
+  
+  colunas = names(data_frame_input)
+  
+  linha_esta_preenchida = function(linha_df, df = data_frame_input){
+    ! (any(is.na(df[linha_df,])) | any(length(df[linha_df,])==0))
+  }
+  
+  linhas = nrow(data_frame_input)
+  
+  linhas_a_usar = lapply(1:linhas, linha_esta_preenchida,  df = data_frame_input)
+  linhas_a_usar = do.call(rbind, linhas_a_usar)
+  
+  data_frame_filtrado = data_frame_input[linhas_a_usar,]
+  
+  data_frame_filtrado
+}
