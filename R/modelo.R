@@ -710,10 +710,10 @@ calcular_engajamento = function(parametros) {
   
   # Inputs
   deslig = c("DesligamentosVoluntarios")
-  customed = c("CustoMedSubstitu")
+  # customed = c("CustoMedSubstitu")
   
   # Calculando Custos com Desligamentos Voluntários
-  parametros[despesas] = parametros[deslig] * -parametros[customed]
+  parametros[despesas] = parametros[deslig] * -parametros["DespSubstVolunt"]
   
   parametros
 }
