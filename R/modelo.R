@@ -72,8 +72,6 @@ formula_ncs_j_k = function(Nev_k, Pcs_k_l) {
 
 calcular_beneficios_inss = function(parametros) {
   
-  
-  
   # Nb 91, 94 e 92
   # Índice de Frequência
   vetor_acidentes = c("Tipico", "DoenOcup")
@@ -254,8 +252,16 @@ calcular_indices_ampliados = function(parametros) {
 calcular_taxas_acidentes = function(parametros) {
   
   # Índice de Frequência - foi Arbitrado que os acidentes abaixo influenciarão as taxas de Gravidade e Frequência.
-  vetor_acidentes = c("Tipico", "DoenOcup")
+  vetor_acidentes = c("Tipico")
   vetor_eventos = c("Afmenor15", "Afmaior15", "Safast", "Obito")
+  eventos_tipicos_para_taxas = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+  
+  # Eventos ocupacionais sem afastamento não entram na contabilização das Taxas de Frequência e Gravidade (visto que usualmente as queixas entram nesta variável).
+  vetor_acidentes = c("DoenOcup")
+  vetor_eventos = c("Afmenor15", "Afmaior15", "Obito")
+  eventos_ocupacionais_para_taxas = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+  
+  # Ajustando Eventos com o fator de Ajuste
   
   # Deveríamos separar os óbitos do TempoComputado Médio? A princípio não está separado.
   eventostaxas = c("EventosTaxasFrequenciaeGravidade")
@@ -265,7 +271,7 @@ calcular_taxas_acidentes = function(parametros) {
   parametros["HorasHomemExposicaoRisco"] = parametros["Funcionarios"] * parametros["HorasPorDia"] * parametros["DiasUteis"] * parametros["FatorAjusteExposicaoAoRisco"]
   
   # Somando Eventos
-  parametros[eventostaxas] = somar_eventos(parametros, vetor_acidentes, vetor_eventos)
+  parametros[eventostaxas] = round((eventos_tipicos_para_taxas + eventos_ocupacionais_para_taxas ) * parametros["FatorEventosTFTG"], digits = 0)
   
   # Calculando Taxa de Frequência
   parametros["TaxaFrequencia"] = round((parametros[eventostaxas]*1000000)/parametros["HorasHomemExposicaoRisco"],3)
